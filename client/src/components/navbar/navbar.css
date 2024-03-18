@@ -64,7 +64,7 @@ nav > .buttons-nav {
   border-top: 2px solid rgb(95, 34, 34);
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 }
 .buttons-nav > a > button {

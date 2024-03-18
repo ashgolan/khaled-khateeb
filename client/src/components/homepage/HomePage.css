@@ -11,10 +11,10 @@
 }
 .home-container {
   height: 85vh;
-  background-image: url("/public/home-background2.png");
+  /* background-image: url("/public/background4.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: bottom;
+  background-position: bottom; */
 }
 
 .home-container > .title-homepage {

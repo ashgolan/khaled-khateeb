@@ -80,28 +80,17 @@ export default function Navbar() {
             src="/draw.png"
           />
           <img
-            src="./calender.png"
-            onClick={() => {
-              navigate("/calender");
+            style={{
+              cursor: "pointer",
+              width: "25%",
             }}
-            alt=""
+            alt={""}
+            onClick={() => {
+              navigate("/clients");
+            }}
+            src="/clients.png"
           />
 
-          <img
-            src="./bid.png"
-            onClick={() => {
-              navigate("/freeBidPage");
-            }}
-            alt=""
-          />
-
-          <img
-            src="./pcbid.png"
-            onClick={() => {
-              navigate("/bids");
-            }}
-            alt=""
-          />
           <img
             className="logout-img"
             style={{
@@ -117,40 +106,11 @@ export default function Navbar() {
         </div>
       </div>
       <div className="buttons-nav">
-        <NavLink
-          to={"/inventories"}
-          style={{ backgroundColor: "lightblue" }}
-          className={({ isActive }) => (isActive ? "active" : "")}
-        >
-          <button name="inventories">מוצרים</button>
-        </NavLink>
-        <NavLink
-          to={"/providers"}
-          style={{ backgroundColor: "lightgreen" }}
-          className={({ isActive }) => (isActive ? "active" : "")}
-        >
-          <button name="providers">אנשי קשר</button>
-        </NavLink>
-        <NavLink to={"/contacts"} style={{ backgroundColor: "lightcoral" }}>
-          <button name="contacts">ספקים</button>
-        </NavLink>
-        <NavLink to={"/workersExpenses"} style={{ backgroundColor: "orange" }}>
-          <button name="workersExpenses">עובדים</button>
-        </NavLink>
-        <NavLink
-          to={"/sleevesBids"}
-          style={{ backgroundColor: "lightslategray" }}
-        >
-          <button name="sleevesBids">שרוולים</button>
-        </NavLink>
         <NavLink to={"/expenses"} style={{ backgroundColor: "lightpink" }}>
           <button name="expenses">הוצאות</button>
         </NavLink>
         <NavLink to={"/sales"} style={{ backgroundColor: "lightsalmon" }}>
-          <button name="sales">מכירות</button>
-        </NavLink>
-        <NavLink to={"/orders"} style={{ backgroundColor: "#9DBC98" }}>
-          <button name="orders">הזמנוות</button>
+          <button name="sales">עבודה</button>
         </NavLink>
       </div>
     </nav>

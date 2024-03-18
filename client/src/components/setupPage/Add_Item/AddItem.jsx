@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Api } from "../../../utils/Api";
@@ -21,7 +21,6 @@ export default function AddItem({
       : date.getMonth() + 1;
   const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
   const navigate = useNavigate();
-  const productFormData = useRef();
   // eslint-disable-next-line
   const [clientNameColor, setClientNameColor] = useState("black");
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
@@ -259,7 +258,6 @@ export default function AddItem({
   };
   return (
     <form
-      ref={productFormData}
       onSubmit={confirmAddingItem}
       className="addItem_form"
       style={{ width: collReq === "/sales" && "95%" }}

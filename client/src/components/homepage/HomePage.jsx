@@ -28,8 +28,8 @@ export default function HomePage() {
       <div className="title-homepage">
         <h1 style={{ fontSize: "4rem", fontWeight: "bold" }}>מערכת לניהול</h1>
         <div className="welcome">
-          <p style={{ color: "#f36710" }}>מתפרת</p>
-          <p style={{ color: "#98ca3b" }}>פרטית</p>
+          <p style={{ color: "#f36710" }}>ח.א חקלאות</p>
+          <p style={{ color: "#98ca3b" }}>שירות חקלאי</p>
         </div>
 
         {!getAccessToken() && (

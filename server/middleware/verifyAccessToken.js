@@ -9,7 +9,6 @@ export const verifyAccessToken = (req, res, next) => {
       .status(401)
       .json({ error: "Unauthorized - Access Token missing" });
   }
-
   try {
     const decoded = jwt.verify(accessToken, secretKey);
     req.user = decoded;

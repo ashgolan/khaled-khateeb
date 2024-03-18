@@ -1,4 +1,5 @@
 import "./App.css";
+import React from "react";
 import Navbar from "./components/navbar/Navbar";
 import { FetchingStatus } from "./utils/context";
 import { Route, Routes, useNavigate } from "react-router-dom";
@@ -7,11 +8,11 @@ import Login from "./components/login/Login";
 import HomePage from "./components/homepage/HomePage";
 import IdleTimer from "./utils/IdleTimer";
 import { clearTokens } from "./utils/tokensStorage";
-import Inventories from "./components/inventories/Inventories";
 import Expenses from "./components/expenses/Expenses";
 import Sales from "./components/sales/Sales";
 import ChartHomepage from "./components/charts/ChartHomepage";
 import Calender from "./components/calender/Calender";
+import Clients from "./components/clients/Clients";
 
 function App() {
   const navigate = useNavigate();
@@ -48,15 +49,11 @@ function App() {
             path="/"
             element={<Login setLoggedIn={setLoggedIn}></Login>}
           ></Route>
-          <Route
-            exact
-            path="/clients"
-            element={<Inventories></Inventories>}
-          ></Route>
 
           <Route path="/expenses" element={<Expenses></Expenses>}></Route>
 
           <Route path="/sales" element={<Sales></Sales>}></Route>
+          <Route path="/clients" element={<Clients></Clients>}></Route>
 
           <Route
             path="/chartHomepage"
