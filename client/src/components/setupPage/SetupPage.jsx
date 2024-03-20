@@ -377,7 +377,7 @@ export default function SetupPage({
           <button
             id="quantity"
             className="input_show_item head"
-            style={{ width: "5%" }}
+            style={{width : collReq === '/clients' ? "15%" : "5%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "quantity");

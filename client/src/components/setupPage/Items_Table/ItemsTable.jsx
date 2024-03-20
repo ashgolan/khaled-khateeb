@@ -308,7 +308,7 @@ export default function ItemsTable({
           <input
             id="quantity"
             className="input_show_item"
-            style={{ width: "5%" }}
+            style={{ width: collReq === "/clients" ? "15%" : "5%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.quantity}
             onChange={(e) => {
