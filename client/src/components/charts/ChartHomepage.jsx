@@ -13,6 +13,7 @@ function ChartHomepage() {
   const [report, setReport] = useState({
     typeName: "",
     type: "",
+    clientName: "",
     month: "",
     year: "",
   });
@@ -21,22 +22,22 @@ function ChartHomepage() {
   const [showChart, setShowChart] = useState(false);
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const [fetchingData, setFetchingData] = useState({});
-  const [showLogo, setShowLogo] = useState("flex");
+  const [selectedClient, setSelectedClient] = useState(null);
   const navigate = useNavigate();
   const months = [
     { value: null, label: null },
-    { value: "01", label: "January" },
-    { value: "02", label: "February" },
-    { value: "03", label: "March" },
-    { value: "04", label: "April" },
-    { value: "05", label: "May" },
-    { value: "06", label: "June" },
-    { value: "07", label: "July" },
-    { value: "08", label: "August" },
-    { value: "09", label: "September" },
-    { value: "10", label: "October" },
-    { value: "11", label: "November" },
-    { value: "12", label: "December" },
+    { value: "01", label: "ינואר" },
+    { value: "02", label: "פברואר" },
+    { value: "03", label: "מרץ" },
+    { value: "04", label: "אפריל" },
+    { value: "05", label: "מאי" },
+    { value: "06", label: "יוני" },
+    { value: "07", label: "יולי" },
+    { value: "08", label: "אוגוסט" },
+    { value: "09", label: "ספטמבר" },
+    { value: "10", label: "אוקטובר" },
+    { value: "11", label: "נובמבר" },
+    { value: "12", label: "דיצמבר" },
   ];
   const allMonths = months.map((item) => {
     return { value: item.value, label: item.label };
@@ -53,14 +54,10 @@ function ChartHomepage() {
     };
   });
   const allTypes = [
-    { type: "/sleevesBids", name: "דוח שרוולים" },
     { type: "/expenses", name: "דוח הוצאות" },
     { type: "/sales", name: "דוח הכנסות" },
-    { type: "/workersExpenses", name: "דוח עובדים" },
-    { type: "sleevesBidsCharts", name: "תרשים שרוולים" },
     { type: "expensesCharts", name: "תרשים הוצאות" },
     { type: "salesCharts", name: "תרשים הכנסות" },
-    { type: "workersExpensesCharts", name: "תרשים עובדים" },
   ].map((item) => {
     return { value: item.type, label: item.name };
   });
@@ -101,12 +98,6 @@ function ChartHomepage() {
     });
     const { data: salesData } = await Api.get("/sales", { headers });
     const { data: expensesData } = await Api.get("/expenses", { headers });
-    const { data: workersExpensesData } = await Api.get("/workersExpenses", {
-      headers,
-    });
-    const { data: sleevesBidsData } = await Api.get("/sleevesBids", {
-      headers,
-    });
 
     setFetchingStatus((prev) => {
       return {
@@ -118,8 +109,6 @@ function ChartHomepage() {
     setFetchingData({
       salesData: salesData,
       expensesData: expensesData,
-      sleevesBidsData: sleevesBidsData,
-      workersExpensesData: workersExpensesData,
     });
   };
 
@@ -175,6 +164,15 @@ function ChartHomepage() {
     };
     fetchData();
   }, []);
+  const ids = fetchingData?.salesData?.map(({ clientName }) => clientName);
+  const filtered = fetchingData?.salesData?.filter(
+    ({ clientName }, index) => !ids.includes(clientName, index + 1)
+  );
+
+  const allSelectData = filtered?.map((item) => {
+    return { value: item._id, label: item.clientName };
+  });
+
   return (
     <>
       <div id={"pdfOrder"}>
@@ -199,6 +197,26 @@ function ChartHomepage() {
             }}
             styles={customStyles}
           ></Select>{" "}
+          {(report?.type === "/sales" || report?.type === "salesCharts") && (
+            <Select
+              options={allSelectData}
+              placeholder="בחר קליינט"
+              onChange={(selectedOption) => {
+                setReport((prev) => {
+                  setUpdatedReport((prev) => !prev);
+                  return {
+                    ...prev,
+                    clientName: selectedOption ? selectedOption.label : null,
+                  };
+                });
+                setUpdateChart((prev) => !prev);
+                setShowChart(false);
+              }}
+              defaultValue={report?.clientName ? report?.clientName : null}
+              isClearable={true}
+              styles={customStyles}
+            ></Select>
+          )}
           {report.type && (
             <Select
               options={allYears.filter((option) => option.value !== null)}
@@ -261,8 +279,7 @@ function ChartHomepage() {
         {report.type &&
           (report.type === "/expenses" ||
             report.type === "/sales" ||
-            report.type === "/workersExpenses" ||
-            report.type === "/sleevesBids") && (
+            report.type === "/salesByClient") && (
             <SetupPage
               updatedReport={updatedReport}
               collReq={report.type}
@@ -274,9 +291,7 @@ function ChartHomepage() {
         {report.type &&
           report.year &&
           (report.type === "expensesCharts" ||
-            report.type === "salesCharts" ||
-            report.type === "workersExpensesCharts" ||
-            report.type === "sleevesBidsCharts") && (
+            report.type === "salesCharts") && (
             <ChartPage
               fetchingData={fetchingData}
               showChart={showChart}

@@ -1,6 +1,6 @@
 import React from "react";
 import "./navbar.css";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   clearTokens,
   getAccessToken,
@@ -43,15 +43,9 @@ export default function Navbar() {
             src="/draw.png"
           />
           <div className="createdBy">
-            <img
-              style={{
-                cursor: "pointer",
-                width: "100%",
-              }}
-              alt={""}
-              src="/alaaLogo.png"
-            />
+            <label htmlFor="">created by : Alaa Shaalan</label>
           </div>
+
           <img
             className="logout-img"
             style={{
@@ -66,12 +60,22 @@ export default function Navbar() {
         </div>
 
         <div className="img-uppernav-logo">
-          <img className="logo-img" src="./logo.jpg" alt="" />
+          <label htmlFor="" className="titleBar">
+            ח.א חקלאות
+          </label>
+          <img
+            style={{
+              width: "11%",
+            }}
+            alt={""}
+            src="/flowers2.png"
+          />
         </div>
         <div className="img-bottomNav">
           <img
             style={{
               cursor: "pointer",
+              width: "25%",
             }}
             alt={""}
             onClick={() => {
@@ -82,7 +86,7 @@ export default function Navbar() {
           <img
             style={{
               cursor: "pointer",
-              width: "25%",
+              width: "40%",
             }}
             alt={""}
             onClick={() => {
@@ -96,8 +100,7 @@ export default function Navbar() {
             style={{
               display: getAccessToken() ? "block" : "none",
               cursor: "pointer",
-              // width: "20%",
-              padding: "1%",
+              width: "25%",
             }}
             alt={""}
             src="/switch2.png"

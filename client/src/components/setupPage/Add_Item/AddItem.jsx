@@ -22,25 +22,19 @@ export default function AddItem({
   const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
   const navigate = useNavigate();
   // eslint-disable-next-line
-  const [clientNameColor, setClientNameColor] = useState("black");
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const [itemsValues, setItemsValues] = useState({
-    number: "",
-    name: "",
-    mail: "",
-    bankProps: "",
-    quantity: "",
-    clientName: "",
-    discount: "",
-    expenses: "",
-    location: "",
-    equipment: "",
-    tax: "",
-    taxNumber: "",
-    sale: 0,
-    colored: false,
-    paymentDate: year + "-" + month + "-" + day,
     date: year + "-" + month + "-" + day,
+    clientName: "",
+    name: "",
+    quantity: "",
+    number: "",
+    purpose: "",
+    strains: "",
+    product: "",
+    water: "",
+    tax: false,
+    colored: false,
     totalAmount: 0,
   });
   const sendPostRequest = async (token) => {
@@ -49,34 +43,13 @@ export default function AddItem({
     };
     setFetchingStatus({ loading: true, error: false });
     switch (collReq) {
-      case "/sleevesBids":
+      case "/clients":
         await Api.post(
           collReq,
           {
-            date: itemsValues.date,
             clientName: itemsValues.clientName,
-            number: itemsValues.number,
+            name: itemsValues.name,
             quantity: itemsValues.quantity,
-            tax: itemsValues.tax,
-            totalAmount: itemsValues.totalAmount,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/workersExpenses":
-        await Api.post(
-          collReq,
-          {
-            date: itemsValues.date,
-            location: itemsValues.location,
-            clientName: itemsValues.clientName,
-            equipment: itemsValues.equipment,
-            number: itemsValues.number,
-            colored: itemsValues.colored,
-            totalAmount: itemsValues.number,
-            tax: itemsValues.tax,
           },
           {
             headers: headers,
@@ -87,15 +60,13 @@ export default function AddItem({
         await Api.post(
           collReq,
           {
+            date: itemsValues.date,
             name: itemsValues.name,
             number: itemsValues.number,
-            discount: itemsValues.discount,
-            date: itemsValues.date,
-            colored: itemsValues.colored,
-            tax: itemsValues.tax,
-            taxNumber: itemsValues.taxNumber,
-            paymentDate: itemsValues.paymentDate,
+            quantity: itemsValues.quantity,
             totalAmount: itemsValues.totalAmount,
+            // tax: itemsValues.tax,
+            colored: itemsValues.colored,
           },
           {
             headers: headers,
@@ -110,27 +81,14 @@ export default function AddItem({
             clientName: itemsValues.clientName,
             name: itemsValues.name,
             number: itemsValues.number,
-            discount: itemsValues.discount,
-            sale: itemsValues.sale,
-            expenses: itemsValues.expenses,
-            tax: itemsValues.tax,
+            purpose: itemsValues.purpose,
+            product: itemsValues.product,
+            water: itemsValues.water,
+            strains: itemsValues.strains,
             colored: itemsValues.colored,
+            tax: itemsValues.tax,
             quantity: itemsValues.quantity,
             totalAmount: itemsValues.totalAmount,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/contacts":
-        await Api.post(
-          collReq,
-          {
-            name: itemsValues.name,
-            number: itemsValues.number,
-            mail: itemsValues.mail,
-            bankProps: itemsValues.bankProps,
           },
           {
             headers: headers,
@@ -248,7 +206,18 @@ export default function AddItem({
       textAlign: "center",
     }),
   };
-  const allSelectData = selectData?.map((item) => {
+  const ids = selectData.map(({ clientName }) => clientName);
+  const filtered = selectData.filter(
+    ({ clientName }, index) => !ids.includes(clientName, index + 1)
+  );
+
+  const allSelectData = filtered?.map((item) => {
+    return { value: item._id, label: item.clientName };
+  });
+  const allSelectLandData = selectData?.filter((item) => {
+    return itemsValues.clientName === item.clientName;
+  });
+  const allSelectLandNames = allSelectLandData?.map((item) => {
     return { value: item._id, label: item.name };
   });
   const changeColorOfClientName = (e) => {
@@ -263,10 +232,7 @@ export default function AddItem({
       style={{ width: collReq === "/sales" && "95%" }}
     >
       <div className="add-row">
-        {(collReq === "/sleevesBids" ||
-          collReq === "/expenses" ||
-          collReq === "/workersExpenses" ||
-          collReq === "/sales") && (
+        {(collReq === "/expenses" || collReq === "/sales") && (
           <input
             name="date"
             type="date"
@@ -283,26 +249,43 @@ export default function AddItem({
             }
           ></input>
         )}
-        {collReq === "/workersExpenses" && (
-          <input
-            name="location"
-            id="location"
+        {collReq === "/sales" && (
+          <Select
+            options={allSelectData}
+            className="add_item select-product-in-add "
+            placeholder={"בחר חקלאי"}
+            styles={customStyles}
+            menuPlacement="auto"
             required
-            autoFocus={true}
-            className="add_item"
-            style={{ width: "15%" }}
-            placeholder={"מיקום"}
-            onChange={(e) =>
+            onChange={(e) => {
               setItemsValues((prev) => {
-                return { ...prev, location: e.target.value };
-              })
-            }
-            value={itemsValues.location}
-          ></input>
+                return {
+                  ...prev,
+                  clientName: e.label,
+                };
+              });
+            }}
+          ></Select>
         )}
-        {(collReq === "/sales" ||
-          collReq === "/workersExpenses" ||
-          collReq === "/sleevesBids") && (
+        {collReq === "/sales" && (
+          <Select
+            options={allSelectLandNames}
+            className="add_item select-product-in-add "
+            placeholder={"בחר מטע"}
+            styles={customStyles}
+            menuPlacement="auto"
+            required
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  name: e.label,
+                };
+              });
+            }}
+          ></Select>
+        )}
+        {collReq === "/clients" && (
           <input
             name="clientName"
             id="clientName"
@@ -313,7 +296,7 @@ export default function AddItem({
               width: collReq === "/sales" ? "10%" : "15%",
               color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
             }}
-            placeholder={collReq === "/workersExpenses" ? "עובד" : "קליינט"}
+            placeholder={"קליינט"}
             onChange={(e) =>
               setItemsValues((prev) => {
                 return { ...prev, clientName: e.target.value };
@@ -322,275 +305,151 @@ export default function AddItem({
             value={itemsValues.clientName}
           ></input>
         )}
-        {collReq === "/workersExpenses" && (
+        {collReq === "/sales" && (
           <input
-            name="equipment"
-            id="equipment"
+            id="purpose"
+            className="add_item select-product-in-add "
+            placeholder="מטרת הטיפול"
+            // style={{
+            //   width: "25%",
+            // }}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return { ...prev, purpose: e.target.value };
+              })
+            }
+            value={itemsValues.purpose}
+          />
+        )}
+        {collReq === "/sales" && (
+          <input
+            id="strains"
+            className="add_item select-product-in-add "
+            placeholder="זנים מטופלים"
+            // style={{
+            //   width: "25%",
+            // }}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return { ...prev, strains: e.target.value };
+              })
+            }
+            value={itemsValues.strains}
+          />
+        )}
+
+        {(collReq === "/clients" || collReq === "/expenses") && (
+          <input
+            name="name"
+            id="name"
             required
             autoFocus={true}
             className="add_item"
-            style={{ width: "15%" }}
-            placeholder={"ציוד"}
+            style={{ width: "35%" }}
+            placeholder={
+              collReq === "/providers" || collReq === "/expenses"
+                ? "שם"
+                : collReq === "/clients"
+                ? "מטע"
+                : "מוצר"
+            }
             onChange={(e) =>
               setItemsValues((prev) => {
-                return { ...prev, equipment: e.target.value };
+                return { ...prev, name: e.target.value };
               })
             }
-            value={itemsValues.equipment}
+            value={itemsValues.name}
           ></input>
         )}
-        {(collReq === "/sales" || collReq === "/expenses") && (
-          <Select
-            options={allSelectData}
-            className="add_item select-product-in-add "
-            placeholder={collReq === "/expenses" ? "בחר ספק" : "בחר מוצר"}
-            styles={customStyles}
-            menuPlacement="auto"
-            required
-            onChange={(e) => {
-              const filteredItem = selectData.filter(
-                (item) => item._id === e.value
-              )[0];
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  name: e.label,
-                  number:
-                    collReq === "/sales" ? filteredItem.number : prev.number,
-                  sale:
-                    collReq === "/sales" ? +filteredItem.number : +prev.number,
-                  totalAmount:
-                    (+prev.number - (+prev.number * +prev.discount) / 100) *
-                      +prev.quantity -
-                    +prev.expenses,
-                };
-              });
-            }}
-          ></Select>
-        )}
-        {collReq !== "/sales" &&
-          collReq !== "/workersExpenses" &&
-          collReq !== "/expenses" &&
-          collReq !== "/sleevesBids" && (
-            <input
-              name="name"
-              id="name"
-              required
-              autoFocus={true}
-              className="add_item"
-              style={{ width: "35%" }}
-              placeholder={
-                collReq === "/providers" || collReq === "/expenses"
-                  ? "שם"
-                  : collReq === "/contacts"
-                  ? "שם חברה"
-                  : "מוצר"
-              }
-              onChange={(e) =>
-                setItemsValues((prev) => {
-                  return { ...prev, name: e.target.value };
-                })
-              }
-              value={itemsValues.name}
-            ></input>
-          )}
-        <input
-          name="number"
-          id="number"
-          style={{
-            width: collReq === "/sales" ? "6%" : "15%",
-          }}
-          required
-          className="add_item"
-          placeholder={
-            collReq === "/contacts" || collReq === "/providers"
-              ? "מספר"
-              : collReq === "/workersExpenses" ||
-                collReq === "/sleevesBids" ||
-                collReq === "/expenses"
-              ? "סכום"
-              : "מחיר"
-          }
-          onDoubleClick={changeColorOfClientName}
-          onChange={(e) =>
-            setItemsValues((prev) => {
-              return {
-                ...prev,
-                number: e.target.value,
-                sale:
-                  +e.target.value - (+prev.discount * +e.target.value) / 100,
-                totalAmount: !(collReq === "/sales")
-                  ? +prev.quantity
-                    ? +e.target.value * +prev.quantity
-                    : +e.target.value
-                  : (+e.target.value -
-                      (+e.target.value * +prev.discount) / 100) *
-                      +prev.quantity -
-                    +prev.expenses,
-              };
-            })
-          }
-          value={itemsValues.number}
-        ></input>
-        {collReq === "/sales" && (
+        {collReq !== "/clients" && (
           <input
-            name="discount"
-            id="discount"
-            style={{ width: "7%" }}
+            name="number"
+            id="number"
+            style={{
+              width: collReq === "/sales" ? "6%" : "15%",
+            }}
             required
             className="add_item"
-            placeholder="הנחה"
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  discount: +e.target.value,
-                  sale: +prev.number - (+prev.number * +e.target.value) / 100,
-                  totalAmount:
-                    (+prev.number - (+prev.number * +e.target.value) / 100) *
-                      +prev.quantity -
-                    +prev.expenses,
-                };
-              });
-            }}
-            value={itemsValues.discount}
-          ></input>
-        )}
-        {collReq === "/sales" && (
-          <input
-            name="sale"
-            id="sale"
-            style={{ width: "7%" }}
-            required
-            className="add_item"
-            placeholder={"נטו"}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  discount: +e.target.value,
-                  sale: +prev.number - (+prev.number * +e.target.value) / 100,
-                  totalAmount:
-                    (+prev.number - (+prev.number * +e.target.value) / 100) *
-                      +prev.quantity -
-                    +prev.expenses,
-                };
-              });
-            }}
-            disabled
-            value={+itemsValues.sale}
-          ></input>
-        )}
-        {collReq === "/sales" && (
-          <input
-            name="expenses"
-            id="expenses"
-            style={{ width: "7%" }}
-            required
-            className="add_item"
-            placeholder={"הוצאות"}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  expenses: +e.target.value,
-                  totalAmount:
-                    (+prev.number - (+prev.number * +prev.discount) / 100) *
-                      +prev.quantity -
-                    +e.target.value,
-                };
-              });
-            }}
-            value={itemsValues.expenses}
-          ></input>
-        )}
-        {collReq === "/contacts" && (
-          <input
-            name="mail"
-            id="mail"
-            type="email"
-            style={{ width: "25%" }}
-            required
-            className="add_item"
-            placeholder="דואר אלקטרוני"
+            placeholder={
+              collReq === "/contacts" || collReq === "/providers"
+                ? "מספר"
+                : "מחיר"
+            }
+            onDoubleClick={changeColorOfClientName}
             onChange={(e) =>
               setItemsValues((prev) => {
-                return { ...prev, mail: e.target.value };
+                return {
+                  ...prev,
+                  number: e.target.value,
+                  totalAmount: +e.target.value * +prev.quantity,
+                };
               })
             }
-            value={itemsValues.mail}
+            value={itemsValues.number}
           ></input>
         )}
-        {collReq === "/contacts" && (
-          <input
-            name="bankProps"
-            id="bankProps"
-            style={{ width: "25%" }}
-            required
-            className="add_item"
-            placeholder="פרטי בנק"
-            onChange={(e) =>
-              setItemsValues((prev) => {
-                return { ...prev, bankProps: e.target.value };
-              })
-            }
-            value={itemsValues.bankProps}
-          ></input>
-        )}
-        {(collReq === "/sleevesBids" || collReq === "/sales") && (
+
+        {(collReq === "/clients" ||
+          collReq === "/sales" ||
+          collReq === "/expenses") && (
           <input
             name="quantity"
             id="quantity"
-            style={{ width: collReq === "/sales" ? "5%" : "10%" }}
+            style={{ width: "10%" }}
             required
             className="add_item"
-            placeholder="כמות"
+            placeholder={collReq === "/sales" ? "שטח" : "כמות"}
             onChange={(e) => {
               setItemsValues((prev) => {
                 return {
                   ...prev,
                   quantity: e.target.value,
-                  totalAmount:
-                    collReq === "/sales"
-                      ? (+prev.number - (+prev.number * +prev.discount) / 100) *
-                          +e.target.value -
-                        +prev.expenses
-                      : +e.target.value * prev.number,
+                  totalAmount: +e.target.value * prev.number,
                 };
               });
             }}
             value={itemsValues.quantity}
           ></input>
         )}
-        {collReq === "/expenses" && (
+        {collReq === "/sales" && (
           <input
-            name="taxNumber"
-            id="taxNumber"
-            style={{ width: collReq === "/sales" ? "5%" : "10%" }}
-            required
-            className="add_item"
-            placeholder={`מס חשבונית`}
-            onChange={(e) => {
+            id="product"
+            className="add_item select-product-in-add "
+            placeholder="חומר"
+            // style={{
+            //   width: "25%",
+            // }}
+            onChange={(e) =>
               setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  taxNumber: e.target.value,
-                };
-              });
-            }}
-            value={itemsValues.taxNumber}
-          ></input>
+                return { ...prev, product: e.target.value };
+              })
+            }
+            value={itemsValues.product}
+          />
         )}
-        {(collReq === "/sleevesBids" ||
-          collReq === "/sales" ||
-          collReq === "/expenses" ||
-          collReq === "/workersExpenses") && (
+        {collReq === "/sales" && (
+          <input
+            id="water"
+            className="add_item select-product-in-add "
+            placeholder="מים לריסוס"
+            // style={{
+            //   width: "25%",
+            // }}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return { ...prev, water: e.target.value };
+              })
+            }
+            value={itemsValues.water}
+          />
+        )}
+        {/* {(collReq === "/sales" || collReq === "/expenses") && (
           <Select
             id="tax"
             options={allTaxSelect}
             className="add_item select-category-add"
             placeholder={
-              collReq === "/workersExpenses" || collReq === "/expenses"
+              collReq === "/sales" || collReq === "/expenses"
                 ? "שולם"
                 : "חשבונית"
             }
@@ -604,27 +463,7 @@ export default function AddItem({
             menuPlacement="auto"
             required
           />
-        )}
-        {collReq === "/expenses" && (
-          <input
-            name="paymentDate"
-            type="date"
-            id="paymentDate"
-            style={{
-              width:
-                collReq === "/sales" || collReq === "/expenses" ? "11%" : "25%",
-            }}
-            required
-            className="add_item"
-            placeholder="בחר תאריך"
-            value={itemsValues.paymentDate}
-            onChange={(e) =>
-              setItemsValues((prev) => {
-                return { ...prev, paymentDate: e.target.value };
-              })
-            }
-          ></input>
-        )}{" "}
+        )} */}
       </div>
       <div
         style={{

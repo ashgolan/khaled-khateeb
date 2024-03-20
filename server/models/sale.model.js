@@ -9,13 +9,13 @@ const saleSchema = new Schema({
   date: { type: String, default: year + "-" + month + "-" + day },
   clientName: { type: String, required: true },
   purpose: { type: String, required: true },
-  landName: { type: String, required: true },
+  name: { type: String, required: true },
   strains: { type: String, default: "-" },
   quantity: { type: Number, default: 0 },
-  water: { type: Number, default: 0 },
   number: { type: Number, default: 0 },
+  water: { type: Number, default: 0 },
+  product: { type: String, default: "-" },
   totalAmount: { type: Number, default: 0 },
-  paid: { type: Boolean, default: false },
   colored: { type: Boolean, default: false },
 });
 

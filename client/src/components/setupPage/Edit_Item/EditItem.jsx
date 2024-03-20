@@ -28,64 +28,37 @@ export default function EditItem({
   };
   const isInputsChanged = () => {
     switch (collReq) {
-      case "/contacts":
+      case "/clients":
         return (
-          itemsValues.number !== item.number ||
+          itemsValues.clientName !== item.clientName ||
           itemsValues.name !== item.name ||
-          itemsValues.mail !== item.mail ||
-          itemsValues.bankProps !== item.bankProps
-        );
-      case "/sleevesBids":
-        return (
-          itemsValues.number !== item.number ||
-          itemsValues.clientName !== item.clientName ||
-          itemsValues.date !== item.date ||
-          itemsValues.tax !== item.tax ||
-          itemsValues.quantity !== item.quantity ||
-          itemsValues.totalAmount !== item.totalAmount
-        );
-      case "/workersExpenses":
-        return (
-          itemsValues.date !== item.date ||
-          itemsValues.location !== item.location ||
-          itemsValues.clientName !== item.clientName ||
-          itemsValues.colored !== item.colored ||
-          itemsValues.equipment !== item.equipment ||
-          itemsValues.number !== item.number ||
-          +itemsValues.totalAmount !== item.number ||
-          itemsValues.tax !== item.tax
+          itemsValues.quantity !== item.quantity
         );
       case "/sales":
         return (
-          itemsValues.number !== item.number ||
-          itemsValues.name !== item.name ||
-          itemsValues.clientName !== item.clientName ||
-          itemsValues.sale !== item.sale ||
-          itemsValues.discount !== item.discount ||
-          itemsValues.expenses !== item.expenses ||
           itemsValues.date !== item.date ||
-          itemsValues.tax !== item.tax ||
-          itemsValues.colored !== item.colored ||
+          itemsValues.clientName !== item.clientName ||
+          itemsValues.name !== item.name ||
+          itemsValues.purpose !== item.purpose ||
+          itemsValues.strains !== item.strains ||
+          itemsValues.number !== item.number ||
           itemsValues.quantity !== item.quantity ||
-          itemsValues.totalAmount !== item.totalAmount
+          itemsValues.product !== item.product ||
+          itemsValues.water !== item.water ||
+          itemsValues.totalAmount !== item.totalAmount ||
+          itemsValues.tax !== item.tax ||
+          itemsValues.colored !== item.colored
         );
       case "/expenses":
         return (
-          itemsValues.number !== item.number ||
-          itemsValues.name !== item.name ||
-          itemsValues.tax !== item.tax ||
-          itemsValues.taxNumber !== item.taxNumber ||
           itemsValues.date !== item.date ||
-          itemsValues.colored !== item.colored ||
-          itemsValues.paymentDate !== item.paymentDate ||
-          itemsValues.totalAmount !== item.totalAmount
+          itemsValues.name !== item.name ||
+          itemsValues.number !== item.number ||
+          itemsValues.quantity !== item.quantity ||
+          itemsValues.totalAmount !== item.totalAmount ||
+          itemsValues.tax !== item.tax ||
+          itemsValues.colored !== item.colored
         );
-
-      case "/inventories":
-        return (
-          itemsValues.number !== item.number || itemsValues.name !== item.name
-        );
-
       default:
         return (
           itemsValues.number !== item.number || itemsValues.name !== item.name
@@ -99,34 +72,13 @@ export default function EditItem({
     });
 
     switch (collReq) {
-      case "/sleevesBids":
+      case "/clients":
         await Api.patch(
           `${collReq}/${item._id}`,
           {
             clientName: itemsValues.clientName,
-            number: itemsValues.number,
-            date: itemsValues.date,
-            tax: itemsValues.tax,
+            name: itemsValues.name,
             quantity: itemsValues.quantity,
-            totalAmount: itemsValues.totalAmount,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/workersExpenses":
-        await Api.patch(
-          `${collReq}/${item._id}`,
-          {
-            date: itemsValues.date,
-            location: itemsValues.location,
-            clientName: itemsValues.clientName,
-            equipment: itemsValues.equipment,
-            number: itemsValues.number,
-            colored: itemsValues.colored,
-            totalAmount: itemsValues.number,
-            tax: itemsValues.tax,
           },
           {
             headers: headers,
@@ -138,12 +90,13 @@ export default function EditItem({
           `${collReq}/${item._id}`,
           {
             date: itemsValues.date,
-            name: itemsValues.name,
             clientName: itemsValues.clientName,
+            name: itemsValues.name,
             number: itemsValues.number,
-            discount: itemsValues.discount,
-            sale: itemsValues.sale,
-            expenses: itemsValues.expenses,
+            purpose: itemsValues.purpose,
+            product: itemsValues.product,
+            water: itemsValues.water,
+            strains: itemsValues.strains,
             colored: itemsValues.colored,
             tax: itemsValues.tax,
             quantity: itemsValues.quantity,
@@ -154,41 +107,17 @@ export default function EditItem({
           }
         );
         break;
-      case "/contacts":
-        await Api.patch(
-          `${collReq}/${item._id}`,
-          {
-            name: itemsValues.name,
-            number: itemsValues.number,
-            mail: itemsValues.mail,
-            bankProps: itemsValues.bankProps,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/inventories":
-        await Api.patch(
-          `${collReq}/${item._id}`,
-          { name: itemsValues.name, number: itemsValues.number },
-          {
-            headers: headers,
-          }
-        );
-        break;
       case "/expenses":
         await Api.patch(
           `${collReq}/${item._id}`,
           {
+            date: itemsValues.date,
             name: itemsValues.name,
             number: itemsValues.number,
-            date: itemsValues.date,
-            tax: itemsValues.tax,
-            taxNumber: itemsValues.taxNumber,
-            colored: itemsValues.colored,
-            paymentDate: itemsValues.paymentDate,
+            quantity: itemsValues.quantity,
             totalAmount: itemsValues.totalAmount,
+            tax: itemsValues.tax,
+            colored: itemsValues.colored,
           },
           {
             headers: headers,

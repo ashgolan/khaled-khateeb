@@ -10,8 +10,19 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgb(8, 119, 170);
 }
-
+.titleBar {
+  font-size: 3.5rem;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+}
+.img-bottomNav-left {
+  width: 20%;
+  color: rgb(54, 51, 51);
+  text-align: end;
+}
 .img-uppernav-logout,
 .img-uppernav-bid {
   width: 20%;
@@ -29,7 +40,7 @@ nav {
 .img-uppernav-logo {
   display: flex;
   flex: 1 1 50%;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   margin: 0.5% auto;
 }
@@ -89,23 +100,31 @@ nav > .buttons-nav {
   border: none;
   border-bottom: 2px solid transparent;
 }
-.img-bottomNav,
-.img-bottomNav-left {
+
+.img-bottomNav {
+  padding: 1%;
   display: flex;
   flex: 1 1 25%;
   flex-direction: row-reverse;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  background-color: white;
+  border-radius: 5rem 0 0 0;
 }
 .createdBy {
   display: flex;
+  font-size: 1rem;
+  padding: 2%;
   justify-content: center;
   width: 70%;
+  color: brown;
+  background-color: white;
+  border-radius: 0 1rem 1rem 0;
 }
 .img-bottomNav > img {
-  width: 20%;
-  padding: 0.5%;
+  margin-left: 3%;
+  width: 30%;
 }
 nav a :hover {
   background-color: white;

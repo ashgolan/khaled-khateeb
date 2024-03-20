@@ -10,6 +10,8 @@ const expenseSchema = new Schema({
   name: { type: String, required: true },
   quantity: { type: Number, default: 0 },
   number: { type: Number, default: 0 },
+  tax: { type: Boolean, default: true },
+  colored: { type: Boolean, default: false },
   totalAmount: { type: Number },
 });
 

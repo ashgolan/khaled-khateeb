@@ -1,7 +1,7 @@
 export const getCollectionProps = (collReq) => {
   switch (collReq) {
     case "/clients":
-      return ["name", "landName", "quantity"];
+      return ["clientName", "name", "quantity"];
     case "/expenses":
       return ["name", "number", "date", "quantity", "totalAmount"];
     case "/sales":
