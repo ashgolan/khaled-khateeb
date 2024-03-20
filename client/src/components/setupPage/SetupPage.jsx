@@ -259,7 +259,7 @@ export default function SetupPage({
           <button
             id="date"
             className="input_show_item head"
-            style={{ width: report?.type ? "17%" : "11%" }}
+            style={{ width: report?.type ? "17%" : "10%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "date");
@@ -340,7 +340,7 @@ export default function SetupPage({
             id="strains"
             className="input_show_item head"
             style={{
-              width: "7%",
+              width: "10%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -377,7 +377,7 @@ export default function SetupPage({
           <button
             id="quantity"
             className="input_show_item head"
-            style={{ width: "7%" }}
+            style={{ width: "5%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "quantity");
@@ -404,7 +404,7 @@ export default function SetupPage({
           <button
             id="water"
             className="input_show_item head"
-            style={{ width: "7%", textAlign: "center" }}
+            style={{ width: "5%", textAlign: "center" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "water");

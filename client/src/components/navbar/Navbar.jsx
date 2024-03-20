@@ -109,11 +109,24 @@ export default function Navbar() {
         </div>
       </div>
       <div className="buttons-nav">
-        <NavLink to={"/expenses"} style={{ backgroundColor: "lightpink" }}>
-          <button name="expenses">הוצאות</button>
+        <NavLink
+          to={"/expenses"}
+          style={{ backgroundColor: "rgb(80, 163, 77)" }}
+        >
+          <button
+            name="expenses"
+            style={{ fontWeight: "bold", color: "whitesmoke" }}
+          >
+            הוצאות
+          </button>
         </NavLink>
-        <NavLink to={"/sales"} style={{ backgroundColor: "lightsalmon" }}>
-          <button name="sales">עבודה</button>
+        <NavLink to={"/sales"} style={{ backgroundColor: "rgb(80, 163, 77)" }}>
+          <button
+            name="sales"
+            style={{ fontWeight: "bold", color: "whitesmoke" }}
+          >
+            עבודה
+          </button>
         </NavLink>
       </div>
     </nav>

@@ -139,7 +139,7 @@ export default function ItemsTable({
             id="date"
             type="date"
             className="input_show_item"
-            style={{ width: report?.type ? "17%" : "11%" }}
+            style={{ width: report?.type ? "17%" : "10%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.date}
             onChange={(e) => {
@@ -264,7 +264,7 @@ export default function ItemsTable({
             id="strains"
             className="input_show_item"
             style={{
-              width: "7%",
+              width: "10%",
             }}
             disabled={changeStatus.disabled}
             value={itemsValues.strains}
@@ -308,7 +308,7 @@ export default function ItemsTable({
           <input
             id="quantity"
             className="input_show_item"
-            style={{ width: "7%" }}
+            style={{ width: "5%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.quantity}
             onChange={(e) => {
@@ -341,7 +341,7 @@ export default function ItemsTable({
           <input
             id="water"
             className="input_show_item"
-            style={{ width: "7%" }}
+            style={{ width: "5%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.water}
             onChange={(e) => {

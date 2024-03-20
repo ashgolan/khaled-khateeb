@@ -2,7 +2,7 @@ nav {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-bottom: 2px solid rgb(95, 34, 34);
+  border-bottom: 2px solid rgb(0, 0, 0);
   align-items: center;
   background: white !important;
 }
@@ -42,7 +42,6 @@ nav {
   flex: 1 1 50%;
   justify-content: center;
   align-items: center;
-  margin: 0.5% auto;
 }
 .img-uppernav {
   display: flex;
@@ -72,7 +71,8 @@ nav {
   }
 }
 nav > .buttons-nav {
-  border-top: 2px solid rgb(95, 34, 34);
+  background-color: green;
+  border-top: 2px solid rgb(255, 166, 0);
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -127,11 +127,11 @@ nav > .buttons-nav {
   width: 30%;
 }
 nav a :hover {
-  background-color: white;
+  background-color: transparent;
   color: brown;
   font-weight: bold;
-  border-radius: 0;
-  border-bottom: 2px solid gold;
+  /* border-radius: 0; */
+  border-bottom: 2px solid orange;
 }
 nav a.active {
   background-color: transparent !important;
