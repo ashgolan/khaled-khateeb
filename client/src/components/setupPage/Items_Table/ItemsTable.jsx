@@ -69,39 +69,38 @@ export default function ItemsTable({
     control: (base, state) => ({
       ...base,
       textAlign: "right",
-      backgroundColor: "rgb(48, 45, 45)",
       border: "none",
+      backgroundColor: "white",
       whiteSpace: "nowrap",
       overflow: "hidden",
       textOverflow: "ellipsis",
     }),
     dropdownIndicator: (base) => ({
       ...base,
-      display: report?.type !== undefined && "none",
+      // display: report?.type !== undefined && "none",
+      display: "none",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      padding: "10px", // Adjust padding as needed
+      background: state.isFocused ? "gold" : "rgb(48, 45, 45)",
+      color: state.isFocused ? "rgb(48, 45, 45)" : "inherit",
+    }),
+    singleValue: (provided, styles, state) => ({
+      ...provided,
+      ...styles,
+      color: state.isSelected ? "red" : "black",
+
+      margin: "0",
     }),
     placeholder: (provided) => ({
       ...provided,
-      color:
-        collReq === "/expenses" && itemsValues.colored
-          ? "rgb(255, 71, 46)"
-          : "whitesmoke",
+      color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
     }),
     menu: (base) => ({
       ...base,
       textAlign: "center",
-      backgroundColor: "rgb(48, 45, 45)",
     }),
-    option: (provided, state) => ({
-      ...provided,
-      background: state.isFocused ? "gold" : "rgb(48, 45, 45)",
-      color: state.isFocused ? "rgb(48, 45, 45)" : "inherit",
-    }),
-    singleValue: (styles, state) => {
-      return {
-        ...styles,
-        color: state.isSelected ? "red" : "whitesmoke",
-      };
-    },
   };
 
   const changeColorOfClientName = (e) => {
@@ -156,7 +155,7 @@ export default function ItemsTable({
             className="input_show_item"
             style={{
               width: collReq === "/clients" ? "25%" : "13%",
-              color: itemsValues.colored ? "rgb(255, 71, 46)" : "whitesmoke",
+              color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
             }}
             disabled={changeStatus.disabled}
             value={itemsValues.clientName}
@@ -308,7 +307,11 @@ export default function ItemsTable({
           <input
             id="quantity"
             className="input_show_item"
-            style={{ width: collReq === "/clients" ? "15%" : "5%" }}
+            style={{
+              width: collReq === "/clients" ? "15%" : "5%",
+              color: collReq === "/clients" ? "rgb(184, 89, 0)" : "black",
+              fontWeight: collReq === "/clients" ? "bold" : "normal",
+            }}
             disabled={changeStatus.disabled}
             value={itemsValues.quantity}
             onChange={(e) => {
@@ -358,6 +361,8 @@ export default function ItemsTable({
             className="input_show_item"
             style={{
               width: collReq === "/expenses" ? "8%" : "5%",
+              color: "rgb(184, 89, 0)",
+              fontWeight: "bold",
             }}
             disabled
             value={+itemsValues?.totalAmount.toFixed(2)}

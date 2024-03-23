@@ -275,7 +275,7 @@ export default function SetupPage({
             id="clientName"
             className="input_show_item head"
             style={{
-              width: collReq === "/clients" ? "25%" : "13%",
+              width: collReq === "/clients" ? "25%" : "9%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -297,7 +297,7 @@ export default function SetupPage({
                 collReq === "/clients" || collReq === "/expenses"
                   ? "32%"
                   : collReq === "/sales"
-                  ? "13%"
+                  ? "9%"
                   : report?.type
                   ? "45%"
                   : "18%",
@@ -305,7 +305,7 @@ export default function SetupPage({
                 collReq === "/clients" || collReq === "/expenses"
                   ? "32%"
                   : collReq === "/sales" || collReq === "/expenses"
-                  ? "13%"
+                  ? "9%"
                   : report?.type
                   ? "45%"
                   : "18%",

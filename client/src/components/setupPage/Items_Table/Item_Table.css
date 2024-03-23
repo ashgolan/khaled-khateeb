@@ -18,12 +18,14 @@
 .Item_form > .select-product-head,
 .head {
   height: 46px;
+  margin: 0.1%;
 }
 
 .input_show_item {
-  border: 0.5px whitesmoke solid;
-  background-color: rgb(48, 45, 45);
-  color: whitesmoke;
+  border: none;
+  border-bottom: 2px rgb(4, 64, 119) solid;
+  background-color: white;
+  color: rgb(44, 43, 43);
   text-align: right;
   padding: 0.5%;
   direction: rtl;
@@ -40,8 +42,8 @@
 }
 
 .select-product-head {
-  max-width: 13%;
-  min-width: 13%;
+  max-width: 9%;
+  min-width: 9%;
   padding: 0.3% 0;
 }
 .desc-style {

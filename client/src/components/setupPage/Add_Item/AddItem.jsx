@@ -347,8 +347,8 @@ export default function AddItem({
             className="add_item"
             style={{ width: "35%" }}
             placeholder={
-              collReq === "/providers" || collReq === "/expenses"
-                ? "שם"
+              collReq === "/expenses"
+                ? "שם החומר"
                 : collReq === "/clients"
                 ? "מטע"
                 : "מוצר"
