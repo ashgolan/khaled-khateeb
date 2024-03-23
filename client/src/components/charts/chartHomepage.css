@@ -1,6 +1,6 @@
 @media screen and (max-width: 1000px) {
   .charts-title {
-    width: 80% !important;
+    width: 90% !important;
   }
   .chart-container {
     width: 70% !important;
@@ -16,7 +16,7 @@
   display: flex;
   justify-content: space-around;
   flex-direction: row-reverse;
-  width: 90%;
+  width: 70%;
   margin: 1% auto;
 }
 .charts-title > button {

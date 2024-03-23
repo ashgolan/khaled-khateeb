@@ -139,7 +139,7 @@ export default function ItemsTable({
             id="date"
             type="date"
             className="input_show_item"
-            style={{ width: report?.type ? "17%" : "10%" }}
+            style={{ width: report?.type ? "15%" : "13%" }}
             disabled={changeStatus.disabled}
             value={itemsValues.date}
             onChange={(e) => {
@@ -217,8 +217,8 @@ export default function ItemsTable({
             className="input_show_item"
             style={{
               maxWidth:
-                collReq === "/clients"
-                  ? "42%"
+                collReq === "/clients" || collReq === "/expenses"
+                  ? "32%"
                   : collReq === "/sales" || collReq === "/expenses"
                   ? "13%"
                   : report?.type
@@ -226,8 +226,8 @@ export default function ItemsTable({
                   : "15%",
 
               minWidth:
-                collReq === "/clients"
-                  ? "42%"
+                collReq === "/clients" || collReq === "/expenses"
+                  ? "32%"
                   : collReq === "/sales" || collReq === "/expenses"
                   ? "13%"
                   : report?.type
@@ -327,7 +327,7 @@ export default function ItemsTable({
           <input
             id="product"
             className="input_show_item"
-            style={{ width: "10%" }}
+            style={{ width: report?.type ? "12%" : "8%", textAlign: "center" }}
             disabled={changeStatus.disabled}
             value={itemsValues.product}
             onChange={(e) => {
@@ -357,7 +357,7 @@ export default function ItemsTable({
             id="totalAmount"
             className="input_show_item"
             style={{
-              width: "6%",
+              width: collReq === "/expenses" ? "8%" : "5%",
             }}
             disabled
             value={+itemsValues?.totalAmount.toFixed(2)}

@@ -33,18 +33,7 @@ export default function Navbar() {
     <nav style={{ pointerEvents: getAccessToken() ? "auto" : "none" }}>
       <div className="upper-nav">
         <div className="img-bottomNav-left">
-          <img
-            style={{
-              cursor: "pointer",
-              width: "6%",
-              visibility: "hidden",
-            }}
-            alt={""}
-            src="/draw.png"
-          />
-          <div className="createdBy">
-            <label htmlFor="">created by : Alaa Shaalan</label>
-          </div>
+          <label htmlFor="">created by : Alaa Shaalan</label>
         </div>
 
         <div className="img-uppernav-logo">

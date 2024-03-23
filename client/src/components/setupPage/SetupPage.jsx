@@ -261,7 +261,7 @@ export default function SetupPage({
           <button
             id="date"
             className="input_show_item head"
-            style={{ width: report?.type ? "17%" : "10%" }}
+            style={{ width: report?.type ? "15%" : "13%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "date");
@@ -294,16 +294,16 @@ export default function SetupPage({
             className="input_show_item head"
             style={{
               maxWidth:
-                collReq === "/clients"
-                  ? "42%"
-                  : collReq === "/sales" || collReq === "/expenses"
+                collReq === "/clients" || collReq === "/expenses"
+                  ? "32%"
+                  : collReq === "/sales"
                   ? "13%"
                   : report?.type
                   ? "45%"
                   : "18%",
               minWidth:
-                collReq === "/clients"
-                  ? "42%"
+                collReq === "/clients" || collReq === "/expenses"
+                  ? "32%"
                   : collReq === "/sales" || collReq === "/expenses"
                   ? "13%"
                   : report?.type
@@ -393,7 +393,7 @@ export default function SetupPage({
           <button
             id="product"
             className="input_show_item head"
-            style={{ width: "10%", textAlign: "center" }}
+            style={{ width: report?.type ? "12%" : "8%", textAlign: "center" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "product");
@@ -421,7 +421,7 @@ export default function SetupPage({
             id="totalAmount"
             className="input_show_item head"
             style={{
-              width: "6%",
+              width: collReq === "/expenses" ? "8%" : "5%",
             }}
             onClick={(e) => {
               e.preventDefault();

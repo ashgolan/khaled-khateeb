@@ -2,11 +2,8 @@
   .form-outline mb-1 {
     height: 20%;
   }
+
 }
 .vh-50 {
   height: 85vh;
-  /* background-image: url("/public/background4.jpg");
-  background-repeat: repeat;
-  background-size: contain;
-  background-position: bottom; */
 }
