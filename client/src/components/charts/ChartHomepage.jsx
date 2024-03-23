@@ -197,32 +197,6 @@ function ChartHomepage() {
             }}
             styles={customStyles}
           ></Select>{" "}
-          {(report?.type === "/sales" || report?.type === "salesCharts") && (
-            <Select
-              options={allSelectData.filter((option) => option.value !== null)}
-              placeholder="בחר קליינט"
-              onChange={(selectedOption) => {
-                setReport((prev) => {
-                  setUpdatedReport((prev) => !prev);
-                  return {
-                    ...prev,
-                    clientName: selectedOption ? selectedOption.label : null,
-                  };
-                });
-                setUpdateChart((prev) => !prev);
-                setShowChart(false);
-              }}
-              value={
-                report.clientName !== null
-                  ? allSelectData?.find(
-                      (option) => option.value === report.clientName
-                    )
-                  : null
-              }
-              isClearable={true}
-              styles={customStyles}
-            ></Select>
-          )}
           {report.type && (
             <Select
               options={allYears.filter((option) => option.value !== null)}
@@ -269,6 +243,32 @@ function ChartHomepage() {
                   : null
               }
               isClearable={true}
+            ></Select>
+          )}
+          {(report?.type === "/sales" || report?.type === "salesCharts") && (
+            <Select
+              options={allSelectData.filter((option) => option.value !== null)}
+              placeholder="בחר קליינט"
+              onChange={(selectedOption) => {
+                setReport((prev) => {
+                  setUpdatedReport((prev) => !prev);
+                  return {
+                    ...prev,
+                    clientName: selectedOption ? selectedOption.label : null,
+                  };
+                });
+                setUpdateChart((prev) => !prev);
+                setShowChart(false);
+              }}
+              value={
+                report.clientName !== null
+                  ? allSelectData?.find(
+                      (option) => option.value === report.clientName
+                    )
+                  : null
+              }
+              isClearable={true}
+              styles={customStyles}
             ></Select>
           )}
           {report.type && report.year && (
