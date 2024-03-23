@@ -78,7 +78,8 @@ nav {
     flex-wrap: wrap;
   }
   .img-uppernav-logo > img {
-    width: 9%;
+    width: 7% !important;
+    padding: 1%;
   }
 }
 nav > .buttons-nav {
