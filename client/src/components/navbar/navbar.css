@@ -77,6 +77,9 @@ nav {
   nav > .buttons-nav {
     flex-wrap: wrap;
   }
+  .img-uppernav-logo > img {
+    width: 9%;
+  }
 }
 nav > .buttons-nav {
   background-color: green;
