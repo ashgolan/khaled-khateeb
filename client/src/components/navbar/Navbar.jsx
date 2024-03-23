@@ -36,7 +36,7 @@ export default function Navbar() {
           <img
             style={{
               cursor: "pointer",
-              width: "5%",
+              width: "6%",
               visibility: "hidden",
             }}
             alt={""}
@@ -45,18 +45,6 @@ export default function Navbar() {
           <div className="createdBy">
             <label htmlFor="">created by : Alaa Shaalan</label>
           </div>
-
-          <img
-            className="logout-img"
-            style={{
-              visibility: "hidden",
-              cursor: "pointer",
-              width: "5%",
-              padding: "1%",
-            }}
-            alt={""}
-            src="/switch2.png"
-          />
         </div>
 
         <div className="img-uppernav-logo">
@@ -75,7 +63,7 @@ export default function Navbar() {
           <img
             style={{
               cursor: "pointer",
-              width: "25%",
+              width: "15%",
             }}
             alt={""}
             onClick={() => {
@@ -86,7 +74,7 @@ export default function Navbar() {
           <img
             style={{
               cursor: "pointer",
-              width: "40%",
+              width: "25%",
             }}
             alt={""}
             onClick={() => {
@@ -94,13 +82,24 @@ export default function Navbar() {
             }}
             src="/clients.png"
           />
+          <img
+            style={{
+              cursor: "pointer",
+              width: "15%",
+            }}
+            alt={""}
+            onClick={() => {
+              navigate("/calender");
+            }}
+            src="/calender.png"
+          />
 
           <img
             className="logout-img"
             style={{
               display: getAccessToken() ? "block" : "none",
               cursor: "pointer",
-              width: "25%",
+              width: "15%",
             }}
             alt={""}
             src="/switch2.png"
@@ -115,16 +114,13 @@ export default function Navbar() {
         >
           <button
             name="expenses"
-            style={{ fontWeight: "bold", color: "whitesmoke" }}
+            style={{ fontWeight: "bold", color: "white" }}
           >
             הוצאות
           </button>
         </NavLink>
         <NavLink to={"/sales"} style={{ backgroundColor: "rgb(80, 163, 77)" }}>
-          <button
-            name="sales"
-            style={{ fontWeight: "bold", color: "whitesmoke" }}
-          >
+          <button name="sales" style={{ fontWeight: "bold", color: "white" }}>
             עבודה
           </button>
         </NavLink>

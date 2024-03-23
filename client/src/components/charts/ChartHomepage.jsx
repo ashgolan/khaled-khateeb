@@ -22,7 +22,6 @@ function ChartHomepage() {
   const [showChart, setShowChart] = useState(false);
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const [fetchingData, setFetchingData] = useState({});
-  const [selectedClient, setSelectedClient] = useState(null);
   const navigate = useNavigate();
   const months = [
     { value: null, label: null },
@@ -187,6 +186,7 @@ function ChartHomepage() {
                 return {
                   ...prev,
                   typeName: e.label,
+                  clientName: null,
                   type: e.value,
                   month: null,
                   year: null,
@@ -212,7 +212,7 @@ function ChartHomepage() {
                 setUpdateChart((prev) => !prev);
                 setShowChart(false);
               }}
-              defaultValue={report?.clientName ? report?.clientName : null}
+              defaultValue={report.type !== null ? report?.clientName : null}
               isClearable={true}
               styles={customStyles}
             ></Select>

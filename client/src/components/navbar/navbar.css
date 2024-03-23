@@ -9,7 +9,6 @@ nav {
 .upper-nav {
   display: flex;
   justify-content: center;
-  align-items: center;
   background-color: rgb(8, 119, 170);
 }
 .titleBar {
@@ -19,19 +18,11 @@ nav {
   font-weight: bold;
 }
 .img-bottomNav-left {
-  width: 20%;
   color: rgb(54, 51, 51);
   text-align: end;
 }
 .img-uppernav-logout,
 .img-uppernav-bid {
-  width: 20%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.img-uppernav-logout > .logout-img {
-  cursor: pointer;
   width: 20%;
   display: flex;
   justify-content: center;
@@ -43,27 +34,37 @@ nav {
   justify-content: center;
   align-items: center;
 }
-.img-uppernav {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 @media screen and (max-width: 1000px) {
-  .createdBy {
-    width: 20%;
-    border-bottom: 2px solid rgb(95, 34, 34);
+  .img-bottomNav-left {
+    display: block;
+    width: 100%;
   }
-  .createdBy > img {
-    width: 30% !important;
+  .createdBy {
+    display: block;
+    width: 100% !important;
+    border-bottom: 2px solid rgb(95, 34, 34);
+    border-radius: 0 0 2rem 2rem !important;
+  }
+
+  .img-uppernav-logo {
+    padding: 1%;
+  }
+  .img-uppernav-logo > img {
+    width: 8% !important;
+  }
+  .titleBar {
+    font-size: 2.5rem;
+    color: white;
+    text-align: center;
+    font-weight: bold;
   }
   .upper-nav {
     flex-direction: column;
   }
-  .img-bottomNav {
-    width: 30% !important;
-  }
+
   .img-bottomNav > img {
-    width: 25% !important;
+    width: 15% !important;
     padding: 2%;
   }
   nav > .buttons-nav {
@@ -104,7 +105,7 @@ nav > .buttons-nav {
 .img-bottomNav {
   padding: 1%;
   display: flex;
-  flex: 1 1 25%;
+  flex: 1 1 35%;
   flex-direction: row-reverse;
   justify-content: center;
   align-items: center;
@@ -124,7 +125,7 @@ nav > .buttons-nav {
 }
 .img-bottomNav > img {
   margin-left: 3%;
-  width: 30%;
+  width: 20%;
 }
 nav a :hover {
   background-color: transparent;
@@ -137,11 +138,6 @@ nav a.active {
   background-color: transparent !important;
   border-radius: 0;
   border-bottom: 2px solid gold;
-}
-@media screen and (max-width: 1000px) {
-  .img-bottomNav-left {
-    width: 90%;
-  }
 }
 
 @media print {
