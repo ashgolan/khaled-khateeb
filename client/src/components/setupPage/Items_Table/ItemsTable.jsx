@@ -137,7 +137,7 @@ export default function ItemsTable({
           <input
             id="date"
             type="date"
-            className="input_show_item"
+            className="input_show_item date-input"
             style={{ width: report?.type ? "15%" : "13%", textAlign: "center" }}
             disabled={changeStatus.disabled}
             value={itemsValues.date}
@@ -263,7 +263,7 @@ export default function ItemsTable({
             id="strains"
             className="input_show_item"
             style={{
-              width: "7%",
+              width: "10%",
             }}
             disabled={changeStatus.disabled}
             value={itemsValues.strains}

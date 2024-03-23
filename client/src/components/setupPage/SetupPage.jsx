@@ -275,7 +275,7 @@ export default function SetupPage({
             id="clientName"
             className="input_show_item head"
             style={{
-              width: collReq === "/clients" ? "25%" : "9%",
+              width: collReq === "/clients" ? "25%" : "11%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -297,7 +297,7 @@ export default function SetupPage({
                 collReq === "/clients" || collReq === "/expenses"
                   ? "32%"
                   : collReq === "/sales"
-                  ? "9%"
+                  ? "11%"
                   : report?.type
                   ? "45%"
                   : "18%",
@@ -305,7 +305,7 @@ export default function SetupPage({
                 collReq === "/clients" || collReq === "/expenses"
                   ? "32%"
                   : collReq === "/sales" || collReq === "/expenses"
-                  ? "9%"
+                  ? "11%"
                   : report?.type
                   ? "45%"
                   : "18%",
@@ -342,7 +342,7 @@ export default function SetupPage({
             id="strains"
             className="input_show_item head"
             style={{
-              width: "7%",
+              width: "10%",
             }}
             onClick={(e) => {
               e.preventDefault();

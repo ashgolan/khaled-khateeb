@@ -12,6 +12,13 @@
   align-items: center;
   margin: auto;
 }
+.date-box-container {
+  position: relative;
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+  display: none;
+}
 .Item_form > input,
 .Item_form > .select-category,
 .Item_form > .select-product,
@@ -42,8 +49,8 @@
 }
 
 .select-product-head {
-  max-width: 9%;
-  min-width: 9%;
+  max-width: 11%;
+  min-width: 11%;
   padding: 0.3% 0;
 }
 .desc-style {
