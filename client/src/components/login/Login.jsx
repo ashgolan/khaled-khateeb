@@ -74,7 +74,7 @@ export default function Login({ setLoggedIn }) {
       {!fetchingStatus.loading && (
         <div className="container py-5">
           <div className="row d-flex justify-content-center align-items-center ">
-            <div className="col-9 col-md-3 col-lg-6 col-xl-5">
+            <div className="col-9 col-md-6 col-lg-6 col-xl-5">
               <div
                 className="card shadow-2-strong"
                 style={{ borderRadius: "1rem" }}
