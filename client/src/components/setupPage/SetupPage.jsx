@@ -342,7 +342,7 @@ export default function SetupPage({
             id="strains"
             className="input_show_item head"
             style={{
-              width: "9%",
+              width: "7%",
             }}
             onClick={(e) => {
               e.preventDefault();

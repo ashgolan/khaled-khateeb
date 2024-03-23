@@ -263,7 +263,7 @@ export default function ItemsTable({
             id="strains"
             className="input_show_item"
             style={{
-              width: "9%",
+              width: "7%",
             }}
             disabled={changeStatus.disabled}
             value={itemsValues.strains}
