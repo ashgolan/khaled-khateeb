@@ -233,7 +233,7 @@ export default function SetupPage({
         <label
           htmlFor=""
           style={{
-            width: "30%",
+            width: "40%",
             margin: "auto",
             textAlign: "center",
             fontWeight: "bold",
@@ -261,7 +261,7 @@ export default function SetupPage({
           <button
             id="date"
             className="input_show_item head"
-            style={{ width: report?.type ? "15%" : "13%", textAlign: "center" }}
+            style={{ width: report?.type ? "15%" : "17%", textAlign: "center" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "date");
@@ -275,7 +275,7 @@ export default function SetupPage({
             id="clientName"
             className="input_show_item head"
             style={{
-              width: collReq === "/clients" ? "25%" : "11%",
+              width: collReq === "/clients" ? "25%" : "10%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -297,7 +297,7 @@ export default function SetupPage({
                 collReq === "/clients" || collReq === "/expenses"
                   ? "32%"
                   : collReq === "/sales"
-                  ? "11%"
+                  ? "10%"
                   : report?.type
                   ? "45%"
                   : "18%",
@@ -305,7 +305,7 @@ export default function SetupPage({
                 collReq === "/clients" || collReq === "/expenses"
                   ? "32%"
                   : collReq === "/sales" || collReq === "/expenses"
-                  ? "11%"
+                  ? "10%"
                   : report?.type
                   ? "45%"
                   : "18%",
