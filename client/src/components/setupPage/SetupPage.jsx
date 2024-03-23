@@ -244,7 +244,9 @@ export default function SetupPage({
           {"  "}
           {collReq === "/clients"
             ? "כמות דונומים בטיפול :"
-            : `סכום כל התנועות : `}
+            : collReq === "/expenses"
+            ? `סכום כל ההוצאות : `
+            : `סכום כל ההכנסות : `}
           {getTotals().toFixed(2)}
           {collReq === "/clients" ? " דונם " : ` ש"ח `}
         </label>
@@ -377,7 +379,7 @@ export default function SetupPage({
           <button
             id="quantity"
             className="input_show_item head"
-            style={{width : collReq === '/clients' ? "15%" : "5%" }}
+            style={{ width: collReq === "/clients" ? "15%" : "5%" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "quantity");

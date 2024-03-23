@@ -115,7 +115,7 @@ nav > .buttons-nav {
 }
 .createdBy {
   display: flex;
-  font-size: 1rem;
+  font-size: 0.8rem;
   padding: 2%;
   justify-content: center;
   width: 70%;

@@ -110,7 +110,7 @@ export default function Navbar() {
       <div className="buttons-nav">
         <NavLink
           to={"/expenses"}
-          style={{ backgroundColor: "rgb(80, 163, 77)" }}
+          style={{ backgroundColor: "rgb(80, 163, 77)", fontSize: "1.5rem" }}
         >
           <button
             name="expenses"
@@ -119,7 +119,10 @@ export default function Navbar() {
             הוצאות
           </button>
         </NavLink>
-        <NavLink to={"/sales"} style={{ backgroundColor: "rgb(80, 163, 77)" }}>
+        <NavLink
+          to={"/sales"}
+          style={{ backgroundColor: "rgb(80, 163, 77)", fontSize: "1.5rem" }}
+        >
           <button name="sales" style={{ fontWeight: "bold", color: "white" }}>
             עבודה
           </button>

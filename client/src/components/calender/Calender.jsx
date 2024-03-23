@@ -199,7 +199,7 @@ function Calender() {
     const headers = { Authorization: token };
 
     try {
-      const title = prompt("הכנס את הפעולה הרצויה :");
+      const title = prompt("הכנס את ההערה הרצויה :");
       if (title) {
         const newEvent = {
           title,

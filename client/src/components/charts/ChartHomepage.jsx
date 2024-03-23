@@ -171,7 +171,7 @@ function ChartHomepage() {
   const allSelectData = filtered?.map((item) => {
     return { value: item._id, label: item.clientName };
   });
-
+  allSelectData?.unshift({ value: null, label: null });
   return (
     <>
       <div id={"pdfOrder"}>
@@ -199,7 +199,7 @@ function ChartHomepage() {
           ></Select>{" "}
           {(report?.type === "/sales" || report?.type === "salesCharts") && (
             <Select
-              options={allSelectData}
+              options={allSelectData.filter((option) => option.value !== null)}
               placeholder="בחר קליינט"
               onChange={(selectedOption) => {
                 setReport((prev) => {
@@ -212,7 +212,13 @@ function ChartHomepage() {
                 setUpdateChart((prev) => !prev);
                 setShowChart(false);
               }}
-              defaultValue={report.type !== null ? report?.clientName : null}
+              value={
+                report.clientName !== null
+                  ? allSelectData?.find(
+                      (option) => option.value === report.clientName
+                    )
+                  : null
+              }
               isClearable={true}
               styles={customStyles}
             ></Select>
