@@ -248,7 +248,7 @@ export default function ItemsTable({
             id="purpose"
             className="input_show_item"
             style={{
-              width: "10%",
+              width: "9%",
             }}
             disabled={changeStatus.disabled}
             value={itemsValues.purpose}

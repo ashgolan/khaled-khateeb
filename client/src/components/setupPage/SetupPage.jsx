@@ -327,7 +327,7 @@ export default function SetupPage({
             id="purpose"
             className="input_show_item head"
             style={{
-              width: "10%",
+              width: "9%",
             }}
             onClick={(e) => {
               e.preventDefault();
