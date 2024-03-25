@@ -12,6 +12,8 @@ export default function AddItem({
   setItemIsUpdated,
   collReq,
   selectData,
+  expenses,
+  tractorPrice,
 }) {
   const date = new Date();
   const year = date.getFullYear();
@@ -31,6 +33,7 @@ export default function AddItem({
     number: "",
     purpose: "",
     strains: "",
+    letersOfProduct: "",
     product: "",
     water: "",
     tax: false,
@@ -81,6 +84,7 @@ export default function AddItem({
             clientName: itemsValues.clientName,
             name: itemsValues.name,
             number: itemsValues.number,
+            letersOfProduct: itemsValues.letersOfProduct,
             purpose: itemsValues.purpose,
             product: itemsValues.product,
             water: itemsValues.water,
@@ -189,12 +193,12 @@ export default function AddItem({
     e.preventDefault();
     setaddItemToggle({ btnVisible: true, formVisible: false });
   };
-  const allTaxSelect = [
-    { value: true, label: "כן" },
-    { value: false, label: "לא" },
-  ].map((item) => {
-    return { value: item.value, label: item.label };
-  });
+  // const allTaxSelect = [
+  //   { value: true, label: "כן" },
+  //   { value: false, label: "לא" },
+  // ].map((item) => {
+  //   return { value: item.value, label: item.label };
+  // });
   const customStyles = {
     control: (base) => ({
       ...base,
@@ -214,6 +218,14 @@ export default function AddItem({
   const allSelectData = filtered?.map((item) => {
     return { value: item._id, label: item.clientName };
   });
+  const idsOfProduct = expenses?.map(({ name }) => name);
+  const filteredProducts = expenses?.filter(
+    ({ product }, index) => !idsOfProduct.includes(product, index + 1)
+  );
+  const allSelectProducts = filteredProducts?.map((item) => {
+    return { value: item.number, label: item.name };
+  });
+
   const allSelectLandData = selectData?.filter((item) => {
     return itemsValues.clientName === item.clientName;
   });
@@ -361,6 +373,31 @@ export default function AddItem({
             value={itemsValues.name}
           ></input>
         )}
+        {collReq === "/sales" && (
+          <Select
+            options={allSelectProducts}
+            className="input_show_item select-product-head "
+            placeholder={
+              itemsValues?.product ? itemsValues.product : "בחר חומר"
+            }
+            styles={customStyles}
+            menuPlacement="auto"
+            required
+            // value={itemsValues?.product}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  product: e.label,
+                  number: e.value,
+                  totalAmount:
+                    +e.value * +itemsValues.letersOfProduct +
+                    +tractorPrice?.price * +itemsValues.quantity,
+                };
+              });
+            }}
+          ></Select>
+        )}
         {collReq !== "/clients" && (
           <input
             name="number"
@@ -381,11 +418,38 @@ export default function AddItem({
                 return {
                   ...prev,
                   number: e.target.value,
-                  totalAmount: +e.target.value * +prev.quantity,
+                  totalAmount:
+                    +e.target.value * +itemsValues.letersOfProduct +
+                    +tractorPrice?.price * +itemsValues.quantity,
                 };
               })
             }
             value={itemsValues.number}
+          ></input>
+        )}
+        {collReq !== "/clients" && (
+          <input
+            name="letersOfProduct"
+            id="letersOfProduct"
+            style={{
+              width: collReq === "/sales" ? "6%" : "15%",
+            }}
+            required
+            className="add_item"
+            placeholder={"כ.חומר"}
+            onDoubleClick={changeColorOfClientName}
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  letersOfProduct: e.target.value,
+                  totalAmount:
+                    +e.target.value * +itemsValues.number +
+                    +tractorPrice?.price * +itemsValues.quantity,
+                };
+              })
+            }
+            value={itemsValues.letersOfProduct}
           ></input>
         )}
 
@@ -404,29 +468,16 @@ export default function AddItem({
                 return {
                   ...prev,
                   quantity: e.target.value,
-                  totalAmount: +e.target.value * prev.number,
+                  totalAmount:
+                    +itemsValues.number * +itemsValues.letersOfProduct +
+                    +tractorPrice?.price * +e.target.value,
                 };
               });
             }}
             value={itemsValues.quantity}
           ></input>
         )}
-        {collReq === "/sales" && (
-          <input
-            id="product"
-            className="add_item select-product-in-add "
-            placeholder="חומר"
-            // style={{
-            //   width: "25%",
-            // }}
-            onChange={(e) =>
-              setItemsValues((prev) => {
-                return { ...prev, product: e.target.value };
-              })
-            }
-            value={itemsValues.product}
-          />
-        )}
+
         {collReq === "/sales" && (
           <input
             id="water"

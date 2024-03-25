@@ -42,6 +42,7 @@ export default function EditItem({
           itemsValues.purpose !== item.purpose ||
           itemsValues.strains !== item.strains ||
           itemsValues.number !== item.number ||
+          itemsValues.letersOfProduct !== item.letersOfProduct ||
           itemsValues.quantity !== item.quantity ||
           itemsValues.product !== item.product ||
           itemsValues.water !== item.water ||
@@ -70,7 +71,6 @@ export default function EditItem({
     setFetchingStatus((prev) => {
       return { ...prev, status: true, loading: true };
     });
-
     switch (collReq) {
       case "/clients":
         await Api.patch(
@@ -94,6 +94,7 @@ export default function EditItem({
             name: itemsValues.name,
             number: itemsValues.number,
             purpose: itemsValues.purpose,
+            letersOfProduct: itemsValues.letersOfProduct,
             product: itemsValues.product,
             water: itemsValues.water,
             strains: itemsValues.strains,

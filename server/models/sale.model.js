@@ -11,10 +11,11 @@ const saleSchema = new Schema({
   purpose: { type: String, required: true },
   name: { type: String, required: true },
   strains: { type: String, default: "-" },
+  product: { type: String, default: "-" },
+  letersOfProduct: { type: Number, required: true },
   quantity: { type: Number, default: 0 },
   number: { type: Number, default: 0 },
   water: { type: Number, default: 0 },
-  product: { type: String, default: "-" },
   totalAmount: { type: Number, default: 0 },
   colored: { type: Boolean, default: false },
 });

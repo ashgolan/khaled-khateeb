@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useState, useContext } from "react";
 import AddItem from "./Add_Item/AddItem";
 import AddItemBtn from "./Add_Item/AddItemBtn";
@@ -21,7 +21,6 @@ export default function SetupPage({
 }) {
   const date = new Date();
   const year = date.getFullYear();
-
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [fetchedData, setFetchingData] = useState([]);
@@ -32,8 +31,16 @@ export default function SetupPage({
     btnVisible: true,
     formVisible: false,
   });
+  const [defaultTractorPrice, setDefaultTractorPrice] = useState([]);
   const [kindOfSort, setKindOfSort] = useState("date");
   const [clients, setClients] = useState([]);
+
+  const [expenses, setExpenses] = useState([]);
+  const [tractorPriceChangeDisplay, settractorPriceChangeDisplay] =
+    useState(false);
+  const [tractorPrice, setTractorPrice] = useState({
+    price: "",
+  });
   const getTotals = () => {
     let total = 0;
     if (collReq === "/clients") {
@@ -66,6 +73,16 @@ export default function SetupPage({
       if (collReq === "/sales") {
         const { data: clientsData } = await Api.get("/clients", { headers });
         setClients(clientsData);
+        const { data: expensesData } = await Api.get("/expenses", { headers });
+        setExpenses(expensesData);
+        const { data: tractorPriceData } = await Api.get("/tractorPrice", {
+          headers,
+        });
+        setTractorPrice((prev) => {
+          return { ...prev, price: tractorPriceData[0]?.price };
+        });
+
+        setDefaultTractorPrice(tractorPriceData);
       }
       if (report === undefined) {
         if (collReq === "/sales" || collReq === "/expenses") {
@@ -188,6 +205,89 @@ export default function SetupPage({
         );
     }
   };
+
+  const updateTractorPriceHandler = async () => {
+    try {
+      await updateRequest(getAccessToken());
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        try {
+          const newAccessToken = await refreshMyToken();
+          try {
+            await updateRequest(newAccessToken);
+          } catch (e) {
+            throw e;
+          }
+        } catch (refreshError) {
+          setFetchingStatus((prev) => {
+            return {
+              ...prev,
+              status: false,
+              loading: false,
+            };
+          });
+          clearTokens();
+
+          navigate("/homepage");
+        }
+      } else {
+        clearTokens();
+
+        setFetchingStatus((prev) => {
+          return {
+            ...prev,
+            status: false,
+            loading: false,
+            message: ".. תקלה בעדכון המוצר",
+          };
+        });
+        setTimeout(() => {
+          setFetchingStatus((prev) => {
+            return {
+              ...prev,
+              status: false,
+              loading: false,
+              message: null,
+            };
+          });
+          navigate("/homepage");
+        }, 1000);
+      }
+    }
+  };
+
+  const updateRequest = async (token) => {
+    const headers = { Authorization: token };
+    setFetchingStatus((prev) => {
+      return { ...prev, status: true, loading: true };
+    });
+    await Api.patch(
+      `${"/tractorPrice"}/${defaultTractorPrice[0]?._id}`,
+      {
+        price: tractorPrice.price,
+      },
+      {
+        headers: headers,
+      }
+    );
+
+    setFetchingStatus((prev) => {
+      return {
+        ...prev,
+        status: false,
+        loading: false,
+        message: "העידכון בוצע בהצלחה",
+      };
+    });
+    settractorPriceChangeDisplay((prev) => !prev);
+    setItemIsUpdated((prev) => !prev);
+    setTimeout(() => {
+      setFetchingStatus((prev) => {
+        return { ...prev, status: false, loading: false, message: null };
+      });
+    }, 1000);
+  };
+
   const sortedInventory = (kindOfSort) => {
     switch (kindOfSort) {
       case "number":
@@ -205,6 +305,11 @@ export default function SetupPage({
       case "quantity":
         return fetchedData?.sort(
           (a, b) => parseFloat(a.quantity) - parseFloat(b.quantity)
+        );
+      case "letersOfProduct":
+        return fetchedData?.sort(
+          (a, b) =>
+            parseFloat(a.letersOfProduct) - parseFloat(b.letersOfProduct)
         );
       case "water":
         return fetchedData?.sort(
@@ -226,12 +331,10 @@ export default function SetupPage({
         return fetchedData?.sort((a, b) => (a.date > b.date ? 1 : -1));
     }
   };
-
   return (
     <div className="inventory-container">
       {getTotals() > 0 && (
-        <label
-          htmlFor=""
+        <div
           style={{
             width: "40%",
             margin: "auto",
@@ -241,15 +344,88 @@ export default function SetupPage({
             borderBottom: "2px solid orange",
           }}
         >
-          {"  "}
-          {collReq === "/clients"
-            ? "כמות דונומים בטיפול :"
-            : collReq === "/expenses"
-            ? `סכום כל ההוצאות : `
-            : `סכום כל ההכנסות : `}
-          {getTotals().toFixed(2)}
-          {collReq === "/clients" ? " דונם " : ` ש"ח `}
-        </label>
+          <i
+            class="fa-solid fa-tractor"
+            style={{
+              marginRight: "2%",
+              color: "brown",
+              cursor: "pointer",
+              fontSize: "2rem",
+              display:
+                collReq === "/sales" && report?.type === undefined
+                  ? "inline-block"
+                  : "none",
+            }}
+            onClick={() => settractorPriceChangeDisplay((prev) => !prev)}
+          ></i>
+
+          <label htmlFor="">
+            {"  "}
+            {collReq === "/clients"
+              ? "כמות דונומים בטיפול :"
+              : collReq === "/expenses"
+              ? `סכום כל ההוצאות : `
+              : `סכום כל ההכנסות : `}
+            {getTotals().toFixed(2)}
+            {collReq === "/clients" ? " דונם " : ` ש"ח `}
+          </label>
+        </div>
+      )}
+      {tractorPriceChangeDisplay && (
+        <div
+          style={{
+            width: "40%",
+            margin: "auto",
+            textAlign: "center",
+            color: "green",
+            borderBottom: "2px solid orange",
+          }}
+        >
+          <button
+            style={{
+              border: "none",
+              backgroundColor: "lightgreen",
+              display:
+                tractorPrice?.price === defaultTractorPrice[0]?.price
+                  ? "none"
+                  : "inline-block",
+            }}
+            onClick={updateTractorPriceHandler}
+          >
+            מאשר שינויים
+          </button>
+          {` ש"ח לדונם `}
+          <input
+            style={{
+              border: "none",
+              width: "5%",
+              fontWeight: "bold",
+              color: "rgb(1, 83, 104)",
+            }}
+            type="number"
+            placeholder={defaultTractorPrice[0]?.price}
+            value={tractorPrice?.price ? tractorPrice?.price : ""}
+            onChange={(e) => {
+              setTractorPrice((prev) => {
+                return { ...prev, price: e.target.value };
+              });
+            }}
+          />
+          <label htmlFor="">
+            {"  "}
+            {" : מחיר עבודת הטרקטור"}
+          </label>
+          <i
+            class="fa-solid fa-arrow-up"
+            style={{ marginLeft: "2%", color: "gold", cursor: "pointer" }}
+            onClick={() => {
+              settractorPriceChangeDisplay((prev) => !prev);
+              setTractorPrice((prev) => {
+                return { ...prev, price: defaultTractorPrice[0].price };
+              });
+            }}
+          ></i>
+        </div>
       )}
       <form
         className="Item_form"
@@ -261,7 +437,7 @@ export default function SetupPage({
           <button
             id="date"
             className="input_show_item head"
-            style={{ width: report?.type ? "15%" : "17%", textAlign: "center" }}
+            style={{ width: report?.type ? "15%" : "13%", textAlign: "center" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "date");
@@ -342,7 +518,7 @@ export default function SetupPage({
             id="strains"
             className="input_show_item head"
             style={{
-              width: "10%",
+              width: "8%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -350,6 +526,21 @@ export default function SetupPage({
             }}
           >
             זנים
+          </button>
+        )}
+        {collReq === "/sales" && (
+          <button
+            id="product"
+            className="input_show_item head"
+            style={{
+              width: "10%",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "product");
+            }}
+          >
+            חומר{" "}
           </button>
         )}
         {collReq !== "/clients" && (
@@ -388,20 +579,20 @@ export default function SetupPage({
             {collReq === "/sales" ? "שטח" : "כמות"}
           </button>
         )}
-
         {collReq === "/sales" && (
           <button
-            id="product"
+            id="letersOfProduct"
             className="input_show_item head"
-            style={{ width: report?.type ? "12%" : "8%", textAlign: "center" }}
+            style={{ width: "5%" }}
             onClick={(e) => {
               e.preventDefault();
-              setKindOfSort(() => "product");
+              setKindOfSort(() => "letersOfProduct");
             }}
           >
-            חומר{" "}
+            {"כ.חומר"}
           </button>
         )}
+
         {collReq === "/sales" && (
           <button
             id="water"
@@ -485,6 +676,8 @@ export default function SetupPage({
               collReq={collReq}
               selectData={clients}
               report={report}
+              expenses={expenses}
+              tractorPrice={+tractorPrice?.price}
             />
           );
         })}
@@ -500,6 +693,8 @@ export default function SetupPage({
           setItemIsUpdated={setItemIsUpdated}
           collReq={collReq}
           selectData={clients}
+          expenses={expenses}
+          tractorPrice={tractorPrice}
         ></AddItem>
       )}
     </div>

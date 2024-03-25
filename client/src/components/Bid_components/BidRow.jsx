@@ -17,7 +17,6 @@ export default function BidRow({ numOfRow, myData, itemInBid, setBid, bid }) {
   const allItems = myData?.map((item, index) => {
     return { value: item._id, label: item.name };
   });
-  console.log(itemInRow);
   const uncheckItem = () => {
     const myFilteredData = bid?.data?.map((item) => {
       if (item.id === numOfRow) {

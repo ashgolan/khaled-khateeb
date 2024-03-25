@@ -9,6 +9,7 @@ import { expenseRouter } from "./routers/expense.router.js";
 import { eventsRouter } from "./routers/events.router.js";
 import { clientRouter } from "./routers/client.router.js";
 import { bidRouter } from "./routers/bid.router.js";
+import { tractorPriceRouter } from "./routers/tractorPrice.router.js";
 
 const app = Express();
 const __dirname = url.fileURLToPath(new URL("./", import.meta.url));
@@ -26,6 +27,7 @@ app.use("/sales", saleRouter);
 app.use("/expenses", expenseRouter);
 app.use("/events", eventsRouter);
 app.use("/bids", bidRouter);
+app.use("/tractorPrice", tractorPriceRouter);
 app.listen(PORT, () => {
   console.log("connecting to port", PORT);
 });

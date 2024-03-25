@@ -14,6 +14,8 @@ export default function ItemsTable({
   collReq,
   selectData,
   report,
+  expenses,
+  tractorPrice,
 }) {
   const [changeStatus, setChangeStatus] = useState({
     editText: "עריכה",
@@ -30,6 +32,7 @@ export default function ItemsTable({
     product: "",
     water: "",
     quantity: "",
+    letersOfProduct: "",
     colored: false,
     date: "",
     tax: false,
@@ -46,6 +49,9 @@ export default function ItemsTable({
           purpose: thisItem.purpose ? thisItem.purpose : "",
           strains: thisItem.strains ? thisItem.strains : "",
           product: thisItem.product ? thisItem.product : "",
+          letersOfProduct: thisItem.letersOfProduct
+            ? thisItem.letersOfProduct
+            : "",
           water: thisItem.water ? thisItem.water : "",
           quantity: thisItem.quantity ? thisItem.quantity : "",
           colored: thisItem.colored ? thisItem.colored : false,
@@ -58,12 +64,12 @@ export default function ItemsTable({
     getData();
   }, [item._id, myData]);
 
-  const allTaxSelect = [
-    { value: true, label: "כן" },
-    { value: false, label: "לא" },
-  ].map((item) => {
-    return { value: item.value, label: item.label };
-  });
+  // const allTaxSelect = [
+  //   { value: true, label: "כן" },
+  //   { value: false, label: "לא" },
+  // ].map((item) => {
+  //   return { value: item.value, label: item.label };
+  // });
 
   const customStyles = {
     control: (base, state) => ({
@@ -83,13 +89,13 @@ export default function ItemsTable({
     option: (provided, state) => ({
       ...provided,
       padding: "10px", // Adjust padding as needed
-      background: state.isFocused ? "gold" : "rgb(48, 45, 45)",
+      background: state.isFocused ? "gold" : "rgb#ffd900",
       color: state.isFocused ? "rgb(48, 45, 45)" : "inherit",
     }),
     singleValue: (provided, styles, state) => ({
       ...provided,
       ...styles,
-      color: state.isSelected ? "red" : "black",
+      color: state?.isSelected ? "red" : "black",
 
       margin: "0",
     }),
@@ -115,6 +121,13 @@ export default function ItemsTable({
   const allSelectData = filtered?.map((item) => {
     return { value: item._id, label: item.clientName };
   });
+  const idsOfProduct = expenses?.map(({ name }) => name);
+  const filteredProducts = expenses?.filter(
+    ({ product }, index) => !idsOfProduct.includes(product, index + 1)
+  );
+  const allSelectProducts = filteredProducts?.map((item) => {
+    return { value: item.number, label: item.name };
+  });
   const allSelectLandData = selectData?.filter((item) => {
     return itemsValues.clientName === item.clientName;
   });
@@ -130,15 +143,12 @@ export default function ItemsTable({
           width: collReq === "/clients" ? "60%" : "95%",
         }}
       >
-        {(collReq === "/sleevesBids" ||
-          collReq === "/expenses" ||
-          collReq === "/workersExpenses" ||
-          collReq === "/sales") && (
+        {(collReq === "/expenses" || collReq === "/sales") && (
           <input
             id="date"
             type="date"
             className="input_show_item date-input"
-            style={{ width: report?.type ? "15%" : "17%", textAlign: "center" }}
+            style={{ width: report?.type ? "15%" : "13%", textAlign: "center" }}
             disabled={changeStatus.disabled}
             value={itemsValues.date}
             onChange={(e) => {
@@ -149,7 +159,7 @@ export default function ItemsTable({
           ></input>
         )}
 
-        {(collReq === "/clients" || collReq === "/sleevesBids") && (
+        {collReq === "/clients" && (
           <input
             id="clientName"
             className="input_show_item"
@@ -177,7 +187,7 @@ export default function ItemsTable({
             styles={customStyles}
             menuPlacement="auto"
             required
-            defaultValue={itemsValues.clientName}
+            value={itemsValues.clientName}
             onChange={(e) => {
               setItemsValues((prev) => {
                 return {
@@ -198,7 +208,7 @@ export default function ItemsTable({
             styles={customStyles}
             menuPlacement="auto"
             required
-            defaultValue={itemsValues.name}
+            value={itemsValues.name}
             onChange={(e) => {
               setItemsValues((prev) => {
                 return {
@@ -263,7 +273,7 @@ export default function ItemsTable({
             id="strains"
             className="input_show_item"
             style={{
-              width: "10%",
+              width: "8%",
             }}
             disabled={changeStatus.disabled}
             value={itemsValues.strains}
@@ -274,6 +284,33 @@ export default function ItemsTable({
             }}
           />
         )}
+        {collReq === "/sales" && (
+          <Select
+            options={allSelectProducts}
+            className="input_show_item select-product-head "
+            placeholder={
+              itemsValues?.product ? itemsValues.product : "בחר חומר"
+            }
+            isDisabled={changeStatus.disabled}
+            styles={customStyles}
+            menuPlacement="auto"
+            required
+            value={itemsValues?.product}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  product: e.label,
+                  number: e.value,
+                  totalAmount:
+                    +e.value * +itemsValues.letersOfProduct +
+                    +tractorPrice * +itemsValues.quantity,
+                };
+              });
+            }}
+          ></Select>
+        )}
+
         {collReq !== "/clients" && (
           <input
             id="number"
@@ -293,8 +330,10 @@ export default function ItemsTable({
               setItemsValues((prev) => {
                 return {
                   ...prev,
-                  number: e.target.value,
-                  totalAmount: +e.target.value * +prev.quantity,
+                  number: +e.target.value,
+                  totalAmount:
+                    +e.target.value * +itemsValues.letersOfProduct +
+                    +tractorPrice * +itemsValues.quantity,
                 };
               });
             }}
@@ -319,27 +358,37 @@ export default function ItemsTable({
                 return {
                   ...prev,
                   quantity: e.target.value,
-                  totalAmount: e.target.value * prev.number,
+                  totalAmount:
+                    +itemsValues.number * +itemsValues.letersOfProduct +
+                    +tractorPrice * +e.target.value,
+                };
+              });
+            }}
+          ></input>
+        )}
+        {collReq === "/sales" && (
+          <input
+            id="letersOfProduct"
+            className="input_show_item"
+            style={{
+              width: "5%",
+            }}
+            disabled={changeStatus.disabled}
+            value={itemsValues.letersOfProduct}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  letersOfProduct: e.target.value,
+                  totalAmount:
+                    +itemsValues.number * +e.target.value +
+                    +tractorPrice * +itemsValues.quantity,
                 };
               });
             }}
           ></input>
         )}
 
-        {collReq === "/sales" && (
-          <input
-            id="product"
-            className="input_show_item"
-            style={{ width: report?.type ? "12%" : "8%", textAlign: "center" }}
-            disabled={changeStatus.disabled}
-            value={itemsValues.product}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return { ...prev, product: e.target.value };
-              });
-            }}
-          />
-        )}
         {collReq === "/sales" && (
           <input
             id="water"
@@ -365,7 +414,7 @@ export default function ItemsTable({
               fontWeight: "bold",
             }}
             disabled
-            value={+itemsValues?.totalAmount.toFixed(2)}
+            value={+itemsValues?.totalAmount?.toFixed(2)}
           ></input>
         )}
         {/* 
