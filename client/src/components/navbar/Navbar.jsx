@@ -72,6 +72,17 @@ export default function Navbar() {
             src="/clients.png"
           />
           <img
+            src="./bid.png"
+            style={{
+              cursor: "pointer",
+              width: "15%",
+            }}
+            onClick={() => {
+              navigate("/freeBidPage");
+            }}
+            alt=""
+          />
+          <img
             style={{
               cursor: "pointer",
               width: "15%",
@@ -99,7 +110,7 @@ export default function Navbar() {
       <div className="buttons-nav">
         <NavLink
           to={"/expenses"}
-          style={{ backgroundColor: "rgb(80, 163, 77)", fontSize: "1.5rem" }}
+          style={{ backgroundColor: "rgb(80, 163, 77)", fontSize: "1.2rem" }}
         >
           <button
             name="expenses"
@@ -109,8 +120,16 @@ export default function Navbar() {
           </button>
         </NavLink>
         <NavLink
+          to={"/orders"}
+          style={{ backgroundColor: "rgb(80, 163, 77)", fontSize: "1.2rem" }}
+        >
+          <button name="sales" style={{ fontWeight: "bold", color: "white" }}>
+            הצעות/הזמנות
+          </button>
+        </NavLink>
+        <NavLink
           to={"/sales"}
-          style={{ backgroundColor: "rgb(80, 163, 77)", fontSize: "1.5rem" }}
+          style={{ backgroundColor: "rgb(80, 163, 77)", fontSize: "1.2rem" }}
         >
           <button name="sales" style={{ fontWeight: "bold", color: "white" }}>
             עבודה

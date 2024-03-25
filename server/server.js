@@ -8,6 +8,7 @@ import { userRouter } from "./routers/user.router.js";
 import { expenseRouter } from "./routers/expense.router.js";
 import { eventsRouter } from "./routers/events.router.js";
 import { clientRouter } from "./routers/client.router.js";
+import { bidRouter } from "./routers/bid.router.js";
 
 const app = Express();
 const __dirname = url.fileURLToPath(new URL("./", import.meta.url));
@@ -24,6 +25,7 @@ app.use("/clients", clientRouter);
 app.use("/sales", saleRouter);
 app.use("/expenses", expenseRouter);
 app.use("/events", eventsRouter);
+app.use("/bids", bidRouter);
 app.listen(PORT, () => {
   console.log("connecting to port", PORT);
 });

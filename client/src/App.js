@@ -13,7 +13,8 @@ import Sales from "./components/sales/Sales";
 import ChartHomepage from "./components/charts/ChartHomepage";
 import Calender from "./components/calender/Calender";
 import Clients from "./components/clients/Clients";
-
+import FreeBidPage from "./components/Bid_components/FreeBidPage";
+import OrderPage from "./components/Order_Components/OrderPage";
 function App() {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
@@ -54,6 +55,11 @@ function App() {
 
           <Route path="/sales" element={<Sales></Sales>}></Route>
           <Route path="/clients" element={<Clients></Clients>}></Route>
+          <Route
+            path="/freeBidPage"
+            element={<FreeBidPage></FreeBidPage>}
+          ></Route>
+          <Route path="/orders" element={<OrderPage></OrderPage>}></Route>
 
           <Route
             path="/chartHomepage"
