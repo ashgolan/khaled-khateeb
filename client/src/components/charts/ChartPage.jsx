@@ -3,13 +3,13 @@ import { Bar } from "react-chartjs-2";
 import { chart as ChartJS } from "chart.js/auto";
 import { getDataByTotals } from "../../utils/getDataByTotals";
 // import ChartDataLabels from "chartjs-plugin-datalabels";
-
 function ChartPage({ report, setShowChart, showChart, fetchingData }) {
+  console.log(report?.month);
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
       {
-        label: report?.month && report?.year ? "סכום חודשי" : "סכום יומי",
+        label: "סכום",
         data: [],
         backgroundColor: [
           "#4CAF50",
