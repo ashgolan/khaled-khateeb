@@ -376,7 +376,7 @@ export default function AddItem({
         {collReq === "/sales" && (
           <Select
             options={allSelectProducts}
-            className="input_show_item select-product-head "
+            className="add_item select-product-in-add "
             placeholder={
               itemsValues?.product ? itemsValues.product : "בחר חומר"
             }
