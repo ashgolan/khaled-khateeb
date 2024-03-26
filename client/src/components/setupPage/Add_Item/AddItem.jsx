@@ -427,7 +427,7 @@ export default function AddItem({
             value={itemsValues.number}
           ></input>
         )}
-        {collReq !== "/clients" && (
+        {collReq === "/sales" && (
           <input
             name="letersOfProduct"
             id="letersOfProduct"
