@@ -419,8 +419,10 @@ export default function AddItem({
                   ...prev,
                   number: e.target.value,
                   totalAmount:
-                    +e.target.value * +itemsValues.letersOfProduct +
-                    +tractorPrice?.price * +itemsValues.quantity,
+                    collReq === "/expenses"
+                      ? +e.target.value * +itemsValues.quantity
+                      : +e.target.value * +itemsValues.letersOfProduct +
+                        +tractorPrice?.price * +itemsValues.quantity,
                 };
               })
             }
@@ -453,30 +455,28 @@ export default function AddItem({
           ></input>
         )}
 
-        {(collReq === "/clients" ||
-          collReq === "/sales" ||
-          collReq === "/expenses") && (
-          <input
-            name="quantity"
-            id="quantity"
-            style={{ width: "10%" }}
-            required
-            className="add_item"
-            placeholder={collReq === "/sales" ? "שטח" : "כמות"}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  quantity: e.target.value,
-                  totalAmount:
-                    +itemsValues.number * +itemsValues.letersOfProduct +
-                    +tractorPrice?.price * +e.target.value,
-                };
-              });
-            }}
-            value={itemsValues.quantity}
-          ></input>
-        )}
+        <input
+          name="quantity"
+          id="quantity"
+          style={{ width: "10%" }}
+          required
+          className="add_item"
+          placeholder={collReq === "/sales" ? "שטח" : "כמות"}
+          onChange={(e) => {
+            setItemsValues((prev) => {
+              return {
+                ...prev,
+                quantity: e.target.value,
+                totalAmount:
+                  collReq === "/expenses"
+                    ? +itemsValues.number * +e.target.value
+                    : +itemsValues.number * +itemsValues.letersOfProduct +
+                      +tractorPrice?.price * +e.target.value,
+              };
+            });
+          }}
+          value={itemsValues.quantity}
+        ></input>
 
         {collReq === "/sales" && (
           <input
