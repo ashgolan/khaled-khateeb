@@ -70,11 +70,11 @@ export default function Login({ setLoggedIn }) {
   };
 
   return (
-    <section className="vh-40">
+    <section className="vh-50">
       {!fetchingStatus.loading && (
-        <div className="container py-5">
-          <div className="row d-flex justify-content-center align-items-center ">
-            <div className="col-9 col-md-6 col-lg-6 col-xl-5">
+        <div className="container py-5 h-50">
+          <div className="row d-flex justify-content-center align-items-center h-50">
+            <div className="col-12 col-md-8 col-lg-6 col-xl-5">
               <div
                 className="card shadow-2-strong"
                 style={{ borderRadius: "1rem" }}
