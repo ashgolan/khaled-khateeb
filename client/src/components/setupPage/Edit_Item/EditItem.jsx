@@ -76,8 +76,8 @@ export default function EditItem({
         await Api.patch(
           `${collReq}/${item._id}`,
           {
-            clientName: itemsValues.clientName,
-            name: itemsValues.name,
+            clientName: itemsValues.clientName.trim(),
+            name: itemsValues.name.trim(),
             quantity: itemsValues.quantity,
           },
           {

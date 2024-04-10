@@ -50,8 +50,8 @@ export default function AddItem({
         await Api.post(
           collReq,
           {
-            clientName: itemsValues.clientName,
-            name: itemsValues.name,
+            clientName: itemsValues.clientName.trim(),
+            name: itemsValues.name.trim(),
             quantity: itemsValues.quantity,
           },
           {
