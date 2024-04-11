@@ -332,8 +332,10 @@ export default function ItemsTable({
                   ...prev,
                   number: +e.target.value,
                   totalAmount:
-                    +e.target.value * +itemsValues.letersOfProduct +
-                    +tractorPrice * +itemsValues.quantity,
+                    collReq === "/expenses"
+                      ? +e.target.value * +itemsValues.quantity
+                      : +e.target.value * +itemsValues.letersOfProduct +
+                        +tractorPrice * +itemsValues.quantity,
                 };
               });
             }}
@@ -359,8 +361,10 @@ export default function ItemsTable({
                   ...prev,
                   quantity: e.target.value,
                   totalAmount:
-                    +itemsValues.number * +itemsValues.letersOfProduct +
-                    +tractorPrice * +e.target.value,
+                    collReq === "/expenses"
+                      ? +e.target.value * +itemsValues.number
+                      : +itemsValues.number * +itemsValues.letersOfProduct +
+                        +tractorPrice * +e.target.value,
                 };
               });
             }}
