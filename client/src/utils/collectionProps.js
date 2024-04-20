@@ -14,6 +14,7 @@ export const getCollectionProps = (collReq) => {
         "straints",
         "quantity",
         "water",
+        "product",
         "colored",
         "paid",
         "totalAmount",

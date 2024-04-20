@@ -34,7 +34,7 @@ export default function AddItem({
     purpose: "",
     strains: "",
     letersOfProduct: "",
-    product: "",
+    product: [],
     water: "",
     tax: false,
     colored: false,
@@ -225,7 +225,9 @@ export default function AddItem({
   const allSelectProducts = filteredProducts?.map((item) => {
     return { value: item.number, label: item.name };
   });
-
+  const filteredOptions = allSelectProducts.filter(
+    (option) => !itemsValues?.product.includes(option)
+  );
   const allSelectLandData = selectData?.filter((item) => {
     return itemsValues.clientName === item.clientName;
   });
@@ -375,24 +377,31 @@ export default function AddItem({
         )}
         {collReq === "/sales" && (
           <Select
-            options={allSelectProducts}
+            options={filteredOptions}
             className="add_item select-product-in-add "
             placeholder={
-              itemsValues?.product ? itemsValues.product : "בחר חומר"
+              itemsValues?.product.length > 0 ? itemsValues.product : "בחר חומר"
             }
             styles={customStyles}
             menuPlacement="auto"
+            isMulti
             required
-            // value={itemsValues?.product}
-            onChange={(e) => {
+            onChange={(selectedOptions) => {
               setItemsValues((prev) => {
+                let sumOfValues = selectedOptions.reduce((acc, option) => {
+                  return acc + +option.value * +prev.letersOfProduct;
+                }, 0);
+                let sumOfPrices = selectedOptions.reduce((acc, option) => {
+                  return acc + +option.value;
+                }, 0);
+
+                sumOfValues += +tractorPrice?.price * +prev.quantity;
+
                 return {
                   ...prev,
-                  product: e.label,
-                  number: e.value,
-                  totalAmount:
-                    +e.value * +itemsValues.letersOfProduct +
-                    +tractorPrice?.price * +itemsValues.quantity,
+                  product: selectedOptions,
+                  number: sumOfPrices,
+                  totalAmount: sumOfValues,
                 };
               });
             }}

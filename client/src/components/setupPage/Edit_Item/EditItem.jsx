@@ -23,8 +23,18 @@ export default function EditItem({
     const thisProps = getCollectionProps(collReq);
     if (!thisProps) return;
     for (let i in itemsValues) {
-      if (itemsValues[i] === "" && thisProps.includes(i)) return true;
+      if (itemsValues[i]?.length < 1 && thisProps.includes(i)) return true;
     }
+  };
+  const isSameProducts = () => {
+    console.log(
+      Object.entries(itemsValues?.product).every(
+        ([key, value]) => item?.product[key] === value
+      )
+    );
+    return Object.entries(itemsValues?.product).every(
+      ([key, value]) => item?.product[key] === value
+    );
   };
   const isInputsChanged = () => {
     switch (collReq) {
@@ -44,10 +54,9 @@ export default function EditItem({
           itemsValues.number !== item.number ||
           itemsValues.letersOfProduct !== item.letersOfProduct ||
           itemsValues.quantity !== item.quantity ||
-          itemsValues.product !== item.product ||
+          !isSameProducts() ||
           itemsValues.water !== item.water ||
           itemsValues.totalAmount !== item.totalAmount ||
-          itemsValues.tax !== item.tax ||
           itemsValues.colored !== item.colored
         );
       case "/expenses":

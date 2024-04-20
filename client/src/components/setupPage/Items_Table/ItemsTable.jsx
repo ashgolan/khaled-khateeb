@@ -4,7 +4,6 @@ import DeleteItem from "../Delete_Item/DeleteItem";
 import EditItem from "../Edit_Item/EditItem";
 import "./Item_Table.css";
 import Select from "react-select";
-
 export default function ItemsTable({
   item,
   itemInChange,
@@ -29,7 +28,7 @@ export default function ItemsTable({
     number: "",
     purpose: "",
     strains: "",
-    product: "",
+    product: [],
     water: "",
     quantity: "",
     letersOfProduct: "",
@@ -48,7 +47,7 @@ export default function ItemsTable({
           number: thisItem.number ? thisItem.number : "",
           purpose: thisItem.purpose ? thisItem.purpose : "",
           strains: thisItem.strains ? thisItem.strains : "",
-          product: thisItem.product ? thisItem.product : "",
+          product: thisItem.product ? thisItem.product : [],
           letersOfProduct: thisItem.letersOfProduct
             ? thisItem.letersOfProduct
             : "",
@@ -80,6 +79,7 @@ export default function ItemsTable({
       whiteSpace: "nowrap",
       overflow: "hidden",
       textOverflow: "ellipsis",
+      maxHeight: changeStatus.disabled && "40px",
     }),
     dropdownIndicator: (base) => ({
       ...base,
@@ -128,6 +128,10 @@ export default function ItemsTable({
   const allSelectProducts = filteredProducts?.map((item) => {
     return { value: item.number, label: item.name };
   });
+  const filteredOptions = allSelectProducts.filter(
+    (option) => !itemsValues?.product.includes(option)
+  );
+
   const allSelectLandData = selectData?.filter((item) => {
     return itemsValues.clientName === item.clientName;
   });
@@ -286,28 +290,39 @@ export default function ItemsTable({
         )}
         {collReq === "/sales" && (
           <Select
-            options={allSelectProducts}
-            className="input_show_item select-product-head "
+            options={filteredOptions}
+            className="input_show_item select-product-head Select-multi-value-wrapper "
             placeholder={
               itemsValues?.product ? itemsValues.product : "בחר חומר"
             }
             isDisabled={changeStatus.disabled}
             styles={customStyles}
             menuPlacement="auto"
+            isMulti
             required
             value={itemsValues?.product}
-            onChange={(e) => {
+            onChange={(selectedOptions) => {
               setItemsValues((prev) => {
+                // Calculate the sum of the selected option values
+                let sumOfValues = selectedOptions.reduce((acc, option) => {
+                  return acc + +option.value * +prev.letersOfProduct;
+                }, 0);
+                let sumOfPrices = selectedOptions.reduce((acc, option) => {
+                  return acc + +option.value;
+                }, 0);
+
+                // Add any additional calculation to the sum (e.g., tractor price * quantity)
+                sumOfValues += +tractorPrice * +prev.quantity;
+
                 return {
                   ...prev,
-                  product: e.label,
-                  number: e.value,
-                  totalAmount:
-                    +e.value * +itemsValues.letersOfProduct +
-                    +tractorPrice * +itemsValues.quantity,
+                  product: selectedOptions,
+                  number: sumOfPrices,
+                  totalAmount: +sumOfValues,
                 };
               });
             }}
+            popup
           ></Select>
         )}
 

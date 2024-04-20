@@ -11,7 +11,7 @@ const saleSchema = new Schema({
   purpose: { type: String, required: true },
   name: { type: String, required: true },
   strains: { type: String, default: "-" },
-  product: { type: String, default: "-" },
+  product: { type: Array, default: [] },
   letersOfProduct: { type: Number, required: true },
   quantity: { type: Number, default: 0 },
   number: { type: Number, default: 0 },

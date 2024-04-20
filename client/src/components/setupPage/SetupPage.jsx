@@ -336,7 +336,7 @@ export default function SetupPage({
       {getTotals() > 0 && (
         <div
           style={{
-            width: "40%",
+            width: "60%",
             margin: "auto",
             textAlign: "center",
             fontWeight: "bold",
@@ -365,9 +365,19 @@ export default function SetupPage({
               ? "כמות דונומים בטיפול :"
               : collReq === "/expenses"
               ? `סכום כל ההוצאות : `
-              : `סכום כל ההכנסות : `}
-            {getTotals().toFixed(2)}
-            {collReq === "/clients" ? " דונם " : ` ש"ח `}
+              : `סכום כל העבודות : `}
+            {!report?.type && getTotals()}
+            {!report?.type && `  ש"ח לפני מע"מ `}
+            {report?.type && (getTotals() + getTotals() * 0.17).toFixed(2)}{" "}
+            {report?.type && `  ש"ח כולל מע"מ [ `}
+            {report?.type && (
+              <span style={{ fontSize: "0.7rem", color: "darkblue" }}>
+                {getTotals().toFixed(2)}
+                {collReq === "/clients" ? " דונם " : ` ש"ח `} {` + מע"מ 17% ( `}
+                {getTotals().toFixed(2) * 0.17} {`  ש"ח )  `}
+              </span>
+            )}
+            {report?.type && `] `}
           </label>
         </div>
       )}
