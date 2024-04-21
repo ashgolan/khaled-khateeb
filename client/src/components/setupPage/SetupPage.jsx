@@ -367,13 +367,14 @@ export default function SetupPage({
               ? `סכום כל ההוצאות : `
               : `סכום כל העבודות : `}
             {!report?.type && getTotals()}
-            {!report?.type && `  ש"ח לפני מע"מ `}
+            {!report?.type && collReq !== "/clients" && `  ש"ח לפני מע"מ `}
+            {!report?.type && collReq === "/clients" && `  דונם `}
             {report?.type && (getTotals() + getTotals() * 0.17).toFixed(2)}{" "}
             {report?.type && `  ש"ח כולל מע"מ [ `}
             {report?.type && (
               <span style={{ fontSize: "0.7rem", color: "darkblue" }}>
                 {getTotals().toFixed(2)}
-                {collReq === "/clients" ? " דונם " : ` ש"ח `} {` + מע"מ 17% ( `}
+                {` + מע"מ 17% ( `}
                 {(getTotals() * 0.17).toFixed(2)} {`  ש"ח )  `}
               </span>
             )}
