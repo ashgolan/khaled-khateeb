@@ -374,6 +374,7 @@ export default function SetupPage({
             {report?.type && (
               <span style={{ fontSize: "0.7rem", color: "darkblue" }}>
                 {getTotals().toFixed(2)}
+                {`  ש"ח  `}
                 {` + מע"מ 17% ( `}
                 {(getTotals() * 0.17).toFixed(2)} {`  ש"ח )  `}
               </span>
