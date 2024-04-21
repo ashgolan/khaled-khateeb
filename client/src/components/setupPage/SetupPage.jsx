@@ -374,7 +374,7 @@ export default function SetupPage({
               <span style={{ fontSize: "0.7rem", color: "darkblue" }}>
                 {getTotals().toFixed(2)}
                 {collReq === "/clients" ? " דונם " : ` ש"ח `} {` + מע"מ 17% ( `}
-                {getTotals().toFixed(2) * 0.17} {`  ש"ח )  `}
+                {(getTotals() * 0.17).toFixed(2)} {`  ש"ח )  `}
               </span>
             )}
             {report?.type && `] `}
