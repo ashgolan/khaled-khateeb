@@ -247,7 +247,7 @@ function ChartHomepage() {
           )}
           {(report?.type === "/sales" || report?.type === "salesCharts") && (
             <Select
-              options={allSelectData.filter((option) => option.value !== null)}
+              options={allSelectData?.filter((option) => option.value !== null)}
               placeholder="בחר קליינט"
               onChange={(selectedOption) => {
                 setReport((prev) => {
