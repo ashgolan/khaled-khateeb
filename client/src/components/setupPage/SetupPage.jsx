@@ -372,7 +372,7 @@ export default function SetupPage({
             {report?.type && (getTotals() + getTotals() * 0.17).toFixed(2)}{" "}
             {report?.type && `  ש"ח כולל מע"מ [ `}
             {report?.type && (
-              <span style={{ fontSize: "0.7rem", color: "darkblue" }}>
+              <span style={{ fontSize: "0.8rem", color: "darkblue" }}>
                 {getTotals().toFixed(2)}
                 {`  ש"ח  `}
                 {` + מע"מ 17% ( `}

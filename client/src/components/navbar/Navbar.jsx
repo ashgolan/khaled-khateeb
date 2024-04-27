@@ -112,10 +112,7 @@ export default function Navbar() {
           to={"/expenses"}
           style={{ backgroundColor: "rgb(80, 163, 77)", fontSize: "1.2rem" }}
         >
-          <button
-            name="expenses"
-            style={{ fontWeight: "bold", color: "white" }}
-          >
+          <button name="expenses" style={{ color: "white" }}>
             הוצאות
           </button>
         </NavLink>
@@ -123,7 +120,7 @@ export default function Navbar() {
           to={"/orders"}
           style={{ backgroundColor: "rgb(80, 163, 77)", fontSize: "1.2rem" }}
         >
-          <button name="sales" style={{ fontWeight: "bold", color: "white" }}>
+          <button name="sales" style={{ color: "white" }}>
             הצעות/הזמנות
           </button>
         </NavLink>
@@ -131,7 +128,7 @@ export default function Navbar() {
           to={"/sales"}
           style={{ backgroundColor: "rgb(80, 163, 77)", fontSize: "1.2rem" }}
         >
-          <button name="sales" style={{ fontWeight: "bold", color: "white" }}>
+          <button name="sales" style={{ color: "white" }}>
             עבודה
           </button>
         </NavLink>
