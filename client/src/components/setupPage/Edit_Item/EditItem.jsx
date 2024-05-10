@@ -52,7 +52,8 @@ export default function EditItem({
           itemsValues.purpose !== item.purpose ||
           itemsValues.strains !== item.strains ||
           itemsValues.number !== item.number ||
-          itemsValues.letersOfProduct !== item.letersOfProduct ||
+          itemsValues.pricesOfProducts !== item.pricesOfProducts ||
+          itemsValues.quantitiesOfProduct !== item.quantitiesOfProduct ||
           itemsValues.quantity !== item.quantity ||
           !isSameProducts() ||
           itemsValues.water !== item.water ||
@@ -103,7 +104,8 @@ export default function EditItem({
             name: itemsValues.name,
             number: itemsValues.number,
             purpose: itemsValues.purpose,
-            letersOfProduct: itemsValues.letersOfProduct,
+            pricesOfProducts: itemsValues.pricesOfProducts,
+            quantitiesOfProduct: itemsValues.quantitiesOfProduct,
             product: itemsValues.product,
             water: itemsValues.water,
             strains: itemsValues.strains,

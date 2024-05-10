@@ -7,6 +7,9 @@ import { refreshMyToken } from "../../../utils/setNewAccessToken";
 import "./Add_item.css";
 import { clearTokens, getAccessToken } from "../../../utils/tokensStorage";
 import Select from "react-select";
+import InputForQuantity from "./InputForQuantity";
+import { getProductKeys } from "../../../utils/getProductKeys";
+import { getSumOfValues } from "../../../utils/getValuesSum";
 export default function AddItem({
   setaddItemToggle,
   setItemIsUpdated,
@@ -25,6 +28,8 @@ export default function AddItem({
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
+  // const [allQuantities, setAllQuantities] = useState({});
+  // console.log(allQuantities);
   const [itemsValues, setItemsValues] = useState({
     date: year + "-" + month + "-" + day,
     clientName: "",
@@ -33,12 +38,13 @@ export default function AddItem({
     number: "",
     purpose: "",
     strains: "",
-    letersOfProduct: "",
+    pricesOfProducts: {},
     product: [],
     water: "",
     tax: false,
     colored: false,
     totalAmount: 0,
+    quantitiesOfProduct: {},
   });
   const sendPostRequest = async (token) => {
     const headers = {
@@ -77,6 +83,7 @@ export default function AddItem({
         );
         break;
       case "/sales":
+        console.log(itemsValues);
         await Api.post(
           collReq,
           {
@@ -84,7 +91,7 @@ export default function AddItem({
             clientName: itemsValues.clientName,
             name: itemsValues.name,
             number: itemsValues.number,
-            letersOfProduct: itemsValues.letersOfProduct,
+            pricesOfProducts: itemsValues.pricesOfProducts,
             purpose: itemsValues.purpose,
             product: itemsValues.product,
             water: itemsValues.water,
@@ -92,6 +99,7 @@ export default function AddItem({
             colored: itemsValues.colored,
             tax: itemsValues.tax,
             quantity: itemsValues.quantity,
+            quantitiesOfProduct: itemsValues.quantitiesOfProduct,
             totalAmount: itemsValues.totalAmount,
           },
           {
@@ -193,12 +201,7 @@ export default function AddItem({
     e.preventDefault();
     setaddItemToggle({ btnVisible: true, formVisible: false });
   };
-  // const allTaxSelect = [
-  //   { value: true, label: "כן" },
-  //   { value: false, label: "לא" },
-  // ].map((item) => {
-  //   return { value: item.value, label: item.label };
-  // });
+
   const customStyles = {
     control: (base) => ({
       ...base,
@@ -239,6 +242,7 @@ export default function AddItem({
       return { ...prev, colored: !prev.colored };
     });
   };
+
   return (
     <form
       onSubmit={confirmAddingItem}
@@ -324,25 +328,21 @@ export default function AddItem({
             id="purpose"
             className="add_item select-product-in-add "
             placeholder="מטרת הטיפול"
-            // style={{
-            //   width: "25%",
-            // }}
             onChange={(e) =>
               setItemsValues((prev) => {
                 return { ...prev, purpose: e.target.value };
               })
             }
             value={itemsValues.purpose}
+            required
           />
         )}
         {collReq === "/sales" && (
           <input
             id="strains"
+            required
             className="add_item select-product-in-add "
             placeholder="זנים מטופלים"
-            // style={{
-            //   width: "25%",
-            // }}
             onChange={(e) =>
               setItemsValues((prev) => {
                 return { ...prev, strains: e.target.value };
@@ -387,25 +387,42 @@ export default function AddItem({
             isMulti
             required
             onChange={(selectedOptions) => {
+              const keysOfProductNames = selectedOptions.map(
+                (obj) => obj["label"]
+              );
               setItemsValues((prev) => {
-                let sumOfValues = selectedOptions.reduce((acc, option) => {
-                  return acc + +option.value * +prev.letersOfProduct;
-                }, 0);
-                let sumOfPrices = selectedOptions.reduce((acc, option) => {
-                  return acc + +option.value;
-                }, 0);
-
-                sumOfValues += +tractorPrice?.price * +prev.quantity;
-
+                const myNewQuantitis = getProductKeys(
+                  prev.quantitiesOfProduct,
+                  keysOfProductNames
+                );
+                const myNewPrices = getProductKeys(
+                  prev.pricesOfProducts,
+                  keysOfProductNames
+                );
+                const sumOfPrices = getSumOfValues(myNewPrices);
                 return {
                   ...prev,
-                  product: selectedOptions,
+                  quantitiesOfProduct: myNewQuantitis,
+                  pricesOfProducts: myNewPrices,
                   number: sumOfPrices,
-                  totalAmount: sumOfValues,
+                  product: selectedOptions,
+                  totalAmount: +sumOfPrices + +(tractorPrice * prev.quantity),
                 };
               });
             }}
           ></Select>
+        )}
+        {itemsValues?.product?.length > 0 && (
+          <div className="Productquantities">
+            {itemsValues?.product.map((option) => (
+              <InputForQuantity
+                tractorPrice={tractorPrice}
+                itemsValues={itemsValues}
+                setItemsValues={setItemsValues}
+                option={option}
+              ></InputForQuantity>
+            ))}
+          </div>
         )}
         {collReq !== "/clients" && (
           <input
@@ -424,14 +441,19 @@ export default function AddItem({
             onDoubleClick={changeColorOfClientName}
             onChange={(e) =>
               setItemsValues((prev) => {
+                let sumOfPrices = 0;
+                const product = itemsValues.pricesOfProducts;
+                for (const key in product) {
+                  sumOfPrices += product[key];
+                }
                 return {
                   ...prev,
                   number: e.target.value,
                   totalAmount:
                     collReq === "/expenses"
                       ? +e.target.value * +itemsValues.quantity
-                      : +e.target.value * +itemsValues.letersOfProduct +
-                        +tractorPrice?.price * +itemsValues.quantity,
+                      : +e.target.value * +sumOfPrices +
+                        +tractorPrice * +itemsValues.quantity,
                 };
               })
             }
@@ -440,27 +462,16 @@ export default function AddItem({
         )}
         {collReq === "/sales" && (
           <input
-            name="letersOfProduct"
-            id="letersOfProduct"
+            name="quantitiesOfProducts"
+            id="quantitiesOfProducts"
             style={{
               width: collReq === "/sales" ? "6%" : "15%",
             }}
-            required
+            disabled
             className="add_item"
             placeholder={"כ.חומר"}
             onDoubleClick={changeColorOfClientName}
-            onChange={(e) =>
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  letersOfProduct: e.target.value,
-                  totalAmount:
-                    +e.target.value * +itemsValues.number +
-                    +tractorPrice?.price * +itemsValues.quantity,
-                };
-              })
-            }
-            value={itemsValues.letersOfProduct}
+            value={getSumOfValues(itemsValues.quantitiesOfProduct)}
           ></input>
         )}
 
@@ -473,14 +484,18 @@ export default function AddItem({
           placeholder={collReq === "/sales" ? "שטח" : "כמות"}
           onChange={(e) => {
             setItemsValues((prev) => {
+              const sum = Object.values(prev.pricesOfProducts).reduce(
+                (acc, curr) => acc + curr,
+                0
+              );
+
               return {
                 ...prev,
                 quantity: e.target.value,
                 totalAmount:
                   collReq === "/expenses"
                     ? +itemsValues.number * +e.target.value
-                    : +itemsValues.number * +itemsValues.letersOfProduct +
-                      +tractorPrice?.price * +e.target.value,
+                    : +sum + +(tractorPrice * e.target.value),
               };
             });
           }}
@@ -492,38 +507,15 @@ export default function AddItem({
             id="water"
             className="add_item select-product-in-add "
             placeholder="מים לריסוס"
-            // style={{
-            //   width: "25%",
-            // }}
             onChange={(e) =>
               setItemsValues((prev) => {
                 return { ...prev, water: e.target.value };
               })
             }
             value={itemsValues.water}
-          />
-        )}
-        {/* {(collReq === "/sales" || collReq === "/expenses") && (
-          <Select
-            id="tax"
-            options={allTaxSelect}
-            className="add_item select-category-add"
-            placeholder={
-              collReq === "/sales" || collReq === "/expenses"
-                ? "שולם"
-                : "חשבונית"
-            }
-            defaultValue={itemsValues.tax}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return { ...prev, tax: e.value };
-              });
-            }}
-            styles={customStyles}
-            menuPlacement="auto"
             required
           />
-        )} */}
+        )}
       </div>
       <div
         style={{

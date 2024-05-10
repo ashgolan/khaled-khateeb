@@ -4,6 +4,9 @@ import DeleteItem from "../Delete_Item/DeleteItem";
 import EditItem from "../Edit_Item/EditItem";
 import "./Item_Table.css";
 import Select from "react-select";
+import InputForQuantity from "../Add_Item/InputForQuantity";
+import { getSumOfValues } from "../../../utils/getValuesSum";
+import { getProductKeys } from "../../../utils/getProductKeys";
 export default function ItemsTable({
   item,
   itemInChange,
@@ -31,10 +34,11 @@ export default function ItemsTable({
     product: [],
     water: "",
     quantity: "",
-    letersOfProduct: "",
+    pricesOfProducts: {},
     colored: false,
     date: "",
     tax: false,
+    quantitiesOfProduct: {},
     totalAmount: 0,
   });
   useEffect(() => {
@@ -48,13 +52,16 @@ export default function ItemsTable({
           purpose: thisItem.purpose ? thisItem.purpose : "",
           strains: thisItem.strains ? thisItem.strains : "",
           product: thisItem.product ? thisItem.product : [],
-          letersOfProduct: thisItem.letersOfProduct
-            ? thisItem.letersOfProduct
-            : "",
+          pricesOfProducts: thisItem.pricesOfProducts
+            ? thisItem.pricesOfProducts
+            : {},
           water: thisItem.water ? thisItem.water : "",
           quantity: thisItem.quantity ? thisItem.quantity : "",
           colored: thisItem.colored ? thisItem.colored : false,
           date: thisItem.date ? thisItem.date : "",
+          quantitiesOfProduct: thisItem.quantitiesOfProduct
+            ? thisItem.quantitiesOfProduct
+            : {},
           tax: thisItem.tax ? thisItem.tax : false,
           totalAmount: thisItem.totalAmount ? thisItem.totalAmount : "",
         };
@@ -62,13 +69,6 @@ export default function ItemsTable({
     };
     getData();
   }, [item._id, myData]);
-
-  // const allTaxSelect = [
-  //   { value: true, label: "כן" },
-  //   { value: false, label: "לא" },
-  // ].map((item) => {
-  //   return { value: item.value, label: item.label };
-  // });
 
   const customStyles = {
     control: (base, state) => ({
@@ -261,7 +261,7 @@ export default function ItemsTable({
             id="purpose"
             className="input_show_item"
             style={{
-              width: "9%",
+              width: "8%",
             }}
             disabled={changeStatus.disabled}
             value={itemsValues.purpose}
@@ -277,7 +277,7 @@ export default function ItemsTable({
             id="strains"
             className="input_show_item"
             style={{
-              width: "8%",
+              width: "7%",
             }}
             disabled={changeStatus.disabled}
             value={itemsValues.strains}
@@ -302,30 +302,46 @@ export default function ItemsTable({
             required
             value={itemsValues?.product}
             onChange={(selectedOptions) => {
+              const keysOfProductNames = selectedOptions.map(
+                (obj) => obj["label"]
+              );
               setItemsValues((prev) => {
-                // Calculate the sum of the selected option values
-                let sumOfValues = selectedOptions.reduce((acc, option) => {
-                  return acc + +option.value * +prev.letersOfProduct;
-                }, 0);
-                let sumOfPrices = selectedOptions.reduce((acc, option) => {
-                  return acc + +option.value;
-                }, 0);
-
-                // Add any additional calculation to the sum (e.g., tractor price * quantity)
-                sumOfValues += +tractorPrice * +prev.quantity;
-
+                const myNewQuantitis = getProductKeys(
+                  prev.quantitiesOfProduct,
+                  keysOfProductNames
+                );
+                const myNewPrices = getProductKeys(
+                  prev.pricesOfProducts,
+                  keysOfProductNames
+                );
+                const sumOfPrices = getSumOfValues(myNewPrices);
                 return {
                   ...prev,
-                  product: selectedOptions,
+                  quantitiesOfProduct: myNewQuantitis,
+                  pricesOfProducts: myNewPrices,
                   number: sumOfPrices,
-                  totalAmount: +sumOfValues,
+                  product: selectedOptions,
+                  totalAmount: +sumOfPrices + +(tractorPrice * prev.quantity),
                 };
               });
             }}
-            popup
           ></Select>
         )}
-
+        {itemsValues?.product?.length > 0 && !changeStatus.disabled && (
+          <div className="Productquantities">
+            {itemsValues?.product.map((option, index) => (
+              <InputForQuantity
+                tractorPrice={tractorPrice}
+                itemsValues={itemsValues}
+                setItemsValues={setItemsValues}
+                option={option}
+                quantityValue={
+                  Object.values(itemsValues?.quantitiesOfProduct)[index]
+                }
+              ></InputForQuantity>
+            ))}
+          </div>
+        )}
         {collReq !== "/clients" && (
           <input
             id="number"
@@ -345,12 +361,11 @@ export default function ItemsTable({
               setItemsValues((prev) => {
                 return {
                   ...prev,
-                  number: +e.target.value,
+                  number: e.target.value,
                   totalAmount:
                     collReq === "/expenses"
                       ? +e.target.value * +itemsValues.quantity
-                      : +e.target.value * +itemsValues.letersOfProduct +
-                        +tractorPrice * +itemsValues.quantity,
+                      : +e.target.value + +tractorPrice * +itemsValues.quantity,
                 };
               });
             }}
@@ -374,12 +389,11 @@ export default function ItemsTable({
               setItemsValues((prev) => {
                 return {
                   ...prev,
-                  quantity: e.target.value,
+                  quantity: +e.target.value,
                   totalAmount:
                     collReq === "/expenses"
-                      ? +e.target.value * +itemsValues.number
-                      : +itemsValues.number * +itemsValues.letersOfProduct +
-                        +tractorPrice * +e.target.value,
+                      ? +e.target.value * +itemsValues.quantity
+                      : +prev.number + +(tractorPrice * +e.target.value),
                 };
               });
             }}
@@ -392,19 +406,11 @@ export default function ItemsTable({
             style={{
               width: "5%",
             }}
-            disabled={changeStatus.disabled}
-            value={itemsValues.letersOfProduct}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  letersOfProduct: e.target.value,
-                  totalAmount:
-                    +itemsValues.number * +e.target.value +
-                    +tractorPrice * +itemsValues.quantity,
-                };
-              });
-            }}
+            disabled
+            value={Object.values(itemsValues?.quantitiesOfProduct).reduce(
+              (acc, curr) => acc + curr,
+              0
+            )}
           ></input>
         )}
 
@@ -428,7 +434,7 @@ export default function ItemsTable({
             id="totalAmount"
             className="input_show_item"
             style={{
-              width: collReq === "/expenses" ? "8%" : "5%",
+              width: collReq === "/expenses" ? "8%" : "7%",
               color: "rgb(184, 89, 0)",
               fontWeight: "bold",
             }}
@@ -436,25 +442,7 @@ export default function ItemsTable({
             value={+itemsValues?.totalAmount?.toFixed(2)}
           ></input>
         )}
-        {/* 
-        {(collReq === "/sales" || collReq === "/expenses") && (
-          <Select
-            id="tax"
-            options={allTaxSelect}
-            className="input_show_item select-category"
-            isDisabled={changeStatus.disabled}
-            placeholder={itemsValues?.tax === true ? "כן" : "לא"}
-            defaultValue={itemsValues.tax}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return { ...prev, tax: e.value };
-              });
-            }}
-            menuPlacement="auto"
-            styles={customStyles}
-            required
-          />
-        )} */}
+
         {!report?.type && (
           <EditItem
             item={item}

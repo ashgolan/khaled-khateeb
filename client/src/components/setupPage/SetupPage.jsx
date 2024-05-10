@@ -515,7 +515,7 @@ export default function SetupPage({
             id="purpose"
             className="input_show_item head"
             style={{
-              width: "9%",
+              width: "8%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -530,7 +530,7 @@ export default function SetupPage({
             id="strains"
             className="input_show_item head"
             style={{
-              width: "8%",
+              width: "7%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -624,7 +624,7 @@ export default function SetupPage({
             id="totalAmount"
             className="input_show_item head"
             style={{
-              width: collReq === "/expenses" ? "8%" : "5%",
+              width: collReq === "/expenses" ? "8%" : "7%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -706,7 +706,7 @@ export default function SetupPage({
           collReq={collReq}
           selectData={clients}
           expenses={expenses}
-          tractorPrice={tractorPrice}
+          tractorPrice={tractorPrice?.price}
         ></AddItem>
       )}
     </div>
