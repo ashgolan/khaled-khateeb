@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { refreshMyToken } from "../../../utils/setNewAccessToken";
 import { clearTokens, getAccessToken } from "../../../utils/tokensStorage";
 import { getCollectionProps } from "../../../utils/collectionProps";
+import lodash from "lodash";
 export default function EditItem({
   item,
   itemInChange,
@@ -27,15 +28,16 @@ export default function EditItem({
     }
   };
   const isSameProducts = () => {
-    console.log(
-      Object.entries(itemsValues?.product).every(
-        ([key, value]) => item?.product[key] === value
-      )
-    );
     return Object.entries(itemsValues?.product).every(
       ([key, value]) => item?.product[key] === value
     );
   };
+  const isSameQuantities = () => {
+    const updatedSale = itemsValues?.quantitiesOfProduct;
+    const currentSale = item?.quantitiesOfProduct;
+    return lodash.isEqual(updatedSale, currentSale);
+  };
+
   const isInputsChanged = () => {
     switch (collReq) {
       case "/clients":
@@ -52,8 +54,8 @@ export default function EditItem({
           itemsValues.purpose !== item.purpose ||
           itemsValues.strains !== item.strains ||
           itemsValues.number !== item.number ||
-          itemsValues.pricesOfProducts !== item.pricesOfProducts ||
-          itemsValues.quantitiesOfProduct !== item.quantitiesOfProduct ||
+          // itemsValues.pricesOfProducts !== !isSameQuantities() ||
+          !isSameQuantities() ||
           itemsValues.quantity !== item.quantity ||
           !isSameProducts() ||
           itemsValues.water !== item.water ||

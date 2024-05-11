@@ -34,13 +34,14 @@ export default function ItemsTable({
     product: [],
     water: "",
     quantity: "",
-    pricesOfProducts: {},
     colored: false,
     date: "",
     tax: false,
+    pricesOfProducts: {},
     quantitiesOfProduct: {},
     totalAmount: 0,
   });
+  console.log(itemsValues);
   useEffect(() => {
     const getData = async () => {
       const thisItem = myData?.find((t) => t._id === item._id);
@@ -336,7 +337,7 @@ export default function ItemsTable({
                 setItemsValues={setItemsValues}
                 option={option}
                 quantityValue={
-                  Object.values(itemsValues?.quantitiesOfProduct)[index]
+                  Object.values(itemsValues?.quantitiesOfProduct ?? {})[index]
                 }
               ></InputForQuantity>
             ))}
@@ -407,10 +408,9 @@ export default function ItemsTable({
               width: "5%",
             }}
             disabled
-            value={Object.values(itemsValues?.quantitiesOfProduct).reduce(
-              (acc, curr) => acc + curr,
-              0
-            )}
+            value={Object.values(
+              itemsValues?.quantitiesOfProduct ?? {}
+            )?.reduce((acc, curr) => acc + curr, 0)}
           ></input>
         )}
 
