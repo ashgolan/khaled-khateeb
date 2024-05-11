@@ -26,6 +26,7 @@
 }
 .quantityBoxOfProduct:focus {
   outline: none;
+  color: brown;
 }
 .select-category-add {
   width: 9%;
