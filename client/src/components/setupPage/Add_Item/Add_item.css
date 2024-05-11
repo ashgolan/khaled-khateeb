@@ -24,6 +24,9 @@
   border: none;
   border-radius: 0.5rem;
 }
+.quantityBoxOfProduct:focus {
+  outline: none;
+}
 .select-category-add {
   width: 9%;
   padding: 0.3% 0;

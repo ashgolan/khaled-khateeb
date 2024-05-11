@@ -14,7 +14,7 @@ function InputForQuantity({
   }, [quantityValue]);
 
   const handleQuantityChange = (e) => {
-    const newQuantity = +e.target.value || 0;
+    const newQuantity = +e.target.value || "";
 
     setItemsValues((prev) => {
       const updatedQuantities = {
@@ -24,7 +24,7 @@ function InputForQuantity({
 
       const updatedProductsPrice = {
         ...prev.pricesOfProducts,
-        [label]: newQuantity * option.value,
+        [label]: +newQuantity * option.value,
       };
 
       const sumOfPrices = getSumOfValues(updatedProductsPrice);
@@ -48,6 +48,7 @@ function InputForQuantity({
     >
       <input
         type="number"
+        placeholder="כמות"
         className="quantityBoxOfProduct"
         value={letersOfProduct}
         onChange={handleQuantityChange}
