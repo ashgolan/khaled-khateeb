@@ -142,330 +142,357 @@ export default function ItemsTable({
   return (
     <>
       <form
-        className="Item_form"
-        key={`form${item.id}`}
+        className="form-container-in-table"
         style={{
-          width: collReq === "/clients" ? "60%" : "95%",
+          borderBottom: collReq === "/sales" && "1px black dotted",
         }}
       >
-        {(collReq === "/expenses" || collReq === "/sales") && (
-          <input
-            id="date"
-            type="date"
-            className="input_show_item date-input"
-            style={{ width: report?.type ? "15%" : "13%", textAlign: "center" }}
-            disabled={changeStatus.disabled}
-            value={itemsValues.date}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return { ...prev, date: e.target.value };
-              });
-            }}
-          ></input>
-        )}
+        <div
+          className="Item_form"
+          key={`form${item.id}`}
+          style={{
+            width: collReq === "/clients" ? "60%" : "95%",
+          }}
+        >
+          {(collReq === "/expenses" || collReq === "/sales") && (
+            <input
+              id="date"
+              type="date"
+              className="input_show_item date-input"
+              style={{
+                width: report?.type ? "15%" : "13%",
+                textAlign: "center",
+              }}
+              disabled={changeStatus.disabled}
+              value={itemsValues.date}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return { ...prev, date: e.target.value };
+                });
+              }}
+            ></input>
+          )}
 
-        {collReq === "/clients" && (
-          <input
-            id="clientName"
-            className="input_show_item"
-            style={{
-              width: collReq === "/clients" ? "25%" : "13%",
-              color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
-            }}
-            disabled={changeStatus.disabled}
-            value={itemsValues.clientName}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return { ...prev, clientName: e.target.value };
-              });
-            }}
-          ></input>
-        )}
-        {collReq === "/sales" && (
-          <Select
-            options={allSelectData}
-            className="input_show_item select-product-head "
-            placeholder={
-              itemsValues?.clientName ? itemsValues.clientName : "בחר חקלאי"
-            }
-            isDisabled={changeStatus.disabled}
-            styles={customStyles}
-            menuPlacement="auto"
-            required
-            value={itemsValues.clientName}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  name: "",
-                  clientName: e.label,
-                };
-              });
-            }}
-          ></Select>
-        )}
-        {collReq === "/sales" && (
-          <Select
-            options={allSelectLandNames}
-            className="input_show_item select-product-head "
-            placeholder={itemsValues?.name ? itemsValues.name : "בחר מוצר"}
-            isDisabled={changeStatus.disabled}
-            styles={customStyles}
-            menuPlacement="auto"
-            required
-            value={itemsValues.name}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  name: e.label,
-                };
-              });
-            }}
-          ></Select>
-        )}
+          {collReq === "/clients" && (
+            <input
+              id="clientName"
+              className="input_show_item"
+              style={{
+                width: collReq === "/clients" ? "25%" : "13%",
+                color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
+              }}
+              disabled={changeStatus.disabled}
+              value={itemsValues.clientName}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return { ...prev, clientName: e.target.value };
+                });
+              }}
+            ></input>
+          )}
+          {collReq === "/sales" && (
+            <Select
+              options={allSelectData}
+              className="input_show_item select-product-head "
+              placeholder={
+                itemsValues?.clientName ? itemsValues.clientName : "בחר חקלאי"
+              }
+              isDisabled={changeStatus.disabled}
+              styles={customStyles}
+              menuPlacement="auto"
+              required
+              value={itemsValues.clientName}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return {
+                    ...prev,
+                    name: "",
+                    clientName: e.label,
+                  };
+                });
+              }}
+            ></Select>
+          )}
+          {collReq === "/sales" && (
+            <Select
+              options={allSelectLandNames}
+              className="input_show_item select-product-head "
+              placeholder={itemsValues?.name ? itemsValues.name : "בחר מוצר"}
+              isDisabled={changeStatus.disabled}
+              styles={customStyles}
+              menuPlacement="auto"
+              required
+              value={itemsValues.name}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return {
+                    ...prev,
+                    name: e.label,
+                  };
+                });
+              }}
+            ></Select>
+          )}
 
-        {(collReq === "/clients" || collReq === "/expenses") && (
-          <input
-            id="name"
-            className="input_show_item"
-            style={{
-              maxWidth:
-                collReq === "/clients" || collReq === "/expenses"
-                  ? "32%"
-                  : collReq === "/sales" || collReq === "/expenses"
-                  ? "13%"
-                  : report?.type
-                  ? "45%"
-                  : "15%",
+          {(collReq === "/clients" || collReq === "/expenses") && (
+            <input
+              id="name"
+              className="input_show_item"
+              style={{
+                maxWidth:
+                  collReq === "/clients" || collReq === "/expenses"
+                    ? "32%"
+                    : collReq === "/sales" || collReq === "/expenses"
+                    ? "13%"
+                    : report?.type
+                    ? "45%"
+                    : "15%",
 
-              minWidth:
-                collReq === "/clients" || collReq === "/expenses"
-                  ? "32%"
-                  : collReq === "/sales" || collReq === "/expenses"
-                  ? "13%"
-                  : report?.type
-                  ? "45%"
-                  : "15%",
-            }}
-            disabled={changeStatus.disabled}
-            value={itemsValues.name}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return { ...prev, name: e.target.value };
-              });
-            }}
-          ></input>
-        )}
-        {collReq === "/sales" && (
-          <input
-            id="purpose"
-            className="input_show_item"
-            style={{
-              width: "8%",
-            }}
-            disabled={changeStatus.disabled}
-            value={itemsValues.purpose}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return { ...prev, purpose: e.target.value };
-              });
-            }}
-          />
-        )}
-        {collReq === "/sales" && (
-          <input
-            id="strains"
-            className="input_show_item"
-            style={{
-              width: "7%",
-            }}
-            disabled={changeStatus.disabled}
-            value={itemsValues.strains}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return { ...prev, strains: e.target.value };
-              });
-            }}
-          />
-        )}
-        {collReq === "/sales" && (
-          <Select
-            options={filteredOptions}
-            className="input_show_item select-product-head Select-multi-value-wrapper "
-            placeholder={
-              itemsValues?.product ? itemsValues.product : "בחר חומר"
-            }
-            isDisabled={changeStatus.disabled}
-            styles={customStyles}
-            menuPlacement="auto"
-            isMulti
-            required
-            value={itemsValues?.product}
-            onChange={(selectedOptions) => {
-              const keysOfProductNames = selectedOptions.map(
-                (obj) => obj["label"]
-              );
-              setItemsValues((prev) => {
-                const myNewQuantitis = getProductKeys(
-                  prev.quantitiesOfProduct,
-                  keysOfProductNames
+                minWidth:
+                  collReq === "/clients" || collReq === "/expenses"
+                    ? "32%"
+                    : collReq === "/sales" || collReq === "/expenses"
+                    ? "13%"
+                    : report?.type
+                    ? "45%"
+                    : "15%",
+              }}
+              disabled={changeStatus.disabled}
+              value={itemsValues.name}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return { ...prev, name: e.target.value };
+                });
+              }}
+            ></input>
+          )}
+          {collReq === "/sales" && (
+            <input
+              id="purpose"
+              className="input_show_item"
+              style={{
+                width: "8%",
+              }}
+              disabled={changeStatus.disabled}
+              value={itemsValues.purpose}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return { ...prev, purpose: e.target.value };
+                });
+              }}
+            />
+          )}
+          {collReq === "/sales" && (
+            <input
+              id="strains"
+              className="input_show_item"
+              style={{
+                width: "7%",
+              }}
+              disabled={changeStatus.disabled}
+              value={itemsValues.strains}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return { ...prev, strains: e.target.value };
+                });
+              }}
+            />
+          )}
+          {collReq === "/sales" && !report?.type && (
+            <Select
+              options={filteredOptions}
+              className="input_show_item select-product-head Select-multi-value-wrapper "
+              placeholder={
+                itemsValues?.product ? itemsValues.product : "בחר חומר"
+              }
+              isDisabled={changeStatus.disabled}
+              styles={customStyles}
+              menuPlacement="auto"
+              isMulti
+              required
+              value={itemsValues?.product}
+              onChange={(selectedOptions) => {
+                const keysOfProductNames = selectedOptions.map(
+                  (obj) => obj["label"]
                 );
-                const myNewPrices = getProductKeys(
-                  prev.pricesOfProducts,
-                  keysOfProductNames
-                );
-                const sumOfPrices = getSumOfValues(myNewPrices);
-                return {
-                  ...prev,
-                  quantitiesOfProduct: myNewQuantitis,
-                  pricesOfProducts: myNewPrices,
-                  number: sumOfPrices,
-                  product: selectedOptions,
-                  totalAmount: +sumOfPrices + +(tractorPrice * prev.quantity),
-                };
-              });
-            }}
-          ></Select>
-        )}
-        {itemsValues?.product?.length > 0 && !changeStatus.disabled && (
-          <div className="Productquantities">
-            {itemsValues?.product.map((option, index) => (
-              <InputForQuantity
-                tractorPrice={tractorPrice}
-                itemsValues={itemsValues}
-                setItemsValues={setItemsValues}
-                option={option}
-                quantityValue={
-                  Object.values(itemsValues?.quantitiesOfProduct ?? {})[index]
-                }
-              ></InputForQuantity>
+                setItemsValues((prev) => {
+                  const myNewQuantitis = getProductKeys(
+                    prev.quantitiesOfProduct,
+                    keysOfProductNames
+                  );
+                  const myNewPrices = getProductKeys(
+                    prev.pricesOfProducts,
+                    keysOfProductNames
+                  );
+                  const sumOfPrices = getSumOfValues(myNewPrices);
+                  return {
+                    ...prev,
+                    quantitiesOfProduct: myNewQuantitis,
+                    pricesOfProducts: myNewPrices,
+                    number: sumOfPrices,
+                    product: selectedOptions,
+                    totalAmount: +sumOfPrices + +(tractorPrice * prev.quantity),
+                  };
+                });
+              }}
+            ></Select>
+          )}
+          {itemsValues?.product?.length > 0 && !changeStatus.disabled && (
+            <div className="Productquantities">
+              {itemsValues?.product.map((option, index) => (
+                <InputForQuantity
+                  tractorPrice={tractorPrice}
+                  itemsValues={itemsValues}
+                  setItemsValues={setItemsValues}
+                  option={option}
+                  quantityValue={
+                    Object.values(itemsValues?.quantitiesOfProduct ?? {})[index]
+                  }
+                ></InputForQuantity>
+              ))}
+            </div>
+          )}
+          {collReq !== "/clients" && (
+            <input
+              id="number"
+              className="input_show_item"
+              style={{
+                width:
+                  collReq === "/sales"
+                    ? "6%"
+                    : collReq === "/expenses"
+                    ? "10%"
+                    : "15%",
+              }}
+              onDoubleClick={changeColorOfClientName}
+              disabled={changeStatus.disabled}
+              value={itemsValues.number}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return {
+                    ...prev,
+                    number: e.target.value,
+                    totalAmount:
+                      collReq === "/expenses"
+                        ? +e.target.value * +itemsValues.quantity
+                        : +e.target.value +
+                          +tractorPrice * +itemsValues.quantity,
+                  };
+                });
+              }}
+            ></input>
+          )}
+
+          {(collReq === "/clients" ||
+            collReq === "/sales" ||
+            collReq === "/expenses") && (
+            <input
+              id="quantity"
+              className="input_show_item"
+              style={{
+                width: collReq === "/clients" ? "15%" : "5%",
+                color: collReq === "/clients" ? "rgb(184, 89, 0)" : "black",
+                fontWeight: collReq === "/clients" ? "bold" : "normal",
+              }}
+              disabled={changeStatus.disabled}
+              value={itemsValues.quantity}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return {
+                    ...prev,
+                    quantity: +e.target.value,
+                    totalAmount:
+                      collReq === "/expenses"
+                        ? +e.target.value * +itemsValues.quantity
+                        : +prev.number + +(tractorPrice * +e.target.value),
+                  };
+                });
+              }}
+            ></input>
+          )}
+          {collReq === "/sales" && (
+            <input
+              id="letersOfProduct"
+              className="input_show_item"
+              style={{
+                width: "5%",
+              }}
+              disabled
+              value={Object.values(
+                itemsValues?.quantitiesOfProduct ?? {}
+              )?.reduce((acc, curr) => acc + curr, 0)}
+            ></input>
+          )}
+
+          {collReq === "/sales" && (
+            <input
+              id="water"
+              className="input_show_item"
+              style={{ width: "5%" }}
+              disabled={changeStatus.disabled}
+              value={itemsValues.water}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return { ...prev, water: e.target.value };
+                });
+              }}
+            />
+          )}
+
+          {(collReq === "/expenses" || collReq === "/sales") && (
+            <input
+              id="totalAmount"
+              className="input_show_item"
+              style={{
+                width: collReq === "/expenses" ? "8%" : "7%",
+                color: "rgb(184, 89, 0)",
+                fontWeight: "bold",
+              }}
+              disabled
+              value={+itemsValues?.totalAmount?.toFixed(2)}
+            ></input>
+          )}
+
+          {!report?.type && (
+            <EditItem
+              item={item}
+              itemInChange={itemInChange}
+              setItemInChange={setItemInChange}
+              changeStatus={changeStatus}
+              setChangeStatus={setChangeStatus}
+              itemsValues={itemsValues}
+              setItemIsUpdated={setItemIsUpdated}
+              collReq={collReq}
+            ></EditItem>
+          )}
+          {!report?.type && (
+            <DeleteItem
+              itemInChange={itemInChange}
+              setItemInChange={setItemInChange}
+              item={item}
+              changeStatus={changeStatus}
+              setChangeStatus={setChangeStatus}
+              setItemsValues={setItemsValues}
+              setItemIsUpdated={setItemIsUpdated}
+              collReq={collReq}
+            ></DeleteItem>
+          )}
+        </div>
+        {collReq === "/sales" && report?.type && (
+          <div
+            style={{ display: "flex", width: "90%", justifyContent: "center" }}
+          >
+            {itemsValues?.product?.map((option, index) => (
+              <label key={option.value} style={{ color: "green" }}>
+                {index !== 0 && index !== itemsValues?.product.length && ` - `}
+                {option.label}
+              </label>
             ))}
+            <label style={{ color: "brown" }}>
+              {" "}
+              : בעבודה הזאת היה שימוש בחומר
+            </label>
           </div>
-        )}
-        {collReq !== "/clients" && (
-          <input
-            id="number"
-            className="input_show_item"
-            style={{
-              width:
-                collReq === "/sales"
-                  ? "6%"
-                  : collReq === "/expenses"
-                  ? "10%"
-                  : "15%",
-            }}
-            onDoubleClick={changeColorOfClientName}
-            disabled={changeStatus.disabled}
-            value={itemsValues.number}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  number: e.target.value,
-                  totalAmount:
-                    collReq === "/expenses"
-                      ? +e.target.value * +itemsValues.quantity
-                      : +e.target.value + +tractorPrice * +itemsValues.quantity,
-                };
-              });
-            }}
-          ></input>
-        )}
-
-        {(collReq === "/clients" ||
-          collReq === "/sales" ||
-          collReq === "/expenses") && (
-          <input
-            id="quantity"
-            className="input_show_item"
-            style={{
-              width: collReq === "/clients" ? "15%" : "5%",
-              color: collReq === "/clients" ? "rgb(184, 89, 0)" : "black",
-              fontWeight: collReq === "/clients" ? "bold" : "normal",
-            }}
-            disabled={changeStatus.disabled}
-            value={itemsValues.quantity}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  quantity: +e.target.value,
-                  totalAmount:
-                    collReq === "/expenses"
-                      ? +e.target.value * +itemsValues.quantity
-                      : +prev.number + +(tractorPrice * +e.target.value),
-                };
-              });
-            }}
-          ></input>
-        )}
-        {collReq === "/sales" && (
-          <input
-            id="letersOfProduct"
-            className="input_show_item"
-            style={{
-              width: "5%",
-            }}
-            disabled
-            value={Object.values(
-              itemsValues?.quantitiesOfProduct ?? {}
-            )?.reduce((acc, curr) => acc + curr, 0)}
-          ></input>
-        )}
-
-        {collReq === "/sales" && (
-          <input
-            id="water"
-            className="input_show_item"
-            style={{ width: "5%" }}
-            disabled={changeStatus.disabled}
-            value={itemsValues.water}
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                return { ...prev, water: e.target.value };
-              });
-            }}
-          />
-        )}
-
-        {(collReq === "/expenses" || collReq === "/sales") && (
-          <input
-            id="totalAmount"
-            className="input_show_item"
-            style={{
-              width: collReq === "/expenses" ? "8%" : "7%",
-              color: "rgb(184, 89, 0)",
-              fontWeight: "bold",
-            }}
-            disabled
-            value={+itemsValues?.totalAmount?.toFixed(2)}
-          ></input>
-        )}
-
-        {!report?.type && (
-          <EditItem
-            item={item}
-            itemInChange={itemInChange}
-            setItemInChange={setItemInChange}
-            changeStatus={changeStatus}
-            setChangeStatus={setChangeStatus}
-            itemsValues={itemsValues}
-            setItemIsUpdated={setItemIsUpdated}
-            collReq={collReq}
-          ></EditItem>
-        )}
-        {!report?.type && (
-          <DeleteItem
-            itemInChange={itemInChange}
-            setItemInChange={setItemInChange}
-            item={item}
-            changeStatus={changeStatus}
-            setChangeStatus={setChangeStatus}
-            setItemsValues={setItemsValues}
-            setItemIsUpdated={setItemIsUpdated}
-            collReq={collReq}
-          ></DeleteItem>
         )}
       </form>
     </>

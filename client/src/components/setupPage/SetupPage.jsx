@@ -366,7 +366,7 @@ export default function SetupPage({
               : collReq === "/expenses"
               ? `סכום כל ההוצאות : `
               : `סכום כל העבודות : `}
-            {!report?.type && getTotals()}
+            {!report?.type && getTotals().toFixed(2)}
             {!report?.type && collReq !== "/clients" && `  ש"ח לפני מע"מ `}
             {!report?.type && collReq === "/clients" && `  דונם `}
             {report?.type && (getTotals() + getTotals() * 0.17).toFixed(2)}{" "}
@@ -540,7 +540,7 @@ export default function SetupPage({
             זנים
           </button>
         )}
-        {collReq === "/sales" && (
+        {collReq === "/sales" && !report?.type && (
           <button
             id="product"
             className="input_show_item head"
