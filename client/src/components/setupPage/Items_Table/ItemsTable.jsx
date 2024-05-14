@@ -144,7 +144,7 @@ export default function ItemsTable({
       <form
         className="form-container-in-table"
         style={{
-          borderBottom: collReq === "/sales" && "1px black dotted",
+          borderBottom: report?.type && "1px black dotted",
         }}
       >
         <div
