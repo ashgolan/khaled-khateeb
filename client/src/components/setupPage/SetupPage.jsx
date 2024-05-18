@@ -515,7 +515,7 @@ export default function SetupPage({
             id="purpose"
             className="input_show_item head"
             style={{
-              width: "8%",
+              width: report?.type ? "12%" : "8%",
             }}
             onClick={(e) => {
               e.preventDefault();

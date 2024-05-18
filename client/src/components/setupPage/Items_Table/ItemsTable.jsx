@@ -271,7 +271,7 @@ export default function ItemsTable({
               id="purpose"
               className="input_show_item"
               style={{
-                width: "8%",
+                width: report?.type ? "12%" : "8%",
               }}
               disabled={changeStatus.disabled}
               value={itemsValues.purpose}
