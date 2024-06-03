@@ -24,7 +24,7 @@ function InputForQuantity({
 
       const updatedProductsPrice = {
         ...prev.pricesOfProducts,
-        [label]: +newQuantity * option.value,
+        [label]: +newQuantity * +option.value.split("-").pop(),
       };
 
       const sumOfPrices = getSumOfValues(updatedProductsPrice);

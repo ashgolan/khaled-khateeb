@@ -126,8 +126,8 @@ export default function ItemsTable({
   const filteredProducts = expenses?.filter(
     ({ product }, index) => !idsOfProduct.includes(product, index + 1)
   );
-  const allSelectProducts = filteredProducts?.map((item) => {
-    return { value: item.number, label: item.name };
+  const allSelectProducts = filteredProducts?.map((item, index) => {
+    return { value: `${index}-` + item.number, label: item.name };
   });
   const filteredOptions = allSelectProducts.filter(
     (option) => !itemsValues?.product.includes(option)
