@@ -452,7 +452,7 @@ export default function ItemsTable({
               value={(itemsValues?.totalAmount
                 ? +itemsValues.totalAmount
                 : 0
-              ).toFixed(2)}
+              ).toFixed(1)}
             ></input>
           )}
 
