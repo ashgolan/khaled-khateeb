@@ -449,7 +449,10 @@ export default function ItemsTable({
                 fontWeight: "bold",
               }}
               disabled
-              value={+itemsValues?.totalAmount?.toFixed(2)}
+              value={(itemsValues?.totalAmount
+                ? +itemsValues.totalAmount
+                : 0
+              ).toFixed(2)}
             ></input>
           )}
 
