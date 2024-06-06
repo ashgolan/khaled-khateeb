@@ -41,7 +41,6 @@ export default function ItemsTable({
     quantitiesOfProduct: {},
     totalAmount: 0,
   });
-  console.log(itemsValues);
   useEffect(() => {
     const getData = async () => {
       const thisItem = myData?.find((t) => t._id === item._id);
@@ -139,6 +138,8 @@ export default function ItemsTable({
   const allSelectLandNames = allSelectLandData?.map((item) => {
     return { value: item._id, label: item.name };
   });
+  const quantitiesInArray = Object.entries(itemsValues?.quantitiesOfProduct);
+
   return (
     <>
       <form
@@ -485,10 +486,10 @@ export default function ItemsTable({
           <div
             style={{ display: "flex", width: "90%", justifyContent: "center" }}
           >
-            {itemsValues?.product?.map((option, index) => (
-              <label key={option.value} style={{ color: "green" }}>
-                {index !== 0 && index !== itemsValues?.product.length && ` - `}
-                {option.label}
+            {quantitiesInArray?.map(([key, value], index) => (
+              <label style={{ color: "green" }}>
+                {index !== 0 && index !== itemsValues?.product.length && ` - `}{" "}
+                {key} ( {value} )
               </label>
             ))}
             <label style={{ color: "brown" }}>
