@@ -38,9 +38,7 @@ export default function SetupPage({
   const [expenses, setExpenses] = useState([]);
   const [tractorPriceChangeDisplay, settractorPriceChangeDisplay] =
     useState(false);
-  const [tractorPrice, setTractorPrice] = useState({
-    price: "",
-  });
+  const [tractorPrice, setTractorPrice] = useState(0);
   const getTotals = () => {
     let total = 0;
     if (collReq === "/clients") {
@@ -62,6 +60,12 @@ export default function SetupPage({
 
     if (isFetching) {
       if (collReq === "/sales") {
+        const { data: tractorPriceData } = await Api.get("/tractorPrice", {
+          headers,
+        });
+        setTractorPrice(tractorPriceData[0]?.price);
+
+        setDefaultTractorPrice(tractorPriceData);
         setFetchingData(fetchingData.salesData);
       } else if (collReq === "/expenses") {
         setFetchingData(fetchingData.expensesData);
@@ -78,9 +82,7 @@ export default function SetupPage({
         const { data: tractorPriceData } = await Api.get("/tractorPrice", {
           headers,
         });
-        setTractorPrice((prev) => {
-          return { ...prev, price: tractorPriceData[0]?.price };
-        });
+        setTractorPrice(tractorPriceData[0]?.price);
 
         setDefaultTractorPrice(tractorPriceData);
       }
@@ -331,6 +333,7 @@ export default function SetupPage({
         return fetchedData?.sort((a, b) => (a.date > b.date ? 1 : -1));
     }
   };
+  console.log(+tractorPrice);
   return (
     <div className="inventory-container">
       {getTotals() > 0 && (
@@ -689,7 +692,7 @@ export default function SetupPage({
               selectData={clients}
               report={report}
               expenses={expenses}
-              tractorPrice={+tractorPrice?.price}
+              tractorPrice={+tractorPrice}
             />
           );
         })}
@@ -706,7 +709,7 @@ export default function SetupPage({
           collReq={collReq}
           selectData={clients}
           expenses={expenses}
-          tractorPrice={tractorPrice?.price}
+          tractorPrice={+tractorPrice}
         ></AddItem>
       )}
     </div>

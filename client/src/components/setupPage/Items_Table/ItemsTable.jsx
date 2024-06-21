@@ -139,7 +139,7 @@ export default function ItemsTable({
     return { value: item._id, label: item.name };
   });
   const quantitiesInArray = Object.entries(itemsValues?.quantitiesOfProduct);
-
+  const PricesInArray = Object.entries(itemsValues?.pricesOfProducts);
   return (
     <>
       <form
@@ -332,7 +332,8 @@ export default function ItemsTable({
                     pricesOfProducts: myNewPrices,
                     number: sumOfPrices,
                     product: selectedOptions,
-                    totalAmount: +sumOfPrices + +(tractorPrice * prev.quantity),
+                    totalAmount:
+                      +sumOfPrices + +(+tractorPrice * prev.quantity),
                   };
                 });
               }}
@@ -342,7 +343,7 @@ export default function ItemsTable({
             <div className="Productquantities">
               {itemsValues?.product.map((option, index) => (
                 <InputForQuantity
-                  tractorPrice={tractorPrice}
+                  tractorPrice={+tractorPrice}
                   itemsValues={itemsValues}
                   setItemsValues={setItemsValues}
                   option={option}
@@ -484,18 +485,55 @@ export default function ItemsTable({
         </div>
         {collReq === "/sales" && report?.type && (
           <div
-            style={{ display: "flex", width: "90%", justifyContent: "center" }}
+            style={{
+              display: "flex",
+              width: "80%",
+              justifyContent: "flex-end",
+              paddingRight: "1%",
+              marginBottom: "1px",
+            }}
           >
-            {quantitiesInArray?.map(([key, value], index) => (
-              <label style={{ color: "green" }}>
-                {index !== 0 && index !== itemsValues?.product.length && ` - `}{" "}
-                {key} ( {value} )
+            <div
+              style={{
+                padding: "0 1%",
+                color: "green",
+              }}
+            >
+              <label htmlFor="" style={{ color: "brown" }}>
+                [
               </label>
+              {`  ( ש"ח `}
+              <label htmlFor="">
+                {+tractorPrice * +itemsValues?.quantity + " )"}
+              </label>
+              <label htmlFor="" style={{ color: "darkblue" }}>
+                {" "}
+                : עבודת טרקטור
+              </label>
+            </div>
+            {quantitiesInArray?.map(([key, value], index) => (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row-reverse",
+                  justifyContent: "space-between",
+                  padding: "0 1%",
+                  color: "darkblue",
+                }}
+              >
+                <label
+                  style={{ color: "green", direction: "rtl", margin: "0 10px" }}
+                >
+                  {key} {value} {"ל. ("} {PricesInArray[index][1]} {`ש"ח`}
+                  {") "}
+                </label>
+              </div>
             ))}
-            <label style={{ color: "brown" }}>
+            <label htmlFor="" style={{ color: "darkblue" }}>
               {" "}
-              : בעבודה הזאת היה שימוש בחומר
+              : חומרים
             </label>
+            <label style={{ color: "brown" }}> ] חישוב מפורט</label>
           </div>
         )}
       </form>
