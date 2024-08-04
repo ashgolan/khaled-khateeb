@@ -333,7 +333,6 @@ export default function SetupPage({
         return fetchedData?.sort((a, b) => (a.date > b.date ? 1 : -1));
     }
   };
-  console.log(+tractorPrice);
   return (
     <div className="inventory-container">
       {getTotals() > 0 && (

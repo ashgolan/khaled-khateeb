@@ -25,6 +25,7 @@ export default function ItemsTable({
     disabled: true,
     itemId: null,
   });
+  const [totalsInMessages, setTotalsInMessages] = useState(0);
   const [itemsValues, setItemsValues] = useState({
     name: "",
     clientName: "",
@@ -140,6 +141,14 @@ export default function ItemsTable({
   });
   const quantitiesInArray = Object.entries(itemsValues?.quantitiesOfProduct);
   const PricesInArray = Object.entries(itemsValues?.pricesOfProducts);
+
+  const getTotalsOfProducts = () => {
+    let sum = 0;
+    quantitiesInArray?.map((product, index) => {
+      sum += +PricesInArray[index][1];
+    });
+    return sum;
+  };
   return (
     <>
       <form
@@ -504,7 +513,8 @@ export default function ItemsTable({
               </label>
               {`  ( ש"ח `}
               <label htmlFor="">
-                {+tractorPrice * +itemsValues?.quantity + " )"}
+                {+itemsValues.totalAmount - +getTotalsOfProducts() + " )"}
+                {/* {+tractorPrice * +itemsValues?.quantity + " )"} */}
               </label>
               <label htmlFor="" style={{ color: "darkblue" }}>
                 {" "}
