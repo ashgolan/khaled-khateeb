@@ -16,7 +16,7 @@
   display: flex;
   justify-content: space-around;
   flex-direction: row-reverse;
-  width: 70%;
+  width: 90%;
   margin: 1% auto;
 }
 .charts-title > button {

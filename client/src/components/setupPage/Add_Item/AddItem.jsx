@@ -28,8 +28,6 @@ export default function AddItem({
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
-  // const [allQuantities, setAllQuantities] = useState({});
-  // console.log(allQuantities);
   const [itemsValues, setItemsValues] = useState({
     date: year + "-" + month + "-" + day,
     clientName: "",

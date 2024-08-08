@@ -14,7 +14,7 @@ function ChartHomepage() {
     typeName: "",
     type: "",
     clientName: "",
-    month: "",
+    month: [],
     year: "",
   });
   const [updatedReport, setUpdatedReport] = useState(false);
@@ -208,6 +208,7 @@ function ChartHomepage() {
                     setUpdatedReport((prev) => !prev);
                     return {
                       ...prev,
+                      month: [],
                       year: selectedOption ? selectedOption.value : null,
                     };
                   });
@@ -232,18 +233,20 @@ function ChartHomepage() {
                     setUpdatedReport((prev) => !prev);
                     return {
                       ...prev,
-                      month: selectedOption ? selectedOption.value : null,
+                      month: selectedOption,
                     };
                   });
                   setUpdateChart((prev) => !prev);
                   setShowChart(false);
                 }}
                 styles={customStyles}
-                value={
-                  report.month !== null
-                    ? allMonths?.find((option) => option.value === report.month)
-                    : null
+                isMulti={
+                  report.type === "expensesCharts" ||
+                  report.type === "salesCharts"
+                    ? false
+                    : true
                 }
+                value={report?.month || []}
                 isClearable={true}
               ></Select>
             )}
