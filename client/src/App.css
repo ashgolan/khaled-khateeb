@@ -23,6 +23,10 @@ button {
   .message {
     width: 80%;
   }
+  .loader {
+    width: 68px;
+    height: 68px;
+  }
 }
 .loading {
   width: 100%;
