@@ -10,6 +10,11 @@ import { eventsRouter } from "./routers/events.router.js";
 import { clientRouter } from "./routers/client.router.js";
 import { bidRouter } from "./routers/bid.router.js";
 import { tractorPriceRouter } from "./routers/tractorPrice.router.js";
+import { personalSalesRouter } from "./routers/personal/personalSales.router.js";
+import { personalWorkersRouter } from "./routers/personal/personalWorkers.router.js";
+import { personalRkrRouter } from "./routers/personal/personalRkr.router.js";
+import { personalProductExpensesRouter } from "./routers/personal/personalProductExpenses.router.js";
+import { personalTractorPriceRouter } from "./routers/personal/personalTractorPrice.router.js";
 
 const app = Express();
 const __dirname = url.fileURLToPath(new URL("./", import.meta.url));
@@ -28,6 +33,11 @@ app.use("/expenses", expenseRouter);
 app.use("/events", eventsRouter);
 app.use("/bids", bidRouter);
 app.use("/tractorPrice", tractorPriceRouter);
+app.use("/personalSales", personalSalesRouter);
+app.use("/personalWorkers", personalWorkersRouter);
+app.use("/personalRkrExpenses", personalRkrRouter);
+app.use("/personalProductExpenses", personalProductExpensesRouter);
+app.use("/personalTractorPrice", personalTractorPriceRouter);
 app.listen(PORT, () => {
   console.log("connecting to port", PORT);
 });
