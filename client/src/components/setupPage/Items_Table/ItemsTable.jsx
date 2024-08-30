@@ -151,17 +151,13 @@ export default function ItemsTable({
   };
   return (
     <>
-      <form
-        className="form-container-in-table"
-        style={{
-          borderBottom: report?.type && "1px black dotted",
-        }}
-      >
+      <form className="form-container-in-table">
         <div
           className="Item_form"
           key={`form${item.id}`}
           style={{
-            width: collReq === "/clients" ? "60%" : "95%",
+            width:
+              collReq === "/clients" ? "60%" : report?.type ? "100%" : "95%",
           }}
         >
           {(collReq === "/expenses" || collReq === "/sales") && (
@@ -255,7 +251,7 @@ export default function ItemsTable({
                     : collReq === "/sales" || collReq === "/expenses"
                     ? "13%"
                     : report?.type
-                    ? "45%"
+                    ? "55%"
                     : "15%",
 
                 minWidth:
@@ -264,7 +260,7 @@ export default function ItemsTable({
                     : collReq === "/sales" || collReq === "/expenses"
                     ? "13%"
                     : report?.type
-                    ? "45%"
+                    ? "55%"
                     : "15%",
               }}
               disabled={changeStatus.disabled}
@@ -455,7 +451,8 @@ export default function ItemsTable({
               id="totalAmount"
               className="input_show_item"
               style={{
-                width: collReq === "/expenses" ? "8%" : "7%",
+                width:
+                  collReq === "/expenses" ? "8%" : report?.type ? "10%" : "7%",
                 color: "rgb(184, 89, 0)",
                 fontWeight: "bold",
               }}
@@ -546,6 +543,12 @@ export default function ItemsTable({
             <label style={{ color: "brown" }}> ] חישוב מפורט</label>
           </div>
         )}
+        <div
+          style={{
+            width: "84.7%",
+            borderBottom: report?.type && "1px black dotted",
+          }}
+        ></div>
       </form>
     </>
   );

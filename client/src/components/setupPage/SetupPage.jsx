@@ -335,7 +335,17 @@ export default function SetupPage({
     }
   };
   return (
-    <div className="inventory-container">
+    <div
+      className="inventory-container"
+      style={{
+        boxShadow:
+          report?.type &&
+          "rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset",
+        borderRadius: "1rem",
+        paddingTop: "2%",
+        paddingBottom: "2%",
+      }}
+    >
       {getTotals() > 0 && (
         <div
           style={{
@@ -445,7 +455,7 @@ export default function SetupPage({
       <form
         className="Item_form"
         style={{
-          width: collReq === "/clients" ? "60%" : "95%",
+          width: collReq === "/clients" ? "60%" : report?.type ? "100%" : "95%",
         }}
       >
         {(collReq === "/expenses" || collReq === "/sales") && (
@@ -490,7 +500,7 @@ export default function SetupPage({
                   : collReq === "/sales"
                   ? "10%"
                   : report?.type
-                  ? "45%"
+                  ? "55%"
                   : "18%",
               minWidth:
                 collReq === "/clients" || collReq === "/expenses"
@@ -498,7 +508,7 @@ export default function SetupPage({
                   : collReq === "/sales" || collReq === "/expenses"
                   ? "10%"
                   : report?.type
-                  ? "45%"
+                  ? "55%"
                   : "18%",
             }}
             onClick={(e) => {
@@ -627,7 +637,8 @@ export default function SetupPage({
             id="totalAmount"
             className="input_show_item head"
             style={{
-              width: collReq === "/expenses" ? "8%" : "7%",
+              width:
+                collReq === "/expenses" ? "8%" : report?.type ? "10%" : "7%",
             }}
             onClick={(e) => {
               e.preventDefault();

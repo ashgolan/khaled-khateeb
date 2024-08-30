@@ -4,7 +4,6 @@
   }
 }
 .Item_form {
-  width: 95%;
   padding: 0.3% 0;
   display: flex;
   flex-direction: row-reverse;
