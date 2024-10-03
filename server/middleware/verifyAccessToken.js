@@ -17,3 +17,26 @@ export const verifyAccessToken = (req, res, next) => {
     return res.status(401).json({ error: "{צריך להיכנס כמנהל למערכת!!!}" });
   }
 };
+
+// import { env } from "process";
+// import jwt from "jsonwebtoken";
+
+// export const verifyAccessToken = (req, res, next) => {
+//   const secretKey = env.ACCESS_TOKEN_SECRET;
+//   const accessToken = req.header("Authorization");
+
+//   if (!accessToken) {
+//     return res
+//       .status(401)
+//       .json({ error: "Unauthorized - Access Token missing" });
+//   }
+
+//   try {
+//     const decoded = jwt.verify(accessToken.split(" ")[1], secretKey); // Use the second part after 'Bearer'
+//     req.user = decoded;
+//     next();
+//   } catch (error) {
+//     console.error("Token verification error:", error.message); // Log the error for debugging
+//     return res.status(401).json({ error: "צריך להיכנס כמנהל למערכת!!!" });
+//   }
+// };

@@ -17,6 +17,7 @@ import FreeBidPage from "./components/Bid_components/FreeBidPage";
 import OrderPage from "./components/Order_Components/OrderPage";
 function App() {
   const navigate = useNavigate();
+  const [isPersonal, setIsPersonal] = useState(0);
   const [loggedIn, setLoggedIn] = useState(false);
   const [fetchingStatus, setFetchingStatus] = useState({
     loading: false,
@@ -34,7 +35,7 @@ function App() {
   return (
     <div>
       <IdleTimer timeout={20 * 60 * 1000} onIdle={handleIdle} />
-      <Navbar></Navbar>
+      <Navbar isPersonal={isPersonal} setIsPersonal={setIsPersonal}></Navbar>
       {fetchingStatus.message && (
         <h5 className="message">{fetchingStatus.message}</h5>
       )}
@@ -65,7 +66,10 @@ function App() {
             path="/chartHomepage"
             element={<ChartHomepage></ChartHomepage>}
           ></Route>
-          <Route path="/homePage" element={<HomePage></HomePage>}></Route>
+          <Route
+            path="/homePage"
+            element={<HomePage setIsPersonal={setIsPersonal}></HomePage>}
+          ></Route>
           <Route path="/calender" element={<Calender></Calender>}></Route>
         </Routes>
       </FetchingStatus.Provider>

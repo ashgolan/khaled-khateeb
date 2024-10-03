@@ -2,7 +2,7 @@ nav {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-bottom: 2px solid rgb(0, 0, 0);
+  border-bottom: 2px solid rgb(8, 119, 170);
   align-items: center;
   background: white !important;
 }
@@ -83,12 +83,16 @@ nav {
   }
 }
 nav > .buttons-nav {
-  background-color: green;
-  border-top: 2px solid rgb(255, 166, 0);
+  /* background-color: green; */
+  border-top: 2px solid rgb(8, 119, 170);
   width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
+}
+
+nav > .buttons-nav.active {
+  transform: translateX(100%); /* Slide into view */
 }
 .buttons-nav > a > button {
   background-color: transparent;
@@ -108,7 +112,7 @@ nav > .buttons-nav {
 
 .buttons-nav > a > button {
   width: 100%;
-  padding: 1% 20%;
+  padding: 0.5% 10%;
   border: none;
   border-bottom: 2px solid transparent;
 }
@@ -142,14 +146,9 @@ nav > .buttons-nav {
 nav a :hover {
   background-color: transparent;
   color: brown;
-  font-weight: bold;
+  /* font-weight: bold; */
   /* border-radius: 0; */
-  border-bottom: 2px solid orange;
-}
-nav a.active {
-  background-color: transparent !important;
-  border-radius: 0;
-  border-bottom: 2px solid gold;
+  border-bottom: 2px solid rgb(8, 119, 170);
 }
 
 @media print {

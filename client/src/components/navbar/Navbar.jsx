@@ -1,13 +1,15 @@
 import React from "react";
 import "./navbar.css";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   clearTokens,
   getAccessToken,
   getUserId,
 } from "../../utils/tokensStorage";
 import { Api } from "../../utils/Api";
-export default function Navbar() {
+import GlobalNav from "./GlobalNav";
+import PersonalNav from "./PersonalNav";
+export default function Navbar({ isPersonal, setIsPersonal }) {
   const navigate = useNavigate();
   const logout = async (e) => {
     e.preventDefault();
@@ -52,6 +54,18 @@ export default function Navbar() {
           <img
             style={{
               cursor: "pointer",
+              width: "25%",
+            }}
+            alt={""}
+            onClick={() => {
+              setIsPersonal(0);
+              navigate("/homepage");
+            }}
+            src="/homepage.png"
+          />
+          <img
+            style={{
+              cursor: "pointer",
               width: "15%",
             }}
             alt={""}
@@ -60,18 +74,8 @@ export default function Navbar() {
             }}
             src="/draw.png"
           />
-          <img
-            style={{
-              cursor: "pointer",
-              width: "25%",
-            }}
-            alt={""}
-            onClick={() => {
-              navigate("/clients");
-            }}
-            src="/clients.png"
-          />
-          <img
+
+          {/* <img
             src="./bid.png"
             style={{
               cursor: "pointer",
@@ -81,7 +85,7 @@ export default function Navbar() {
               navigate("/freeBidPage");
             }}
             alt=""
-          />
+          /> */}
           <img
             style={{
               cursor: "pointer",
@@ -107,32 +111,8 @@ export default function Navbar() {
           />
         </div>
       </div>
-      <div className="buttons-nav">
-        <NavLink
-          to={"/expenses"}
-          style={{ backgroundColor: "rgb(80, 163, 77)", fontSize: "1.2rem" }}
-        >
-          <button name="expenses" style={{ color: "white" }}>
-            הוצאות
-          </button>
-        </NavLink>
-        <NavLink
-          to={"/orders"}
-          style={{ backgroundColor: "rgb(80, 163, 77)", fontSize: "1.2rem" }}
-        >
-          <button name="sales" style={{ color: "white" }}>
-            הצעות/הזמנות
-          </button>
-        </NavLink>
-        <NavLink
-          to={"/sales"}
-          style={{ backgroundColor: "rgb(80, 163, 77)", fontSize: "1.2rem" }}
-        >
-          <button name="sales" style={{ color: "white" }}>
-            עבודה
-          </button>
-        </NavLink>
-      </div>
+      {isPersonal === 2 && <GlobalNav></GlobalNav>}
+      {isPersonal === 1 && <PersonalNav></PersonalNav>}
     </nav>
   );
 }

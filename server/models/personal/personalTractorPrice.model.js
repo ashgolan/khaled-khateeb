@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 const personalTractorprice = new Schema({
-  price: { type: String, required: true },
+  price: { type: Number, required: true },
 });
 
 export const PersonalTractorPrice = model(

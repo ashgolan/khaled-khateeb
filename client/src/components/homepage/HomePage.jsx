@@ -8,7 +8,7 @@ import {
   getUserId,
 } from "../../utils/tokensStorage";
 import "./HomePage.css";
-export default function HomePage() {
+export default function HomePage({ setIsPersonal }) {
   const navigate = useNavigate();
   const logoutAll = async (e) => {
     try {
@@ -63,6 +63,32 @@ export default function HomePage() {
             המערכת פתוחה לשימוש חופשי
           </label>
         )}
+      </div>
+      <div className="logos-home-page-container">
+        {/* <img
+          onClick={() => setIsPersonal(1)}
+          className="logos-home-page"
+          src="/logohome5.png"
+          alt=""
+        /> */}
+        <img
+          onClick={() => setIsPersonal(1)}
+          className="logos-home-page-kind"
+          src="/personal1.png"
+          alt=""
+        />
+        <img
+          onClick={() => setIsPersonal(2)}
+          className="logos-home-page-kind"
+          src="/global1.png"
+          alt=""
+        />
+        {/* <img
+          onClick={() => setIsPersonal(2)}
+          className="logos-home-page"
+          src="/logohome6.png"
+          alt=""
+        /> */}
       </div>
     </div>
   );

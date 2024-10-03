@@ -25,7 +25,10 @@ export const personalWorkers = {
 
   createPersonalWorkers: async (req, res) => {
     try {
-      const personalWorkers = await Workers.create(req.body);
+      const personalWorkers = await Workers.create({
+        ...req.body,
+        totalAmount: req.body.number,
+      });
       if (!personalWorkers) throw Error("bad data was inserted!");
       res.send(personalWorkers);
     } catch (e) {

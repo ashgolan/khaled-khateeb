@@ -24,10 +24,23 @@
   justify-content: center;
   align-content: center;
   align-items: center;
-  padding-top: 5%;
+  padding-top: 2%;
   margin: auto;
 }
-
+.logos-home-page-container {
+  display: flex;
+  padding-top: 2%;
+  justify-content: center;
+  cursor: pointer;
+}
+.logos-home-page {
+  width: 15%;
+  /* margin: 0 2%; */
+}
+.logos-home-page-kind {
+  margin: 0 3%;
+  width: 13%;
+}
 .title-homepage > .welcome {
   text-align: center;
   display: flex;
