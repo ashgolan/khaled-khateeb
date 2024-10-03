@@ -19,6 +19,8 @@ export default function SetupPage({
   isFetching,
   fetchingData,
 }) {
+  console.log(aaa);
+  
   const date = new Date();
   const year = date.getFullYear();
   const navigate = useNavigate();
