@@ -8,7 +8,7 @@ const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
 const personalSaleSchema = new Schema({
   date: { type: String, default: year + "-" + month + "-" + day },
   name: { type: String, required: true },
-  strain: { type: String, default: "-" },
+  strains: { type: String, default: "-" },
   weightKind: { type: String, required: true },
   quantity: { type: Number, default: 0 },
   number: { type: Number, default: 0 },

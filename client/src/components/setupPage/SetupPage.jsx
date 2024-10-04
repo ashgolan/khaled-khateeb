@@ -19,8 +19,6 @@ export default function SetupPage({
   isFetching,
   fetchingData,
 }) {
-  console.log(aaa);
-  
   const date = new Date();
   const year = date.getFullYear();
   const navigate = useNavigate();
@@ -37,7 +35,10 @@ export default function SetupPage({
   const [kindOfSort, setKindOfSort] = useState("date");
   const [clients, setClients] = useState([]);
 
+  const [personalProductExpenses, setPersonalProductExpenses] = useState([]);
+  const [personalSales, setPersonalSales] = useState([]);
   const [expenses, setExpenses] = useState([]);
+  const [personalWorkers, setPersonalWorkers] = useState([]);
   const [tractorPriceChangeDisplay, settractorPriceChangeDisplay] =
     useState(false);
   const [tractorPrice, setTractorPrice] = useState(0);
@@ -69,49 +70,84 @@ export default function SetupPage({
 
         setDefaultTractorPrice(tractorPriceData);
         setFetchingData(fetchingData.salesData);
+      } else if (collReq === "/personalSales") {
+        setFetchingData(fetchingData.personalSalesData);
+      } else if (collReq === "/personalProductExpenses") {
+        setFetchingData(fetchingData.personalProductExpensesData);
       } else if (collReq === "/expenses") {
         setFetchingData(fetchingData.expensesData);
+      } else if (collReq === "/personalWorkers") {
+        setFetchingData(fetchingData.personalWorkersData);
       } else {
         setFetchingData(fetchingData.clientsData);
       }
     } else {
       const { data } = await Api.get(collReq, { headers });
-      if (collReq === "/sales") {
-        const { data: clientsData } = await Api.get("/clients", { headers });
-        setClients(clientsData);
-        const { data: expensesData } = await Api.get("/expenses", { headers });
-        setExpenses(expensesData);
-        const { data: tractorPriceData } = await Api.get("/tractorPrice", {
-          headers,
-        });
-        setTractorPrice(tractorPriceData[0]?.price);
 
-        setDefaultTractorPrice(tractorPriceData);
-      }
-      if (report === undefined) {
-        if (collReq === "/sales" || collReq === "/expenses") {
-          setFetchingData(
-            data.filter(
-              (item) =>
-                new Date(item.date).getFullYear() === year ||
-                item.colored === true
-            )
+      if (collReq === "/personalProductExpenses") {
+        const { data: personalProductsExpensesData } = await Api.get(
+          "/personalProductExpenses",
+          { headers }
+        );
+        
+        setPersonalProductExpenses(personalProductsExpensesData);
+        }
+        if (collReq === "/personalWorkers") {
+          const { data: personalWorkersData } = await Api.get(
+            "/personalWorkers",
+            { headers }
           );
+          setPersonalWorkers(personalWorkersData);
+        }
+        if (collReq === "/personalSales") {
+          const { data: personalSalesData } = await Api.get(
+            "/personalSales",
+            { headers }
+          );
+          setPersonalSales(personalSalesData);
+        }
+          if (collReq === "/sales") {
+            const { data: clientsData } = await Api.get("/clients", {
+              headers,
+            });
+            setClients(clientsData);
+            const { data: expensesData } = await Api.get("/expenses", {
+              headers,
+            });
+            setExpenses(expensesData);
+            const { data: tractorPriceData } = await Api.get("/tractorPrice", {
+              headers,
+            });
+            setTractorPrice(tractorPriceData[0]?.price);
+
+            setDefaultTractorPrice(tractorPriceData);
+          }
+        
+        if (report === undefined) {
+          if (collReq === "/sales" || collReq === "/expenses") {
+            setFetchingData(
+              data.filter(
+                (item) =>
+                  new Date(item.date).getFullYear() === year ||
+                  item.colored === true
+              )
+            );
+          } else {
+            setFetchingData(data);
+          }
         } else {
           setFetchingData(data);
         }
-      } else {
-        setFetchingData(data);
       }
+      setFetchingStatus((prev) => {
+        return {
+          ...prev,
+          status: false,
+          loading: false,
+        };
+      });
     }
-    setFetchingStatus((prev) => {
-      return {
-        ...prev,
-        status: false,
-        loading: false,
-      };
-    });
-  };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -190,7 +226,7 @@ export default function SetupPage({
         const month =
           new Date(item.date).getMonth() + 1 < 10
             ? `0${new Date(item.date).getMonth() + 1}`
-            : new Date(item.date).getMonth() + 1;
+            : `${new Date(item.date).getMonth() + 1}`;
         if (report?.clientName)
           return (
             monthNames.includes(month) && item.clientName === report.clientName
@@ -322,6 +358,8 @@ export default function SetupPage({
         );
       case "name":
         return fetchedData?.sort((a, b) => (a.name > b.name ? 1 : -1));
+      case "weightKind":
+        return fetchedData?.sort((a, b) => (a.weightKind > b.weightKind ? 1 : -1));
       case "product":
         return fetchedData?.sort((a, b) => (a.product > b.product ? 1 : -1));
       case "purpose":
@@ -360,7 +398,7 @@ export default function SetupPage({
           }}
         >
           <i
-            class="fa-solid fa-tractor"
+            className="fa-solid fa-tractor"
             style={{
               marginRight: "2%",
               color: "brown",
@@ -460,7 +498,13 @@ export default function SetupPage({
           width: collReq === "/clients" ? "60%" : report?.type ? "100%" : "95%",
         }}
       >
-        {(collReq === "/expenses" || collReq === "/sales") && (
+        {(collReq === "/expenses" ||
+          collReq === "/sales" ||
+          collReq === "/personalWorkers"||
+          collReq === "/personalSales"||
+          collReq === "/personalProductExpenses"
+          
+          ) && (
           <button
             id="date"
             className="input_show_item head"
@@ -473,12 +517,14 @@ export default function SetupPage({
             תאריך
           </button>
         )}
-        {(collReq === "/sales" || collReq === "/clients") && (
+        {(collReq === "/sales" ||
+          collReq === "/clients" ||
+          collReq === "/personalWorkers") && (
           <button
             id="clientName"
             className="input_show_item head"
             style={{
-              width: collReq === "/clients" ? "25%" : "10%",
+              width: collReq === "/clients" ? "25%" : "13%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -491,6 +537,9 @@ export default function SetupPage({
 
         {(collReq === "/clients" ||
           collReq === "/expenses" ||
+          collReq === "/personalWorkers" ||
+          collReq === "/personalSales"||
+          collReq === "/personalProductExpenses"||
           collReq === "/sales") && (
           <button
             id="name"
@@ -499,16 +548,25 @@ export default function SetupPage({
               maxWidth:
                 collReq === "/clients" || collReq === "/expenses"
                   ? "32%"
-                  : collReq === "/sales"
-                  ? "10%"
+                  : collReq === "/sales" ||
+                   collReq === "/personalWorkers"||
+                   collReq === "/personalSales"||
+
+                    collReq === "/personalProductExpenses"
+                  ? "13%"
                   : report?.type
                   ? "55%"
                   : "18%",
               minWidth:
                 collReq === "/clients" || collReq === "/expenses"
                   ? "32%"
-                  : collReq === "/sales" || collReq === "/expenses"
-                  ? "10%"
+                  : collReq === "/sales" ||
+                    collReq === "/expenses" ||
+                    collReq === "/personalSales"||
+
+                    collReq === "/personalWorkers"||
+                    collReq === "/personalProductExpenses"
+                  ? "13%"
                   : report?.type
                   ? "55%"
                   : "18%",
@@ -520,7 +578,10 @@ export default function SetupPage({
           >
             {collReq === "/expenses"
               ? "שם החומר"
-              : collReq === "/clients" || collReq === "/sales"
+              : collReq === "/clients" ||
+                collReq === "/sales" ||
+                collReq === "/personalSales"||
+                collReq === "/personalWorkers"
               ? "מטע"
               : "מוצר"}
           </button>
@@ -540,19 +601,34 @@ export default function SetupPage({
             מטרה
           </button>
         )}
-        {collReq === "/sales" && (
+        {(collReq === "/personalSales") && (
           <button
-            id="strains"
+            id="weightKind"
             className="input_show_item head"
             style={{
               width: "7%",
             }}
             onClick={(e) => {
               e.preventDefault();
-              setKindOfSort(() => "strains");
+              setKindOfSort(() => "weightKind");
             }}
           >
             זנים
+          </button>
+        )}
+        {(collReq === "/sales"||collReq === "/personalSales") && (
+          <button
+            id="strains"
+            className="input_show_item head"
+            style={{
+              width: "10%",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "strains");
+            }}
+          >
+            משקל
           </button>
         )}
         {collReq === "/sales" && !report?.type && (
@@ -578,7 +654,7 @@ export default function SetupPage({
               width:
                 collReq === "/sales"
                   ? "6%"
-                  : collReq === "/expenses"
+                  : collReq === "/expenses" || collReq === "/personalSales"
                   ? "10%"
                   : "15%",
             }}
@@ -587,12 +663,14 @@ export default function SetupPage({
               setKindOfSort(() => "number");
             }}
           >
-            מחיר
+            {collReq === "/personalWorkers" ? "יומית" : "מחיר"}
           </button>
         )}
 
         {(collReq === "/clients" ||
           collReq === "/sales" ||
+          collReq === "/personalProductExpenses"||
+          collReq === "/personalSales"||
           collReq === "/expenses") && (
           <button
             id="quantity"
@@ -634,7 +712,11 @@ export default function SetupPage({
           </button>
         )}
 
-        {(collReq === "/expenses" || collReq === "/sales") && (
+        {(collReq === "/expenses" ||
+          collReq === "/sales" ||
+          collReq === "/personalSales"||
+          collReq === "/personalProductExpenses"||
+          collReq === "/personalWorkers") && (
           <button
             id="totalAmount"
             className="input_show_item head"
@@ -690,7 +772,7 @@ export default function SetupPage({
           </button>
         )}
       </form>
-
+        
       {(!fetchingStatus.loading || fetchedData.length > 0) &&
         filterByReport(sortedInventory(kindOfSort)).map((item) => {
           return (
@@ -705,6 +787,7 @@ export default function SetupPage({
               selectData={clients}
               report={report}
               expenses={expenses}
+              personalWorkers={personalWorkers}
               tractorPrice={+tractorPrice}
             />
           );

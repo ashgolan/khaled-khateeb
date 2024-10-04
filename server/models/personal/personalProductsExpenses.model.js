@@ -9,7 +9,7 @@ const personalProductExpensesSchema = new Schema({
   date: { type: String, default: year + "-" + month + "-" + day },
   name: { type: String, required: true },
   quantity: { type: Number, default: 0 },
-  number: { type: Number, default: 0 },
+  number: { type: String, default: 0 },
   totalAmount: { type: Number, default: 0 },
   colored: { type: Boolean, default: false },
 });

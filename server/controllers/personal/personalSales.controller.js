@@ -46,7 +46,7 @@ export const personalSales = {
 
   updatePersonalSales: async (req, res) => {
     try {
-      const personalSales = await PerformanceMarkersonalSales.findByIdAndUpdate(
+      const personalSales = await PersonalSale.findByIdAndUpdate(
         { _id: req.params.id },
         {
           $set: {

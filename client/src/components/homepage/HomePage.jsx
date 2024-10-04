@@ -72,14 +72,19 @@ export default function HomePage({ setIsPersonal }) {
           alt=""
         /> */}
         <img
-          onClick={() => setIsPersonal(1)}
+          onClick={() => {
+            setIsPersonal(1);
+            localStorage.setItem("isPersonalNav", JSON.stringify(1));
+          }}
           className="logos-home-page-kind"
           src="/personal1.png"
           alt=""
         />
         <img
-          onClick={() => setIsPersonal(2)}
-          className="logos-home-page-kind"
+     onClick={() => {
+            setIsPersonal(2);
+            localStorage.setItem("isPersonalNav", JSON.stringify(2));
+          }}          className="logos-home-page-kind"
           src="/global1.png"
           alt=""
         />

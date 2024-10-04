@@ -35,6 +35,7 @@ export default function ItemsTable({
     product: [],
     water: "",
     quantity: "",
+    weightKind: "",
     colored: false,
     date: "",
     tax: false,
@@ -53,6 +54,7 @@ export default function ItemsTable({
           purpose: thisItem.purpose ? thisItem.purpose : "",
           strains: thisItem.strains ? thisItem.strains : "",
           product: thisItem.product ? thisItem.product : [],
+          weightKind: thisItem.weightKind ? thisItem.weightKind : "",
           pricesOfProducts: thisItem.pricesOfProducts
             ? thisItem.pricesOfProducts
             : {},
@@ -139,8 +141,11 @@ export default function ItemsTable({
   const allSelectLandNames = allSelectLandData?.map((item) => {
     return { value: item._id, label: item.name };
   });
-  const quantitiesInArray = Object.entries(itemsValues?.quantitiesOfProduct);
-  const PricesInArray = Object.entries(itemsValues?.pricesOfProducts);
+  const quantitiesInArray = Object?.entries(
+    itemsValues?.quantitiesOfProduct || {}
+  );
+
+  const PricesInArray = Object.entries(itemsValues?.pricesOfProducts || {});
 
   const getTotalsOfProducts = () => {
     let sum = 0;
@@ -160,7 +165,11 @@ export default function ItemsTable({
               collReq === "/clients" ? "60%" : report?.type ? "100%" : "95%",
           }}
         >
-          {(collReq === "/expenses" || collReq === "/sales") && (
+          {(collReq === "/expenses" ||
+            collReq === "/personalProductExpenses" ||
+            collReq === "/sales" ||
+            collReq === "/personalSales" ||
+            collReq === "/personalWorkers") && (
             <input
               id="date"
               type="date"
@@ -179,7 +188,7 @@ export default function ItemsTable({
             ></input>
           )}
 
-          {collReq === "/clients" && (
+          {(collReq === "/clients" || collReq === "/personalWorkers") && (
             <input
               id="clientName"
               className="input_show_item"
@@ -240,7 +249,11 @@ export default function ItemsTable({
             ></Select>
           )}
 
-          {(collReq === "/clients" || collReq === "/expenses") && (
+          {(collReq === "/clients" ||
+            collReq === "/expenses" ||
+            collReq === "/personalSales" ||
+            collReq === "/personalProductExpenses" ||
+            collReq === "/personalWorkers") && (
             <input
               id="name"
               className="input_show_item"
@@ -248,7 +261,11 @@ export default function ItemsTable({
                 maxWidth:
                   collReq === "/clients" || collReq === "/expenses"
                     ? "32%"
-                    : collReq === "/sales" || collReq === "/expenses"
+                    : collReq === "/sales" ||
+                      collReq === "/expenses" ||
+                      collReq === "/personalWorkers" ||
+                      collReq === "/personalSales" ||
+                      collReq === "/personalProductExpenses"
                     ? "13%"
                     : report?.type
                     ? "55%"
@@ -257,7 +274,11 @@ export default function ItemsTable({
                 minWidth:
                   collReq === "/clients" || collReq === "/expenses"
                     ? "32%"
-                    : collReq === "/sales" || collReq === "/expenses"
+                    : collReq === "/sales" ||
+                      collReq === "/expenses" ||
+                      collReq === "/personalSales" ||
+                      collReq === "/personalWorkers" ||
+                      collReq === "/personalProductExpenses"
                     ? "13%"
                     : report?.type
                     ? "55%"
@@ -288,7 +309,7 @@ export default function ItemsTable({
               }}
             />
           )}
-          {collReq === "/sales" && (
+          {(collReq === "/personalSales" || collReq === "/sales") && (
             <input
               id="strains"
               className="input_show_item"
@@ -300,6 +321,26 @@ export default function ItemsTable({
               onChange={(e) => {
                 setItemsValues((prev) => {
                   return { ...prev, strains: e.target.value };
+                });
+              }}
+            />
+          )}
+          {collReq === "/personalSales" && (
+            <Select
+              id="weightKind"
+              options={[
+                { value: "kg", label: "קילו" },
+                { value: "mical", label: "מיכל" },
+                { value: "null", label: "-" },
+              ]}
+              placeholder={itemsValues?.weightKind ? itemsValues.weightKind : "בחר משקל"}
+              className="input_show_item select-product-head "
+              styles={customStyles}
+              disabled={changeStatus.disabled}
+              value={itemsValues.weightKind}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return { ...prev, weightKind: e.label };
                 });
               }}
             />
@@ -367,7 +408,7 @@ export default function ItemsTable({
                 width:
                   collReq === "/sales"
                     ? "6%"
-                    : collReq === "/expenses"
+                    : collReq === "/expenses" || collReq === "/personalSales"
                     ? "10%"
                     : "15%",
               }}
@@ -380,7 +421,9 @@ export default function ItemsTable({
                     ...prev,
                     number: e.target.value,
                     totalAmount:
-                      collReq === "/expenses"
+                      collReq === "/expenses" ||
+                      collReq === "/personalProductExpenses" ||
+                      collReq === "/personalSales"
                         ? +e.target.value * +itemsValues.quantity
                         : +e.target.value +
                           +tractorPrice * +itemsValues.quantity,
@@ -392,6 +435,8 @@ export default function ItemsTable({
 
           {(collReq === "/clients" ||
             collReq === "/sales" ||
+            collReq === "/personalSales" ||
+            collReq === "/personalProductExpenses" ||
             collReq === "/expenses") && (
             <input
               id="quantity"
@@ -407,10 +452,12 @@ export default function ItemsTable({
                 setItemsValues((prev) => {
                   return {
                     ...prev,
-                    quantity: +e.target.value,
+                    quantity: e.target.value,
                     totalAmount:
-                      collReq === "/expenses"
-                        ? +e.target.value * +itemsValues.quantity
+                      collReq === "/expenses" ||
+                      collReq === "/personalProductExpenses" ||
+                      collReq === "/personalSales"
+                        ? +e.target.value * +itemsValues.number
                         : +prev.number + +(tractorPrice * +e.target.value),
                   };
                 });
@@ -446,7 +493,11 @@ export default function ItemsTable({
             />
           )}
 
-          {(collReq === "/expenses" || collReq === "/sales") && (
+          {(collReq === "/expenses" ||
+            collReq === "/sales" ||
+            collReq === "/personalProductExpenses" ||
+            collReq === "/personalSales" ||
+            collReq === "/personalWorkers") && (
             <input
               id="totalAmount"
               className="input_show_item"

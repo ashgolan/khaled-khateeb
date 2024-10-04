@@ -35,6 +35,7 @@ export default function AddItem({
     quantity: "",
     number: "",
     purpose: "",
+    weightKind : "" ,
     strains: "",
     pricesOfProducts: {},
     product: [],
@@ -50,6 +51,56 @@ export default function AddItem({
     };
     setFetchingStatus({ loading: true, error: false });
     switch (collReq) {
+      case "/personalSales":
+        await Api.post(
+          collReq,
+          {
+            date: itemsValues.date,
+            name: itemsValues.name.trim(),
+            strains: itemsValues.strains,
+            weightKind: itemsValues.weightKind,
+            number: itemsValues.number,
+            quantity: itemsValues.quantity,
+            totalAmount: itemsValues.totalAmount,
+            colored: itemsValues.colored,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
+      case "/personalProductExpenses":
+        await Api.post(
+          collReq,
+          {
+            date: itemsValues.date,
+            name: itemsValues.name.trim(),
+            number: itemsValues.number,
+            quantity: itemsValues.quantity,
+            totalAmount: itemsValues.totalAmount,
+            colored: itemsValues.colored,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
+      case "/personalWorkers":
+        await Api.post(
+          collReq,
+          {
+            date: itemsValues.date,
+            clientName: itemsValues.clientName.trim(),
+            name: itemsValues.name.trim(),
+            number: itemsValues.number,
+            totalAmount: itemsValues.totalAmount,
+            colored: itemsValues.colored,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
       case "/clients":
         await Api.post(
           collReq,
@@ -247,7 +298,11 @@ export default function AddItem({
       style={{ width: collReq === "/sales" && "95%" }}
     >
       <div className="add-row">
-        {(collReq === "/expenses" || collReq === "/sales") && (
+        {(collReq === "/expenses" ||
+          collReq === "/sales" ||
+          collReq === "/personalSales"||
+          collReq === "/personalProductExpenses" ||
+          collReq === "/personalWorkers") && (
           <input
             name="date"
             type="date"
@@ -300,7 +355,7 @@ export default function AddItem({
             }}
           ></Select>
         )}
-        {collReq === "/clients" && (
+        {(collReq === "/clients" || collReq === "/personalWorkers") && (
           <input
             name="clientName"
             id="clientName"
@@ -334,7 +389,8 @@ export default function AddItem({
             required
           />
         )}
-        {collReq === "/sales" && (
+        {         ( collReq === "/personalSales"||
+          collReq === "/sales") && (
           <input
             id="strains"
             required
@@ -348,8 +404,27 @@ export default function AddItem({
             value={itemsValues.strains}
           />
         )}
+        {  collReq === "/personalSales" && (
+          <input
+            id="weightKind"
+            required
+            className="add_item select-product-in-add "
+            placeholder="משקל"
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return { ...prev, weightKind: e.target.value };
+              })
+            }
+            value={itemsValues.weightKind}
+          />
+        )}
 
-        {(collReq === "/clients" || collReq === "/expenses") && (
+        {(collReq === "/clients" ||
+          collReq === "/expenses" ||
+          collReq === "/personalSales"||
+
+          collReq === "/personalProductExpenses" ||
+          collReq === "/personalWorkers") && (
           <input
             name="name"
             id="name"
@@ -358,9 +433,10 @@ export default function AddItem({
             className="add_item"
             style={{ width: "35%" }}
             placeholder={
-              collReq === "/expenses"
+              collReq === "/expenses" || collReq === "/personalProductExpenses"
                 ? "שם החומר"
-                : collReq === "/clients"
+                : collReq === "/clients" || collReq === "/personalWorkers"     ||     collReq === "/personalSales"
+
                 ? "מטע"
                 : "מוצר"
             }
@@ -433,7 +509,9 @@ export default function AddItem({
             placeholder={
               collReq === "/contacts" || collReq === "/providers"
                 ? "מספר"
-                : "מחיר"
+                : collReq === "/personalWorkers"
+                ?  "יומית"
+                :collReq === "/personalSales" ? "סכום" : "מחיר"
             }
             onDoubleClick={changeColorOfClientName}
             onChange={(e) =>
@@ -447,7 +525,8 @@ export default function AddItem({
                   ...prev,
                   number: e.target.value,
                   totalAmount:
-                    collReq === "/expenses"
+                    collReq === "/expenses" ||
+                    collReq === "/personalProductExpenses"||collReq === "/personalSales" 
                       ? +e.target.value * +itemsValues.quantity
                       : +e.target.value * +sumOfPrices +
                         +tractorPrice * +itemsValues.quantity,
@@ -471,33 +550,35 @@ export default function AddItem({
             value={getSumOfValues(itemsValues.quantitiesOfProduct)}
           ></input>
         )}
+        {collReq !== "/personalWorkers" && (
+          <input
+            name="quantity"
+            id="quantity"
+            style={{ width: "10%" }}
+            required
+            className="add_item"
+            placeholder={collReq === "/sales" ? "שטח" : "כמות"}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                const sum = Object.values(prev.pricesOfProducts).reduce(
+                  (acc, curr) => acc + curr,
+                  0
+                );
 
-        <input
-          name="quantity"
-          id="quantity"
-          style={{ width: "10%" }}
-          required
-          className="add_item"
-          placeholder={collReq === "/sales" ? "שטח" : "כמות"}
-          onChange={(e) => {
-            setItemsValues((prev) => {
-              const sum = Object.values(prev.pricesOfProducts).reduce(
-                (acc, curr) => acc + curr,
-                0
-              );
-
-              return {
-                ...prev,
-                quantity: e.target.value,
-                totalAmount:
-                  collReq === "/expenses"
-                    ? +itemsValues.number * +e.target.value
-                    : +sum + +(tractorPrice * e.target.value),
-              };
-            });
-          }}
-          value={itemsValues.quantity}
-        ></input>
+                return {
+                  ...prev,
+                  quantity: e.target.value,
+                  totalAmount:
+                    collReq === "/expenses" ||
+                    collReq === "/personalProductExpenses"||collReq === "/personalSales" 
+                      ? +itemsValues.number * +e.target.value
+                      : +sum + +(tractorPrice * e.target.value),
+                };
+              });
+            }}
+            value={itemsValues.quantity}
+          ></input>
+        )}
 
         {collReq === "/sales" && (
           <input

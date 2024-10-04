@@ -72,7 +72,6 @@ nav {
 
   .img-bottomNav > img {
     width: 7% !important;
-    /* padding: 2%; */
   }
   nav > .buttons-nav {
     flex-wrap: wrap;
@@ -82,8 +81,8 @@ nav {
     padding: 1%;
   }
 }
+
 nav > .buttons-nav {
-  /* background-color: green; */
   border-top: 2px solid rgb(8, 119, 170);
   width: 100%;
   display: flex;
@@ -92,7 +91,7 @@ nav > .buttons-nav {
 }
 
 nav > .buttons-nav.active {
-  transform: translateX(100%); /* Slide into view */
+  transform: translateX(100%); 
 }
 .buttons-nav > a > button {
   background-color: transparent;
@@ -128,17 +127,7 @@ nav > .buttons-nav.active {
   background-color: white;
   border-radius: 5rem 0 0 0;
 }
-.createdBy {
-  /* text-align: end; */
-  /* display: flex;
-  font-size: 0.8rem;
-  padding: 2%;
-  justify-content: center;
-  width: 70%;
-  color: brown;
-  background-color: white;
-  border-radius: 0 1rem 1rem 0; */
-}
+
 .img-bottomNav > img {
   margin-left: 3%;
   width: 20%;
@@ -146,8 +135,7 @@ nav > .buttons-nav.active {
 nav a :hover {
   background-color: transparent;
   color: brown;
-  /* font-weight: bold; */
-  /* border-radius: 0; */
+
   border-bottom: 2px solid rgb(8, 119, 170);
 }
 

@@ -81,21 +81,26 @@ export const userControllers = {
   login: async (req, res) => {
     try {
       const adminUser = await User.findOne({ email: req.body.email });
-      if (!adminUser) throw Error("user not found!!");
-      const { accessToken, refreshToken } = await adminUser.generateAuthToken();
-      const isMatched = await bcrypt.compare(
-        req.body.password,
-        adminUser.password
-      );
+      if (!adminUser) return res.status(404).send("User not found!!");
+  
+      // Run password comparison and token generation in parallel
+      const [isMatched, tokens] = await Promise.all([
+        bcrypt.compare(req.body.password, adminUser.password),
+        adminUser.generateAuthToken()
+      ]);
+  
       if (!isMatched) {
-        throw Error("user not found!!");
-      } else {
-        res.send({ accessToken, refreshToken, adminUser });
+        return res.status(401).send("Invalid credentials!!");
       }
+  
+      // If password is valid, send response with tokens
+      const { accessToken, refreshToken } = tokens;
+      res.send({ accessToken, refreshToken, adminUser });
     } catch (e) {
-      res.send(e.message);
+      res.status(500).send(e.message);
     }
   },
+  
   refreshAccessToken: (req, res) => {
     try {
       const refreshToken = req.body.refreshToken;

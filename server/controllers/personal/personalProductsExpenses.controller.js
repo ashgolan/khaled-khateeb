@@ -27,7 +27,6 @@ export const productsExpenses = {
     try {
       const productsExpenses = await PersonalProductExpenses.create({
         ...req.body,
-        totalAmount: req.body.number,
       });
       if (!productsExpenses) throw Error("bad data was inserted!");
       res.send(productsExpenses);

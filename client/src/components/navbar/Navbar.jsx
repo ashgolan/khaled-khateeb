@@ -10,6 +10,7 @@ import { Api } from "../../utils/Api";
 import GlobalNav from "./GlobalNav";
 import PersonalNav from "./PersonalNav";
 export default function Navbar({ isPersonal, setIsPersonal }) {
+  
   const navigate = useNavigate();
   const logout = async (e) => {
     e.preventDefault();
@@ -111,8 +112,8 @@ export default function Navbar({ isPersonal, setIsPersonal }) {
           />
         </div>
       </div>
-      {isPersonal === 2 && <GlobalNav></GlobalNav>}
-      {isPersonal === 1 && <PersonalNav></PersonalNav>}
+      {(isPersonal === 2 || (JSON.parse(localStorage.getItem('isPersonalNav') == 2))) && <GlobalNav></GlobalNav>}
+      {(isPersonal === 1 || (JSON.parse(localStorage.getItem('isPersonalNav') == 1))) &&<PersonalNav></PersonalNav>}
     </nav>
   );
 }
