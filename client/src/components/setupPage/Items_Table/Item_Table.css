@@ -84,3 +84,26 @@
   border-bottom: 2px solid rgb(228, 96, 96);
   color: rgb(189, 10, 10);
 }
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 2px #f30000, inset 0 0 4px #ff0000 }
+  50% { box-shadow: 0 0 8px #f30000, inset 0 0 4px #ff0000 }
+  100% { box-shadow: 0 0 2px #f30000, inset 0 0 4px #ff0000 }
+}
+
+.inner, .notInner {
+  background-color: transparent;
+  width: 15px;
+  height: 15px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+}
+
+.inner {
+  animation: pulse 2s linear 1s infinite;  /* Add standard animation */
+}
+
+.notInner {
+  box-shadow: 0 0 4px #f1ebeb, inset 0 0 4px #ddd6d6;
+}

@@ -10,6 +10,8 @@ const personalRkrExpensesSchema = new Schema({
   name: { type: String, required: true },
   quantity: { type: Number, default: 0 },
   product: { type: Array, default: [] },
+  pricesOfProducts: { type: Object },
+  quantitiesOfProduct: { type: Object },
   other: { type: String, default: "-" },
   number: { type: Number, default: 0 },
   totalAmount: { type: Number, default: 0 },

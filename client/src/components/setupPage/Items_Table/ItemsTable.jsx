@@ -34,6 +34,7 @@ export default function ItemsTable({
     strains: "",
     product: [],
     water: "",
+    other: "",
     quantity: "",
     weightKind: "",
     colored: false,
@@ -53,6 +54,7 @@ export default function ItemsTable({
           number: thisItem.number ? thisItem.number : "",
           purpose: thisItem.purpose ? thisItem.purpose : "",
           strains: thisItem.strains ? thisItem.strains : "",
+          other: thisItem.other ? thisItem.other : "",
           product: thisItem.product ? thisItem.product : [],
           weightKind: thisItem.weightKind ? thisItem.weightKind : "",
           pricesOfProducts: thisItem.pricesOfProducts
@@ -98,13 +100,12 @@ export default function ItemsTable({
     singleValue: (provided, styles, state) => ({
       ...provided,
       ...styles,
-      color: state?.isSelected ? "red" : "black",
 
       margin: "0",
     }),
     placeholder: (provided) => ({
       ...provided,
-      color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
+      color:  "black",
     }),
     menu: (base) => ({
       ...base,
@@ -165,9 +166,20 @@ export default function ItemsTable({
               collReq === "/clients" ? "60%" : report?.type ? "100%" : "95%",
           }}
         >
+                <label
+          id="colored"
+          className={itemsValues?.colored ? "inner" : "notInner"}
+          disabled={changeStatus.disabled}
+          onDoubleClick={changeColorOfClientName}
+          style={{
+            pointerEvents: changeStatus.disabled ? "none" : "auto", // Disable clicks when disabled
+            cursor: changeStatus.disabled ? "not-allowed" : "pointer", // Change cursor to indicate it's disabled
+          }}
+        />
           {(collReq === "/expenses" ||
             collReq === "/personalProductExpenses" ||
             collReq === "/sales" ||
+            collReq === "/personalRkrExpenses" ||
             collReq === "/personalSales" ||
             collReq === "/personalWorkers") && (
             <input
@@ -252,6 +264,7 @@ export default function ItemsTable({
           {(collReq === "/clients" ||
             collReq === "/expenses" ||
             collReq === "/personalSales" ||
+            collReq === "/personalRkrExpenses" ||
             collReq === "/personalProductExpenses" ||
             collReq === "/personalWorkers") && (
             <input
@@ -265,6 +278,7 @@ export default function ItemsTable({
                       collReq === "/expenses" ||
                       collReq === "/personalWorkers" ||
                       collReq === "/personalSales" ||
+                      collReq === "/personalRkrExpenses" ||
                       collReq === "/personalProductExpenses"
                     ? "13%"
                     : report?.type
@@ -277,6 +291,7 @@ export default function ItemsTable({
                     : collReq === "/sales" ||
                       collReq === "/expenses" ||
                       collReq === "/personalSales" ||
+                      collReq === "/personalRkrExpenses" ||
                       collReq === "/personalWorkers" ||
                       collReq === "/personalProductExpenses"
                     ? "13%"
@@ -345,7 +360,7 @@ export default function ItemsTable({
               }}
             />
           )}
-          {collReq === "/sales" && !report?.type && (
+          {(collReq === "/sales"|| collReq === "/personalRkrExpenses" ) && !report?.type && (
             <Select
               options={filteredOptions}
               className="input_show_item select-product-head Select-multi-value-wrapper "
@@ -436,6 +451,7 @@ export default function ItemsTable({
           {(collReq === "/clients" ||
             collReq === "/sales" ||
             collReq === "/personalSales" ||
+            collReq === "/personalRkrExpenses" ||
             collReq === "/personalProductExpenses" ||
             collReq === "/expenses") && (
             <input
@@ -492,10 +508,26 @@ export default function ItemsTable({
               }}
             />
           )}
-
+          {(collReq === '/personalRkrExpenses') && (
+            <input
+              id="other"
+              className="input_show_item"
+              style={{
+                width: "7%",
+              }}
+              disabled={changeStatus.disabled}
+              value={itemsValues.other}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return { ...prev, other: e.target.value };
+                });
+              }}
+            />
+          )}
           {(collReq === "/expenses" ||
             collReq === "/sales" ||
             collReq === "/personalProductExpenses" ||
+            collReq === "/personalRkrExpenses" ||
             collReq === "/personalSales" ||
             collReq === "/personalWorkers") && (
             <input

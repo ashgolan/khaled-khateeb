@@ -315,8 +315,11 @@ export default function EditItem({
   // Check for empty values
   const checkInputsValues = () => {
     const thisProps = getCollectionProps(collReq);
-    
-    return Array.isArray(thisProps) && thisProps.some((key) => !`${itemsValues[key]}`?.length);
+
+    return (
+      Array.isArray(thisProps) &&
+      thisProps.some((key) => !`${itemsValues[key]}`?.length)
+    );
   };
 
   // // Compare products safely
@@ -339,7 +342,18 @@ export default function EditItem({
   const isInputsChanged = () => {
     const relevantProps = {
       "/clients": ["clientName", "name", "quantity"],
-
+      "/personalRkrExpenses": [
+        "date",
+        "name",
+        "number",
+        "product",
+        "pricesOfProducts",
+        "quantitiesOfProduct",
+        "quantity",
+        "other",
+        "colored",
+        "totalAmount",
+      ],
       "/personalSales": [
         "date",
         "name",
@@ -373,6 +387,9 @@ export default function EditItem({
         "number",
         "purpose",
         "strains",
+        "product",
+        "pricesOfProducts",
+        "quantitiesOfProduct",
         "quantity",
         "water",
         "colored",
@@ -395,42 +412,48 @@ export default function EditItem({
   // Send API request
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
-    try{
-    const payload = {
-      clientName: itemsValues.clientName?.trim(),
-      name: itemsValues.name?.trim(),
-      number: itemsValues.number,
-      quantity: itemsValues.quantity,
-      date: itemsValues.date,
-      purpose: itemsValues.purpose,
-      weightKind : itemsValues.weightKind,
-      strains: itemsValues.strains,
-      water: itemsValues.water,
-      colored: itemsValues.colored,
-      totalAmount: itemsValues.totalAmount,
-      tax: itemsValues.tax,
-      quantitiesOfProduct: itemsValues.quantitiesOfProduct,
-      product: itemsValues.product,
-    };
+    try {
+      const payload = {
+        clientName: itemsValues.clientName?.trim(),
+        name: itemsValues.name?.trim(),
+        number: itemsValues.number,
+        quantity: itemsValues.quantity,
+        date: itemsValues.date,
+        purpose: itemsValues.purpose,
+        weightKind: itemsValues.weightKind,
+        strains: itemsValues.strains,
+        water: itemsValues.water,
+        other: itemsValues.other,
+        colored: itemsValues.colored,
+        totalAmount: itemsValues.totalAmount,
+        tax: itemsValues.tax,
+        quantitiesOfProduct: itemsValues.quantitiesOfProduct,
+        product: itemsValues.product,
+      };
 
-    await Api.patch(`${collReq}/${item._id}`, payload, { headers });
-    setFetchingStatus({
-      status: false,
-      loading: false,
-      message: "העדכון בוצע בהצלחה",
-    });
-    setItemIsUpdated((prev) => !prev);
-    setTimeout(() => setFetchingStatus((prev) => ({ ...prev, message: null })), 1000);
-  }catch(e) {
-    setFetchingStatus({
-      status: false,
-      loading: false,
-      message: "תקלה בביצוע העדכון",
-    });
-    setItemIsUpdated((prev) => !prev);
-    setTimeout(() => setFetchingStatus((prev) => ({ ...prev, message: null })), 1000);
-
-  }
+      await Api.patch(`${collReq}/${item._id}`, payload, { headers });
+      setFetchingStatus({
+        status: false,
+        loading: false,
+        message: "העדכון בוצע בהצלחה",
+      });
+      setItemIsUpdated((prev) => !prev);
+      setTimeout(
+        () => setFetchingStatus((prev) => ({ ...prev, message: null })),
+        1000
+      );
+    } catch (e) {
+      setFetchingStatus({
+        status: false,
+        loading: false,
+        message: "תקלה בביצוע העדכון",
+      });
+      setItemIsUpdated((prev) => !prev);
+      setTimeout(
+        () => setFetchingStatus((prev) => ({ ...prev, message: null })),
+        1000
+      );
+    }
   };
 
   // Update the data with token refresh handling

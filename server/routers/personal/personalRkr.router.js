@@ -12,20 +12,20 @@ personalRkrRouter.get(
 personalRkrRouter.get(
   "/:id",
   verifyAccessToken,
-  personalRkrExpenses.getAllRkrExpenses
+  personalRkrExpenses.getRkrExpense
 );
 personalRkrRouter.post(
   "/",
   verifyAccessToken,
-  personalRkrExpenses.getRkrExpense
+  personalRkrExpenses.createRkrExpense
 );
 personalRkrRouter.patch(
   "/:id",
   verifyAccessToken,
-  personalRkrExpenses.updateProductsExpenses
+  personalRkrExpenses.updateRkrExpense
 );
 personalRkrRouter.delete(
   "/:id",
   verifyAccessToken,
-  personalRkrExpenses.deleteProductsExpenses
+  personalRkrExpenses.deleteRkrExpense
 );

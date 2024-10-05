@@ -23,7 +23,7 @@ export const personalRkrExpenses = {
     }
   },
 
-  createProductsExpenses: async (req, res) => {
+  createRkrExpense: async (req, res) => {
     try {
       const rkrExpense = await PersonalRkrExpenses.create(req.body);
       if (!rkrExpense) throw Error("bad data was inserted!");
@@ -32,7 +32,7 @@ export const personalRkrExpenses = {
       res.send(e.message);
     }
   },
-  deleteProductsExpenses: async (req, res) => {
+  deleteRkrExpense: async (req, res) => {
     try {
       const rkrExpense = await PersonalRkrExpenses.findByIdAndDelete({
         _id: req.params.id,
@@ -44,7 +44,7 @@ export const personalRkrExpenses = {
     }
   },
 
-  updateProductsExpenses: async (req, res) => {
+  updateRkrExpense: async (req, res) => {
     try {
       const rkrExpense = await PersonalRkrExpenses.findByIdAndUpdate(
         { _id: req.params.id },
