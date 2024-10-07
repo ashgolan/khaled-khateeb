@@ -1,5 +1,6 @@
 .addItem_form {
   width: 85%;
+  position: relative;
   margin: 5% auto;
   display: flex;
   flex-direction: column;
@@ -11,13 +12,28 @@
 }
 .Productquantities {
   display: flex;
+  background : white ;
+  position: absolute;
+  top : 8.5vh;
+  left : 73%;
   flex-direction: column;
   width: 20%;
   /* background-color: lightsteelblue; */
   padding: 1%;
   border-radius: 1rem;
   border: green solid 2px;
+  z-index: 100 ;
 }
+.Productquantities::before {
+  content: "";
+  position: absolute;
+  top: -10px; /* Position it above the div */
+  left: 20px; /* Adjust to position the arrow horizontally */
+  border-width: 0 10px 8px 10px; /* Width of the triangle */
+  border-style: solid;
+  border-color: transparent transparent green transparent; /* Triangle pointing down */
+}
+
 .quantityBoxOfProduct {
   width: 30%;
   text-align: right;

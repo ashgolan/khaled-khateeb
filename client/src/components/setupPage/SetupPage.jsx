@@ -108,6 +108,22 @@ export default function SetupPage({
         });
         setPersonalSales(personalSalesData);
       }
+      if (collReq === "/personalRkrExpenses") {
+        const { data: personalRkrExpensesData } = await Api.get(
+          "/personalRkrExpenses",
+          {
+            headers,
+          }
+        );
+        setPersonalRkrExpenses(personalRkrExpensesData);
+        const { data: personalProductExpensesData } = await Api.get(
+          "/personalProductExpenses",
+          {
+            headers,
+          }
+        );
+        setPersonalProductExpenses(personalProductExpensesData);
+      }
       if (collReq === "/sales") {
         const { data: clientsData } = await Api.get("/clients", {
           headers,
@@ -678,7 +694,25 @@ export default function SetupPage({
               setKindOfSort(() => "number");
             }}
           >
-            {collReq === "/personalWorkers" ? "יומית" : "מחיר"}
+            {collReq === "/personalWorkers"
+              ? "יומית"
+              : collReq === "/personalRkrExpenses"
+              ? `סה"כ חומר`
+              : "מחיר"}
+          </button>
+        )}
+
+        {collReq === "/personalRkrExpenses" && (
+          <button
+            id="workPrice"
+            className="input_show_item head"
+            style={{ width: "5%" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "workPrice");
+            }}
+          >
+            {"עבודה"}
           </button>
         )}
 
@@ -697,7 +731,11 @@ export default function SetupPage({
               setKindOfSort(() => "quantity");
             }}
           >
-            {collReq === "/sales" ? "שטח" :collReq === "/personalRkrExpenses"?"דונומים":  "כמות"}
+            {collReq === "/sales"
+              ? "שטח"
+              : collReq === "/personalRkrExpenses"
+              ? "דונומים"
+              : "כמות"}
           </button>
         )}
         {collReq === "/sales" && (
@@ -727,22 +765,21 @@ export default function SetupPage({
             מים
           </button>
         )}
-        {(collReq === "/personalRkrExpenses") &&
-          !report?.type && (
-            <button
-              id="other"
-              className="input_show_item head"
-              style={{
-                width: "7%",
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                setKindOfSort(() => "other");
-              }}
-            >
-              אחר{" "}
-            </button>
-          )}
+        {collReq === "/personalRkrExpenses" && !report?.type && (
+          <button
+            id="other"
+            className="input_show_item head"
+            style={{
+              width: "7%",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "other");
+            }}
+          >
+            אחר{" "}
+          </button>
+        )}
         {(collReq === "/expenses" ||
           collReq === "/sales" ||
           collReq === "/personalSales" ||
@@ -819,6 +856,7 @@ export default function SetupPage({
               selectData={clients}
               report={report}
               expenses={expenses}
+              personalProductExpenses={personalProductExpenses}
               personalWorkers={personalWorkers}
               tractorPrice={+tractorPrice}
             />
@@ -831,6 +869,7 @@ export default function SetupPage({
         )}
       {!addItemToggle.btnVisible && !report?.type && (
         <AddItem
+        personalProductExpenses={personalProductExpenses}
           setaddItemToggle={setaddItemToggle}
           setInventoryData={setFetchingData}
           setItemIsUpdated={setItemIsUpdated}

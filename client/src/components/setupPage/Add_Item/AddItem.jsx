@@ -11,11 +11,12 @@ import InputForQuantity from "./InputForQuantity";
 import { getProductKeys } from "../../../utils/getProductKeys";
 import { getSumOfValues } from "../../../utils/getValuesSum";
 export default function AddItem({
+  collReq,
   setaddItemToggle,
   setItemIsUpdated,
-  collReq,
   selectData,
   expenses,
+  personalProductExpenses,
   tractorPrice,
 }) {
   const date = new Date();
@@ -35,10 +36,11 @@ export default function AddItem({
     quantity: "",
     number: "",
     purpose: "",
-    weightKind : "" ,
+    weightKind: "",
     strains: "",
     pricesOfProducts: {},
     product: [],
+    workPrice: "",
     water: "",
     tax: false,
     colored: false,
@@ -51,6 +53,27 @@ export default function AddItem({
     };
     setFetchingStatus({ loading: true, error: false });
     switch (collReq) {
+      case "/personalRkrExpenses":
+        await Api.post(
+          collReq,
+          {
+            date: itemsValues.date,
+            name: itemsValues.name.trim(),
+            number: itemsValues.number,
+            quantity: itemsValues.quantity,
+            other: itemsValues.other,
+            product: itemsValues.product,
+            pricesOfProducts: itemsValues.pricesOfProducts,
+            quantitiesOfProduct: itemsValues.quantitiesOfProduct,
+            workPrice: itemsValues.workPrice,
+            totalAmount: itemsValues.totalAmount,
+            colored: itemsValues.colored,
+          },
+          {
+            headers: headers,
+          }
+        );
+        break;
       case "/personalSales":
         await Api.post(
           collReq,
@@ -269,9 +292,13 @@ export default function AddItem({
   const allSelectData = filtered?.map((item) => {
     return { value: item._id, label: item.clientName };
   });
-  const idsOfProduct = expenses?.map(({ name }) => name);
-  const filteredProducts = expenses?.filter(
-    ({ product }, index) => !idsOfProduct.includes(product, index + 1)
+  const productsData =
+    collReq === "/sales" ? expenses : personalProductExpenses;
+
+  const idsOfProduct = productsData?.map(({ name }) => name);
+
+  const filteredProducts = productsData?.filter(
+    ({ product }) => !idsOfProduct.includes(product)
   );
   const allSelectProducts = filteredProducts?.map((item, index) => {
     return { value: `${index}-` + item.number, label: item.name };
@@ -300,7 +327,8 @@ export default function AddItem({
       <div className="add-row">
         {(collReq === "/expenses" ||
           collReq === "/sales" ||
-          collReq === "/personalSales"||
+          collReq === "/personalRkrExpenses" ||
+          collReq === "/personalSales" ||
           collReq === "/personalProductExpenses" ||
           collReq === "/personalWorkers") && (
           <input
@@ -389,8 +417,7 @@ export default function AddItem({
             required
           />
         )}
-        {         ( collReq === "/personalSales"||
-          collReq === "/sales") && (
+        {(collReq === "/personalSales" || collReq === "/sales") && (
           <input
             id="strains"
             required
@@ -404,7 +431,7 @@ export default function AddItem({
             value={itemsValues.strains}
           />
         )}
-        {  collReq === "/personalSales" && (
+        {collReq === "/personalSales" && (
           <input
             id="weightKind"
             required
@@ -421,8 +448,8 @@ export default function AddItem({
 
         {(collReq === "/clients" ||
           collReq === "/expenses" ||
-          collReq === "/personalSales"||
-
+          collReq === "/personalRkrExpenses" ||
+          collReq === "/personalSales" ||
           collReq === "/personalProductExpenses" ||
           collReq === "/personalWorkers") && (
           <input
@@ -435,8 +462,10 @@ export default function AddItem({
             placeholder={
               collReq === "/expenses" || collReq === "/personalProductExpenses"
                 ? "שם החומר"
-                : collReq === "/clients" || collReq === "/personalWorkers"     ||     collReq === "/personalSales"
-
+                : collReq === "/clients" ||
+                  collReq === "/personalRkrExpenses" ||
+                  collReq === "/personalWorkers" ||
+                  collReq === "/personalSales"
                 ? "מטע"
                 : "מוצר"
             }
@@ -448,7 +477,7 @@ export default function AddItem({
             value={itemsValues.name}
           ></input>
         )}
-        {collReq === "/sales" && (
+        {(collReq === "/sales" || collReq === "/personalRkrExpenses") && (
           <Select
             options={filteredOptions}
             className="add_item select-product-in-add "
@@ -486,15 +515,37 @@ export default function AddItem({
           ></Select>
         )}
         {itemsValues?.product?.length > 0 && (
-          <div className="Productquantities">
+          <div className="Productquantities" style={{ top: " 20vh" }}>
             {itemsValues?.product.map((option) => (
               <InputForQuantity
+                collReq={collReq}
                 tractorPrice={tractorPrice}
                 itemsValues={itemsValues}
                 setItemsValues={setItemsValues}
                 option={option}
               ></InputForQuantity>
             ))}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                color: "brown",
+              }}
+            >
+              <input
+                name="quantitiesOfProducts"
+                id="quantitiesOfProducts"
+                style={{
+                  width: collReq === "/sales" ? "6%" : "15%",
+                  border: "none",
+                }}
+                disabled
+                placeholder={"כ.חומר"}
+                onDoubleClick={changeColorOfClientName}
+                value={getSumOfValues(itemsValues.quantitiesOfProduct)}
+              ></input>
+              <label>: כמות החומר</label>
+            </div>
           </div>
         )}
         {collReq !== "/clients" && (
@@ -510,8 +561,10 @@ export default function AddItem({
               collReq === "/contacts" || collReq === "/providers"
                 ? "מספר"
                 : collReq === "/personalWorkers"
-                ?  "יומית"
-                :collReq === "/personalSales" ? "סכום" : "מחיר"
+                ? "יומית"
+                : collReq === "/personalSales"
+                ? "סכום"
+                : "מחיר"
             }
             onDoubleClick={changeColorOfClientName}
             onChange={(e) =>
@@ -525,8 +578,11 @@ export default function AddItem({
                   ...prev,
                   number: e.target.value,
                   totalAmount:
-                    collReq === "/expenses" ||
-                    collReq === "/personalProductExpenses"||collReq === "/personalSales" 
+                    collReq === "/personalRkrExpenses"
+                      ? +e.target.value + prev.pricesOfProducts
+                      : collReq === "/expenses" ||
+                        collReq === "/personalProductExpenses" ||
+                        collReq === "/personalSales"
                       ? +e.target.value * +itemsValues.quantity
                       : +e.target.value * +sumOfPrices +
                         +tractorPrice * +itemsValues.quantity,
@@ -536,7 +592,7 @@ export default function AddItem({
             value={itemsValues.number}
           ></input>
         )}
-        {collReq === "/sales" && (
+        {/* {(collReq === "/sales" || collReq === '/personalRkrExpenses')          && (
           <input
             name="quantitiesOfProducts"
             id="quantitiesOfProducts"
@@ -549,7 +605,7 @@ export default function AddItem({
             onDoubleClick={changeColorOfClientName}
             value={getSumOfValues(itemsValues.quantitiesOfProduct)}
           ></input>
-        )}
+        )} */}
         {collReq !== "/personalWorkers" && (
           <input
             name="quantity"
@@ -557,7 +613,13 @@ export default function AddItem({
             style={{ width: "10%" }}
             required
             className="add_item"
-            placeholder={collReq === "/sales" ? "שטח" : "כמות"}
+            placeholder={
+              collReq === "/sales"
+                ? "שטח"
+                : collReq === "/personalRkrExpenses"
+                ? "דונומים"
+                : "כמות"
+            }
             onChange={(e) => {
               setItemsValues((prev) => {
                 const sum = Object.values(prev.pricesOfProducts).reduce(
@@ -570,7 +632,8 @@ export default function AddItem({
                   quantity: e.target.value,
                   totalAmount:
                     collReq === "/expenses" ||
-                    collReq === "/personalProductExpenses"||collReq === "/personalSales" 
+                    collReq === "/personalProductExpenses" ||
+                    collReq === "/personalSales"
                       ? +itemsValues.number * +e.target.value
                       : +sum + +(tractorPrice * e.target.value),
                 };
@@ -580,6 +643,40 @@ export default function AddItem({
           ></input>
         )}
 
+        {collReq === "/personalRkrExpenses" && (
+          <input
+            id="workPrice"
+            className="add_item select-product-in-add "
+            placeholder="עבודה"
+            onChange={(e) =>
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  workPrice: +e.target.value,
+                  totalAmount: +e.target.value + +prev.number,
+                };
+              })
+            }
+            value={itemsValues.workPrice}
+            required
+          />
+        )}
+        {collReq === "/personalRkrExpenses" && (
+          <input
+            id="other"
+            className="add_item select-product-in-add "
+            placeholder="אחר"
+            style={{
+              width: "7%",
+            }}
+            value={itemsValues.other}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, other: e.target.value };
+              });
+            }}
+          />
+        )}
         {collReq === "/sales" && (
           <input
             id="water"

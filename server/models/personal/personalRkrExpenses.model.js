@@ -14,6 +14,7 @@ const personalRkrExpensesSchema = new Schema({
   quantitiesOfProduct: { type: Object },
   other: { type: String, default: "-" },
   number: { type: Number, default: 0 },
+  workPrice: { type: Number, default: 0 },
   totalAmount: { type: Number, default: 0 },
   colored: { type: Boolean, default: false },
 });
