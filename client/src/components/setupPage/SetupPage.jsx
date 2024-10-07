@@ -519,7 +519,7 @@ export default function SetupPage({
       <form
         className="Item_form"
         style={{
-          width: collReq === "/clients" ? "60%" : report?.type ? "100%" : "95%",
+          width: collReq === "/clients" ? "60%" : report?.type ? "100%" : "98%",
         }}
       >
         <label
@@ -536,7 +536,7 @@ export default function SetupPage({
           <button
             id="date"
             className="input_show_item head"
-            style={{ width: report?.type ? "15%" : "13%", textAlign: "center" }}
+            style={{ width: report?.type ? "15%" : "11%", textAlign: "center" }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "date");
@@ -552,7 +552,7 @@ export default function SetupPage({
             id="clientName"
             className="input_show_item head"
             style={{
-              width: collReq === "/clients" ? "25%" : "13%",
+              width: collReq === "/clients" ? "25%" : "10%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -582,7 +582,7 @@ export default function SetupPage({
                     collReq === "/personalRkrExpenses" ||
                     collReq === "/personalSales" ||
                     collReq === "/personalProductExpenses"
-                  ? "13%"
+                  ? "10%"
                   : report?.type
                   ? "55%"
                   : "18%",
@@ -595,7 +595,7 @@ export default function SetupPage({
                     collReq === "/personalSales" ||
                     collReq === "/personalWorkers" ||
                     collReq === "/personalProductExpenses"
-                  ? "13%"
+                  ? "10%"
                   : report?.type
                   ? "55%"
                   : "18%",
@@ -621,7 +621,7 @@ export default function SetupPage({
             id="purpose"
             className="input_show_item head"
             style={{
-              width: report?.type ? "10%" : "8%",
+              width: report?.type ? "10%" : "7%",
             }}
             onClick={(e) => {
               e.preventDefault();
@@ -643,7 +643,7 @@ export default function SetupPage({
               setKindOfSort(() => "weightKind");
             }}
           >
-            זנים
+            משקל
           </button>
         )}
         {(collReq === "/sales" || collReq === "/personalSales") && (
@@ -651,14 +651,14 @@ export default function SetupPage({
             id="strains"
             className="input_show_item head"
             style={{
-              width: "10%",
+              width: "7%",
             }}
             onClick={(e) => {
               e.preventDefault();
               setKindOfSort(() => "strains");
             }}
           >
-            משקל
+            זנים
           </button>
         )}
         {(collReq === "/sales" || collReq === "/personalRkrExpenses") &&

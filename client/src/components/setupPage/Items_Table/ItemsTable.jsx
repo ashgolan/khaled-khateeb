@@ -171,7 +171,7 @@ export default function ItemsTable({
           key={`form${item.id}`}
           style={{
             width:
-              collReq === "/clients" ? "60%" : report?.type ? "100%" : "95%",
+              collReq === "/clients" ? "60%" : report?.type ? "100%" : "98%",
           }}
         >
           <label
@@ -195,7 +195,7 @@ export default function ItemsTable({
               type="date"
               className="input_show_item date-input"
               style={{
-                width: report?.type ? "15%" : "13%",
+                width: report?.type ? "15%" : "11%",
                 textAlign: "center",
               }}
               disabled={changeStatus.disabled}
@@ -213,7 +213,7 @@ export default function ItemsTable({
               id="clientName"
               className="input_show_item"
               style={{
-                width: collReq === "/clients" ? "25%" : "13%",
+                width: collReq === "/clients" ? "25%" : "10%",
                 color: itemsValues.colored ? "rgb(255, 71, 46)" : "black",
               }}
               disabled={changeStatus.disabled}
@@ -288,7 +288,7 @@ export default function ItemsTable({
                       collReq === "/personalSales" ||
                       collReq === "/personalRkrExpenses" ||
                       collReq === "/personalProductExpenses"
-                    ? "13%"
+                    ? "10%"
                     : report?.type
                     ? "55%"
                     : "15%",
@@ -302,7 +302,7 @@ export default function ItemsTable({
                       collReq === "/personalRkrExpenses" ||
                       collReq === "/personalWorkers" ||
                       collReq === "/personalProductExpenses"
-                    ? "13%"
+                    ? "10%"
                     : report?.type
                     ? "55%"
                     : "15%",
@@ -321,7 +321,7 @@ export default function ItemsTable({
               id="purpose"
               className="input_show_item"
               style={{
-                width: report?.type ? "10%" : "8%",
+                width: report?.type ? "10%" : "7%",
               }}
               disabled={changeStatus.disabled}
               value={itemsValues.purpose}
@@ -359,7 +359,7 @@ export default function ItemsTable({
               placeholder={
                 itemsValues?.weightKind ? itemsValues.weightKind : "בחר משקל"
               }
-              className="input_show_item select-product-head "
+              className="input_show_item select-product-weightKind "
               styles={customStyles}
               disabled={changeStatus.disabled}
               value={itemsValues.weightKind}

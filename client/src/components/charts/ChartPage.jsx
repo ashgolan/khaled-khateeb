@@ -82,15 +82,37 @@ function ChartPage({ report, setShowChart, showChart, fetchingData }) {
       });
     }
   };
+  // const showChartHandler = () => {
+  //   report?.type === "expensesCharts" || report?.type === "/expenses"
+  //     ? getChart(fetchingData?.expensesData)
+  //     : report?.type === "sleevesBidsCharts" || report?.type === "/sleevesBids"
+  //     ? getChart(fetchingData?.sleevesBidsData)
+  //     : report?.type === "workersExpensesCharts" ||
+  //       report?.type === "/workersExpenses"
+  //     ? getChart(fetchingData?.workersExpensesData)
+  //     : getChart(fetchingData?.salesData);
+  //   setShowChart(true);
+  // };
+  const dataMap = {
+    "expensesCharts": fetchingData?.expensesData,
+    "/expenses": fetchingData?.expensesData,
+    "/personalProductExpenses": fetchingData?.personalProductExpensesData,
+    "personalProductExpensesCharts": fetchingData?.personalProductExpensesData,
+    "/personalWorkers": fetchingData?.personalWorkersData,
+    "personalWorkersCharts": fetchingData?.personalWorkersData,
+    "/personalSales": fetchingData?.personalSalesData,
+    "personalSalesCharts": fetchingData?.personalSalesData,
+    "/personalRkrExpenses": fetchingData?.personalRkrExpensesData,
+    "personalRkrExpensesCharts": fetchingData?.personalRkrExpensesData,
+    "sleevesBidsCharts": fetchingData?.sleevesBidsData,
+    "/sleevesBids": fetchingData?.sleevesBidsData,
+    "workersExpensesCharts": fetchingData?.workersExpensesData,
+    "/workersExpenses": fetchingData?.workersExpensesData,
+  };
+  
   const showChartHandler = () => {
-    report?.type === "expensesCharts" || report?.type === "/expenses"
-      ? getChart(fetchingData?.expensesData)
-      : report?.type === "sleevesBidsCharts" || report?.type === "/sleevesBids"
-      ? getChart(fetchingData?.sleevesBidsData)
-      : report?.type === "workersExpensesCharts" ||
-        report?.type === "/workersExpenses"
-      ? getChart(fetchingData?.workersExpensesData)
-      : getChart(fetchingData?.salesData);
+    const chartData = dataMap[report?.type] || fetchingData?.salesData;
+    getChart(chartData);
     setShowChart(true);
   };
   return (

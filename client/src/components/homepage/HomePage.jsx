@@ -16,9 +16,11 @@ export default function HomePage({ setIsPersonal }) {
         key: process.env.REACT_APP_ADMIN,
       });
       clearTokens();
+      localStorage.clear();
       deleteUserId();
       navigate("/");
     } catch (e) {
+      localStorage.clear();
       clearTokens();
       navigate("/");
     }
@@ -64,13 +66,8 @@ export default function HomePage({ setIsPersonal }) {
           </label>
         )}
       </div>
-      <div className="logos-home-page-container">
-        {/* <img
-          onClick={() => setIsPersonal(1)}
-          className="logos-home-page"
-          src="/logohome5.png"
-          alt=""
-        /> */}
+      {getAccessToken() &&<div className="logos-home-page-container">
+
         <img
           onClick={() => {
             setIsPersonal(1);
@@ -81,20 +78,15 @@ export default function HomePage({ setIsPersonal }) {
           alt=""
         />
         <img
-     onClick={() => {
+          onClick={() => {
             setIsPersonal(2);
             localStorage.setItem("isPersonalNav", JSON.stringify(2));
-          }}          className="logos-home-page-kind"
+          }}
+          className="logos-home-page-kind"
           src="/global1.png"
           alt=""
         />
-        {/* <img
-          onClick={() => setIsPersonal(2)}
-          className="logos-home-page"
-          src="/logohome6.png"
-          alt=""
-        /> */}
-      </div>
+      </div>}
     </div>
   );
 }

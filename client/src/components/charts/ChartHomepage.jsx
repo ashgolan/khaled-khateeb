@@ -53,10 +53,21 @@ function ChartHomepage() {
     };
   });
   const allTypes = [
-    { type: "/expenses", name: "דוח הוצאות" },
     { type: "/sales", name: "דוח הכנסות" },
-    { type: "expensesCharts", name: "תרשים הוצאות" },
+    { type: "/expenses", name: "דוח הוצאות" },
+    { type: "/personalProductExpenses", name: "דוח הוצאת חומרים פרטי" },
+    { type: "/personalSales", name: "דוח הכנסות פרטי" },
+    { type: "/personalWorkers", name: "דוח עובדים פרטי" },
+    { type: "/personalRkrExpenses", name: "דוח ריסוס קיסוח ריסוק פרטי" },
     { type: "salesCharts", name: "תרשים הכנסות" },
+    { type: "expensesCharts", name: "תרשים הוצאות" },
+    {
+      type: "personalProductExpensesCharts",
+      name: " תרשים הוצאות חומרים פרטי",
+    },
+    { type: "personalSalesCharts", name: "תרשים הכנסות פרטי" },
+    { type: "personalWorkersCharts", name: "תרשים עובדים פרטי" },
+    { type: "personalRkrExpensesCharts", name: "תרשים ריסוס קיסוח ריסוק פרטי" },
   ].map((item) => {
     return { value: item.type, label: item.name };
   });
@@ -95,9 +106,21 @@ function ChartHomepage() {
     setFetchingStatus((prev) => {
       return { ...prev, status: true, loading: true };
     });
-    const { data: salesData } = await Api.get("/sales", { headers });
-    const { data: expensesData } = await Api.get("/expenses", { headers });
-
+    const [
+      salesData,
+      expensesData,
+      personalProductExpensesData,
+      personalSalesData,
+      personalWorkersData,
+      personalRkrExpensesData,
+    ] = await Promise.all([
+      Api.get("/sales", { headers }),
+      Api.get("/expenses", { headers }),
+      Api.get("/personalProductExpenses", { headers }),
+      Api.get("/personalSales", { headers }),
+      Api.get("/personalWorkers", { headers }),
+      Api.get("/personalRkrExpenses", { headers }),
+    ]).then((responses) => responses.map((res) => res.data));
     setFetchingStatus((prev) => {
       return {
         ...prev,
@@ -108,6 +131,10 @@ function ChartHomepage() {
     setFetchingData({
       salesData: salesData,
       expensesData: expensesData,
+      personalProductExpensesData: personalProductExpensesData,
+      personalSalesData: personalSalesData,
+      personalWorkersData: personalWorkersData,
+      personalRkrExpensesData: personalRkrExpensesData,
     });
   };
 
@@ -197,7 +224,22 @@ function ChartHomepage() {
                 setUpdateChart((prev) => !prev);
                 setShowChart(false);
               }}
-              styles={customStyles}
+              styles={{
+                option: (provided, { data, isSelected }) => ({
+                  ...provided,
+                  backgroundColor: isSelected
+                    ? "lightgreen"
+                    : data.value.includes("Charts")
+                    ? "lightblue"
+                    : "white",
+                  color: isSelected
+                    ? "black"
+                    : data.value.includes("Charts")
+                    ? "blue"
+                    : "black",
+                    textAlign : "center"
+                }),
+              }}
             ></Select>{" "}
             {report.type && (
               <Select
@@ -293,6 +335,10 @@ function ChartHomepage() {
         {report.type &&
           (report.type === "/expenses" ||
             report.type === "/sales" ||
+            report.type === "/personalSales" ||
+            report.type === "/personalProductExpenses" ||
+            report.type === "/personalWorkers" ||
+            report.type === "/personalRkrExpenses" ||
             report.type === "/salesByClient") && (
             <SetupPage
               updatedReport={updatedReport}
@@ -305,6 +351,10 @@ function ChartHomepage() {
         {report.type &&
           report.year &&
           (report.type === "expensesCharts" ||
+            report.type === "personalSalesCharts" ||
+            report.type === "personalProductExpensesCharts" ||
+            report.type === "personalWorkersCharts" ||
+            report.type === "personalRkrExpensesCharts" ||
             report.type === "salesCharts") && (
             <ChartPage
               fetchingData={fetchingData}

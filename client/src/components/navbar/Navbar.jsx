@@ -63,6 +63,7 @@ export default function Navbar({ isPersonal, setIsPersonal }) {
             alt={""}
             onClick={() => {
               setIsPersonal(0);
+              localStorage.setItem("isPersonalNav", JSON.stringify(0));
               navigate("/homepage");
             }}
             src="/homepage.png"

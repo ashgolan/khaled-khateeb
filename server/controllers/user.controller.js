@@ -115,7 +115,7 @@ export const userControllers = {
       const newAccessToken = jwt.sign(
         { _id: decoded._id.toString() },
         env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "30min" }
+        { expiresIn: "300min" }
       );
 
       res.json({ accessToken: newAccessToken });

@@ -432,19 +432,26 @@ export default function AddItem({
           />
         )}
         {collReq === "/personalSales" && (
-          <input
-            id="weightKind"
-            required
-            className="add_item select-product-in-add "
-            placeholder="משקל"
-            onChange={(e) =>
-              setItemsValues((prev) => {
-                return { ...prev, weightKind: e.target.value };
-              })
-            }
-            value={itemsValues.weightKind}
-          />
-        )}
+            <Select
+              id="weightKind"
+              options={[
+                { value: "kg", label: "קילו" },
+                { value: "mical", label: "מיכל" },
+                { value: "null", label: "-" },
+              ]}
+              placeholder={
+                itemsValues?.weightKind ? itemsValues.weightKind : "בחר משקל"
+              }
+              className="add_item select-product-in-add "
+              styles={customStyles}
+              value={itemsValues.weightKind}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return { ...prev, weightKind: e.label };
+                });
+              }}
+            />
+          )}
 
         {(collReq === "/clients" ||
           collReq === "/expenses" ||
