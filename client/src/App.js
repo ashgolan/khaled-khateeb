@@ -40,7 +40,7 @@ function App() {
   return (
     <div>
       <IdleTimer timeout={20 * 60 * 1000} onIdle={handleIdle} />
-      <Navbar isPersonal={isPersonal} setIsPersonal={setIsPersonal}></Navbar>
+      {<Navbar isPersonal={isPersonal} setIsPersonal={setIsPersonal}></Navbar>}
       {fetchingStatus.message && (
         <h5 className="message">{fetchingStatus.message}</h5>
       )}

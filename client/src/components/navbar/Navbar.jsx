@@ -10,6 +10,7 @@ import { Api } from "../../utils/Api";
 import GlobalNav from "./GlobalNav";
 import PersonalNav from "./PersonalNav";
 export default function Navbar({ isPersonal, setIsPersonal }) {
+  console.log(isPersonal);
   
   const navigate = useNavigate();
   const logout = async (e) => {
@@ -24,6 +25,8 @@ export default function Navbar({ isPersonal, setIsPersonal }) {
         },
         { headers }
       );
+      setIsPersonal(0)
+      localStorage.clear()
       clearTokens();
       navigate("/");
     } catch (e) {

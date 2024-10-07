@@ -515,7 +515,7 @@ export default function AddItem({
           ></Select>
         )}
         {itemsValues?.product?.length > 0 && (
-          <div className="Productquantities" style={{ top: " 20vh" }}>
+          <div className="Productquantities" style={{ top: " 17vh",left : "2%"}}>
             {itemsValues?.product.map((option) => (
               <InputForQuantity
                 collReq={collReq}
