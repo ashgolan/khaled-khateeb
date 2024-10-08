@@ -15,6 +15,7 @@ import { personalWorkersRouter } from "./routers/personal/personalWorkers.router
 import { personalRkrRouter } from "./routers/personal/personalRkr.router.js";
 import { personalProductExpensesRouter } from "./routers/personal/personalProductExpenses.router.js";
 import { personalTractorPriceRouter } from "./routers/personal/personalTractorPrice.router.js";
+import { taxValuesRouter } from "./routers/taxValues.router.js";
 
 const app = Express();
 const __dirname = url.fileURLToPath(new URL("./", import.meta.url));
@@ -38,6 +39,8 @@ app.use("/personalWorkers", personalWorkersRouter);
 app.use("/personalRkrExpenses", personalRkrRouter);
 app.use("/personalProductExpenses", personalProductExpensesRouter);
 app.use("/personalTractorPrice", personalTractorPriceRouter);
+app.use("/taxValues", taxValuesRouter);
+
 app.listen(PORT, () => {
   console.log("connecting to port", PORT);
 });

@@ -22,6 +22,8 @@ export default function SetupPage({
   const date = new Date();
   const year = date.getFullYear();
   const navigate = useNavigate();
+  const [taxValues, setTaxValues] = useState({});
+
   // eslint-disable-next-line
   const [fetchedData, setFetchingData] = useState([]);
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
@@ -157,6 +159,8 @@ export default function SetupPage({
         setFetchingData(data);
       }
     }
+    const { data: taxValuesData } = await Api.get("/taxValues", { headers });
+  setTaxValues(taxValuesData[0]);
     setFetchingStatus((prev) => {
       return {
         ...prev,
@@ -452,11 +456,16 @@ export default function SetupPage({
             {report?.type && `  ש"ח כולל מע"מ [ `}
             {report?.type && (
               <span style={{ fontSize: "0.8rem", color: "darkblue" }}>
-                {getTotals().toFixed(2)}
-                {`  ש"ח  `}
-                {` + מע"מ 17% ( `}
-                {(getTotals() * 0.17).toFixed(2)} {`  ש"ח )  `}
+              {(getTotals() / (1 + taxValues?.maamValue / 100)).toFixed(2)}
+                  {`  ש"ח  `}
+                  {` + ${taxValues?.maamValue}% מע"מ  ( `}
+                  {(
+                    getTotals() -
+                    getTotals() / (1 + taxValues?.maamValue / 100)
+                  ).toFixed(2)}{" "}
+                  {`  ש"ח )  `}
               </span>
+     
             )}
             {report?.type && `] `}
           </label>

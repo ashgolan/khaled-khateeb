@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./navbar.css";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,9 +9,25 @@ import {
 import { Api } from "../../utils/Api";
 import GlobalNav from "./GlobalNav";
 import PersonalNav from "./PersonalNav";
+import TaxValuesModal from "./TaxValuesModal";
 export default function Navbar({ isPersonal, setIsPersonal }) {
-  console.log(isPersonal);
-  
+  const [taxValues, setTaxValues] = useState({});
+
+  const openModal = async () => {
+    setIsOpen(true);
+    const headers = { Authorization: `Bearer ${getAccessToken()}` };
+    try {
+      const { data: taxValuesData } = await Api.get("/taxValues", {
+        headers,
+      });
+
+      setTaxValues(taxValuesData[0]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
   const navigate = useNavigate();
   const logout = async (e) => {
     e.preventDefault();
@@ -25,8 +41,8 @@ export default function Navbar({ isPersonal, setIsPersonal }) {
         },
         { headers }
       );
-      setIsPersonal(0)
-      localStorage.clear()
+      setIsPersonal(0);
+      localStorage.clear();
       clearTokens();
       navigate("/");
     } catch (e) {
@@ -102,7 +118,16 @@ export default function Navbar({ isPersonal, setIsPersonal }) {
             }}
             src="/calender.png"
           />
-
+          <img
+            style={{
+              cursor: "pointer",
+              width: "15%",
+            }}
+            alt={""}
+            onClick={() => openModal()}
+            src="/taxValues.png"
+          />
+        
           <img
             className="logout-img"
             style={{
@@ -116,8 +141,20 @@ export default function Navbar({ isPersonal, setIsPersonal }) {
           />
         </div>
       </div>
-      {(isPersonal === 2 || (JSON.parse(localStorage.getItem('isPersonalNav') == 2))) && <GlobalNav></GlobalNav>}
-      {(isPersonal === 1 || (JSON.parse(localStorage.getItem('isPersonalNav') == 1))) &&<PersonalNav></PersonalNav>}
+      {(isPersonal === 2 ||
+        JSON.parse(localStorage.getItem("isPersonalNav") == 2)) && (
+        <GlobalNav></GlobalNav>
+      )}
+      {(isPersonal === 1 ||
+        JSON.parse(localStorage.getItem("isPersonalNav") == 1)) && (
+        <PersonalNav></PersonalNav>
+      )}
+      <TaxValuesModal
+          modalIsOpen={modalIsOpen}
+          setIsOpen={setIsOpen}
+          taxValues={taxValues}
+          setTaxValues={setTaxValues}
+        ></TaxValuesModal>
     </nav>
   );
 }
