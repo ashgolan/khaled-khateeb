@@ -41,6 +41,7 @@ export default function AddItem({
     pricesOfProducts: {},
     product: [],
     workPrice: "",
+    workKind: "",
     water: "",
     tax: false,
     colored: false,
@@ -63,6 +64,7 @@ export default function AddItem({
             quantity: itemsValues.quantity,
             other: itemsValues.other,
             product: itemsValues.product,
+            workKind: itemsValues.workKind,
             pricesOfProducts: itemsValues.pricesOfProducts,
             quantitiesOfProduct: itemsValues.quantitiesOfProduct,
             workPrice: itemsValues.workPrice,
@@ -335,7 +337,7 @@ export default function AddItem({
             name="date"
             type="date"
             id="date"
-            style={{ width: collReq === "/sales" ? "11%" : "25%" }}
+            style={{ width: collReq === "/sales" ? "11%" : "15%" }}
             required
             className="add_item"
             placeholder="בחר תאריך"
@@ -382,6 +384,36 @@ export default function AddItem({
               });
             }}
           ></Select>
+        )}
+        {collReq === "/personalRkrExpenses" && (
+          <Select
+            id="workKind"
+            options={[
+              { value: "risos", label: "ריסוס" },
+              { value: "kisoah", label: "קיסוח" },
+              { value: "risok", label: "ריסוק" },
+            ]}
+            placeholder={
+              itemsValues?.workKind ? itemsValues.workKind : "סוג עבודה"
+            }
+            className="add_item select-product-in-add "
+            styles={customStyles}
+            value={itemsValues.workKind}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return {
+                  ...prev,
+                  workKind: e.label,
+                  number: e.label === "ריסוס" ? prev.number : "",
+                  pricesOfProducts: e.label === "ריסוס" ? prev.pricesOfProducts : {},
+                  quantitiesOfProduct: e.label === "ריסוס" ? prev.quantitiesOfProduct : {},
+                  product: e.label === "ריסוס" ? prev.product : [],
+                  totalAmount : e.label === "ריסוס" ? +prev.workPrice + +prev.number :+prev.workPrice
+
+                };
+              });
+            }}
+          />
         )}
         {(collReq === "/clients" || collReq === "/personalWorkers") && (
           <input
@@ -432,26 +464,26 @@ export default function AddItem({
           />
         )}
         {collReq === "/personalSales" && (
-            <Select
-              id="weightKind"
-              options={[
-                { value: "kg", label: "קילו" },
-                { value: "mical", label: "מיכל" },
-                { value: "null", label: "-" },
-              ]}
-              placeholder={
-                itemsValues?.weightKind ? itemsValues.weightKind : "בחר משקל"
-              }
-              className="add_item select-product-in-add "
-              styles={customStyles}
-              value={itemsValues.weightKind}
-              onChange={(e) => {
-                setItemsValues((prev) => {
-                  return { ...prev, weightKind: e.label };
-                });
-              }}
-            />
-          )}
+          <Select
+            id="weightKind"
+            options={[
+              { value: "kg", label: "קילו" },
+              { value: "mical", label: "מיכל" },
+              { value: "null", label: "-" },
+            ]}
+            placeholder={
+              itemsValues?.weightKind ? itemsValues.weightKind : "בחר משקל"
+            }
+            className="add_item select-product-in-add "
+            styles={customStyles}
+            value={itemsValues.weightKind}
+            onChange={(e) => {
+              setItemsValues((prev) => {
+                return { ...prev, weightKind: e.label };
+              });
+            }}
+          />
+        )}
 
         {(collReq === "/clients" ||
           collReq === "/expenses" ||
@@ -465,7 +497,7 @@ export default function AddItem({
             required
             autoFocus={true}
             className="add_item"
-            style={{ width: "35%" }}
+            style={{ width: "15%" }}
             placeholder={
               collReq === "/expenses" || collReq === "/personalProductExpenses"
                 ? "שם החומר"
@@ -484,7 +516,9 @@ export default function AddItem({
             value={itemsValues.name}
           ></input>
         )}
-        {(collReq === "/sales" || collReq === "/personalRkrExpenses") && (
+        {(collReq === "/sales" ||
+          (collReq === "/personalRkrExpenses" &&
+            itemsValues.workKind === "ריסוס")) && (
           <Select
             options={filteredOptions}
             className="add_item select-product-in-add "
@@ -515,21 +549,27 @@ export default function AddItem({
                   pricesOfProducts: myNewPrices,
                   number: sumOfPrices,
                   product: selectedOptions,
-                  totalAmount: +sumOfPrices + +(tractorPrice * prev.quantity),
+                  totalAmount:
+                    collReq === "/sales"
+                      ? +sumOfPrices + +(+tractorPrice * prev.quantity)
+                      : +sumOfPrices + +prev.workPrice,
                 };
               });
             }}
           ></Select>
         )}
         {itemsValues?.product?.length > 0 && (
-          <div className="Productquantities" style={{ top: " 17vh",left : "2%"}}>
-            {itemsValues?.product.map((option) => (
+          <div className="Productquantities">
+            {itemsValues?.product.map((option, index) => (
               <InputForQuantity
                 collReq={collReq}
-                tractorPrice={tractorPrice}
+                tractorPrice={+tractorPrice}
                 itemsValues={itemsValues}
                 setItemsValues={setItemsValues}
                 option={option}
+                quantityValue={
+                  Object.values(itemsValues?.quantitiesOfProduct ?? {})[index]
+                }
               ></InputForQuantity>
             ))}
             <div
@@ -571,6 +611,8 @@ export default function AddItem({
                 ? "יומית"
                 : collReq === "/personalSales"
                 ? "סכום"
+                : collReq === "/personalRkrExpenses"
+                ? "עלות חומר"
                 : "מחיר"
             }
             onDoubleClick={changeColorOfClientName}
@@ -654,7 +696,8 @@ export default function AddItem({
           <input
             id="workPrice"
             className="add_item select-product-in-add "
-            placeholder="עבודה"
+            style={{ width: "10%" }}
+            placeholder="מחיר עבודה"
             onChange={(e) =>
               setItemsValues((prev) => {
                 return {

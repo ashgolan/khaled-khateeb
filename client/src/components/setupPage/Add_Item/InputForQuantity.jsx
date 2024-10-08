@@ -33,7 +33,8 @@ function InputForQuantity({
         ...prev.pricesOfProducts,
         [label]: +newQuantity * +pricePerUnit,
       };
-
+      console.log(option);
+      
       const sumOfPrices = getSumOfValues(updatedProductsPrice);
 
       return {

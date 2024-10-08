@@ -7,6 +7,7 @@ const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
 
 const personalRkrExpensesSchema = new Schema({
   date: { type: String, default: year + "-" + month + "-" + day },
+  workKind: { type: String, required: true },
   name: { type: String, required: true },
   quantity: { type: Number, default: 0 },
   product: { type: Array, default: [] },

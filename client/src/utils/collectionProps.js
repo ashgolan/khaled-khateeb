@@ -25,6 +25,7 @@ export const getCollectionProps = (collReq) => {
         "number",
         "date",
         "quantity",
+        "workKind",
         "pricesOfProducts",
         "quantitiesOfProduct",
         "totalAmount",

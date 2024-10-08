@@ -35,6 +35,7 @@ export default function ItemsTable({
     strains: "",
     product: [],
     water: "",
+    workKind: "",
     other: "",
     quantity: "",
     workPrice: "",
@@ -60,6 +61,7 @@ export default function ItemsTable({
           product: thisItem.product ? thisItem.product : [],
           workPrice: thisItem.workPrice ? thisItem.workPrice : "",
           weightKind: thisItem.weightKind ? thisItem.weightKind : "",
+          workKind: thisItem.workKind ? thisItem.workKind : "",
           pricesOfProducts: thisItem.pricesOfProducts
             ? thisItem.pricesOfProducts
             : {},
@@ -206,6 +208,39 @@ export default function ItemsTable({
                 });
               }}
             ></input>
+          )}
+
+          {collReq === "/personalRkrExpenses" && (
+            <Select
+              id="workKind"
+              isDisabled={changeStatus.disabled}
+              options={[
+                { value: "risos", label: "ריסוס" },
+                { value: "kisoah", label: "קיסוח" },
+                { value: "risok", label: "ריסוק" },
+              ]}
+              placeholder={
+                itemsValues?.workKind ? itemsValues.workKind : "סוג עבודה"
+              }
+              className="input_show_item select-product-head "
+              styles={customStyles}
+              value={itemsValues.workKind}
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  return {
+                    ...prev,
+                    workKind: e.label,
+                    number: e.label === "ריסוס" ? prev.number : "",
+                    pricesOfProducts:
+                      e.label === "ריסוס" ? prev.pricesOfProducts : {},
+                    quantitiesOfProduct:
+                      e.label === "ריסוס" ? prev.quantitiesOfProduct : {},
+                    product: e.label === "ריסוס" ? prev.product : [],
+                    totalAmount : e.label === "ריסוס" ? +prev.workPrice + +prev.number :+prev.workPrice
+                  };
+                });
+              }}
+            />
           )}
 
           {(collReq === "/clients" || collReq === "/personalWorkers") && (
@@ -405,7 +440,9 @@ export default function ItemsTable({
                       number: sumOfPrices,
                       product: selectedOptions,
                       totalAmount:
-                        +sumOfPrices + +(+tractorPrice * prev.quantity),
+                        collReq === "/sales"
+                          ? +sumOfPrices + +(+tractorPrice * prev.quantity)
+                          : +sumOfPrices + +prev.workPrice,
                     };
                   });
                 }}
@@ -425,21 +462,27 @@ export default function ItemsTable({
                   }
                 ></InputForQuantity>
               ))}
-              <div style={{display : "flex" , justifyContent : "center",color : "brown"}}>
-            <input
-            name="quantitiesOfProducts"
-            id="quantitiesOfProducts"
-            style={{
-              width: collReq === "/sales" ? "6%" : "15%",
-              border : "none"
-            }}
-            disabled
-            placeholder={"כ.חומר"}
-            onDoubleClick={changeColorOfClientName}
-            value={getSumOfValues(itemsValues.quantitiesOfProduct)}
-          ></input>
-            <label>: כמות החומר</label>
-          </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  color: "brown",
+                }}
+              >
+                <input
+                  name="quantitiesOfProducts"
+                  id="quantitiesOfProducts"
+                  style={{
+                    width: collReq === "/sales" ? "6%" : "15%",
+                    border: "none",
+                  }}
+                  disabled
+                  placeholder={"כ.חומר"}
+                  onDoubleClick={changeColorOfClientName}
+                  value={getSumOfValues(itemsValues.quantitiesOfProduct)}
+                ></input>
+                <label>: כמות החומר</label>
+              </div>
             </div>
           )}
           {collReq !== "/clients" && (
@@ -450,7 +493,9 @@ export default function ItemsTable({
                 width:
                   collReq === "/sales"
                     ? "6%"
-                    : collReq === "/expenses" || collReq === "/personalSales"
+                    : collReq === "/expenses" ||
+                      collReq === "/personalSales" ||
+                      collReq === "/personalRkrExpenses"
                     ? "10%"
                     : "15%",
               }}
@@ -486,11 +531,10 @@ export default function ItemsTable({
               disabled={changeStatus.disabled}
               value={itemsValues.workPrice}
               onChange={(e) => {
-     
                 setItemsValues((prev) => {
                   return {
                     ...prev,
-                    workPrice : +e.target.value,
+                    workPrice: +e.target.value,
                     totalAmount: +prev.number + +e.target.value,
                   };
                 });

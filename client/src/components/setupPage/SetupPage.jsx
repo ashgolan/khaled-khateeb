@@ -384,6 +384,8 @@ export default function SetupPage({
         return fetchedData?.sort((a, b) =>
           a.weightKind > b.weightKind ? 1 : -1
         );
+      case "workKind":
+        return fetchedData?.sort((a, b) => (a.workKind > b.workKind ? 1 : -1));
       case "product":
         return fetchedData?.sort((a, b) => (a.product > b.product ? 1 : -1));
       case "purpose":
@@ -545,6 +547,21 @@ export default function SetupPage({
             תאריך
           </button>
         )}
+        {(collReq ==='/personalRkrExpenses') && (
+          <button
+            id="workKind"
+            className="input_show_item head"
+            style={{
+              width: "10%",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "workKind");
+            }}
+          >
+            {"עבודה"}
+          </button>
+        )}
         {(collReq === "/sales" ||
           collReq === "/clients" ||
           collReq === "/personalWorkers") && (
@@ -685,7 +702,7 @@ export default function SetupPage({
               width:
                 collReq === "/sales"
                   ? "6%"
-                  : collReq === "/expenses" || collReq === "/personalSales"
+                  : collReq === "/expenses" || collReq === "/personalSales"|| collReq === "/personalRkrExpenses"
                   ? "10%"
                   : "15%",
             }}
