@@ -16,6 +16,7 @@
 .Item_form > .select-category,
 .Item_form > .select-product,
 .Item_form > .select-product-head,
+.Item_form > .select-product-weightKind,
 .head {
   height: 46px;
   margin: 0.1%;
