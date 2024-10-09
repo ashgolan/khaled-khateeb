@@ -411,14 +411,17 @@ export default function EditItem({
   };
 
   // Send API request
+
+
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
     try {
+      
       const payload = {
         clientName: itemsValues.clientName?.trim(),
         name: itemsValues.name?.trim(),
-        number: itemsValues.number,
-        quantity: itemsValues.quantity,
+        number: +itemsValues.number.trim(),
+        quantity: +itemsValues.quantity,
         date: itemsValues.date,
         purpose: itemsValues.purpose,
         weightKind: itemsValues.weightKind,
@@ -444,13 +447,13 @@ export default function EditItem({
         () => setFetchingStatus((prev) => ({ ...prev, message: null })),
         1000
       );
+      setItemIsUpdated((prev) => !prev);
     } catch (e) {
       setFetchingStatus({
         status: false,
         loading: false,
         message: "תקלה בביצוע העדכון",
       });
-      setItemIsUpdated((prev) => !prev);
       setTimeout(
         () => setFetchingStatus((prev) => ({ ...prev, message: null })),
         1000

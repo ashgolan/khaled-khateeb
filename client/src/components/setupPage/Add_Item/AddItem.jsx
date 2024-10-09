@@ -35,14 +35,14 @@ export default function AddItem({
     name: "",
     quantity: "",
     number: "",
-    purpose: "",
+    water: "",
     weightKind: "",
+    workPrice: "",
+    purpose: "",
     strains: "",
     pricesOfProducts: {},
     product: [],
-    workPrice: "",
     workKind: "",
-    water: "",
     tax: false,
     colored: false,
     totalAmount: 0,
@@ -52,166 +52,190 @@ export default function AddItem({
     const headers = {
       Authorization: token,
     };
-    setFetchingStatus({ loading: true, error: false });
-    switch (collReq) {
-      case "/personalRkrExpenses":
-        await Api.post(
-          collReq,
-          {
-            date: itemsValues.date,
-            name: itemsValues.name.trim(),
-            number: itemsValues.number,
-            quantity: itemsValues.quantity,
-            other: itemsValues.other,
-            product: itemsValues.product,
-            workKind: itemsValues.workKind,
-            pricesOfProducts: itemsValues.pricesOfProducts,
-            quantitiesOfProduct: itemsValues.quantitiesOfProduct,
-            workPrice: itemsValues.workPrice,
-            totalAmount: itemsValues.totalAmount,
-            colored: itemsValues.colored,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/personalSales":
-        await Api.post(
-          collReq,
-          {
-            date: itemsValues.date,
-            name: itemsValues.name.trim(),
-            strains: itemsValues.strains,
-            weightKind: itemsValues.weightKind,
-            number: itemsValues.number,
-            quantity: itemsValues.quantity,
-            totalAmount: itemsValues.totalAmount,
-            colored: itemsValues.colored,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/personalProductExpenses":
-        await Api.post(
-          collReq,
-          {
-            date: itemsValues.date,
-            name: itemsValues.name.trim(),
-            number: itemsValues.number,
-            quantity: itemsValues.quantity,
-            totalAmount: itemsValues.totalAmount,
-            colored: itemsValues.colored,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/personalWorkers":
-        await Api.post(
-          collReq,
-          {
-            date: itemsValues.date,
-            clientName: itemsValues.clientName.trim(),
-            name: itemsValues.name.trim(),
-            number: itemsValues.number,
-            totalAmount: itemsValues.totalAmount,
-            colored: itemsValues.colored,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/clients":
-        await Api.post(
-          collReq,
-          {
-            clientName: itemsValues.clientName.trim(),
-            name: itemsValues.name.trim(),
-            quantity: itemsValues.quantity,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/expenses":
-        await Api.post(
-          collReq,
-          {
-            date: itemsValues.date,
-            name: itemsValues.name,
-            number: itemsValues.number,
-            quantity: itemsValues.quantity,
-            totalAmount: itemsValues.totalAmount,
-            // tax: itemsValues.tax,
-            colored: itemsValues.colored,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      case "/sales":
-        await Api.post(
-          collReq,
-          {
-            date: itemsValues.date,
-            clientName: itemsValues.clientName,
-            name: itemsValues.name,
-            number: itemsValues.number,
-            pricesOfProducts: itemsValues.pricesOfProducts,
-            purpose: itemsValues.purpose,
-            product: itemsValues.product,
-            water: itemsValues.water,
-            strains: itemsValues.strains,
-            colored: itemsValues.colored,
-            tax: itemsValues.tax,
-            quantity: itemsValues.quantity,
-            quantitiesOfProduct: itemsValues.quantitiesOfProduct,
-            totalAmount: itemsValues.totalAmount,
-          },
-          {
-            headers: headers,
-          }
-        );
-        break;
-      default:
-        await Api.post(
-          collReq,
-          { name: itemsValues.name, number: itemsValues.number },
-          {
-            headers: headers,
-          }
-        );
-    }
 
-    setItemIsUpdated((prev) => !prev);
+    try {
+      setFetchingStatus({ loading: true, error: false });
+      switch (collReq) {
+        case "/personalRkrExpenses":
+          await Api.post(
+            collReq,
+            {
+              date: itemsValues.date,
+              name: itemsValues.name.trim(),
+              number: itemsValues.number,
+              quantity: itemsValues.quantity,
+              other: itemsValues.other,
+              product: itemsValues.product,
+              workKind: itemsValues.workKind,
+              pricesOfProducts: itemsValues.pricesOfProducts,
+              quantitiesOfProduct: itemsValues.quantitiesOfProduct,
+              workPrice: itemsValues.workPrice,
+              totalAmount: itemsValues.totalAmount,
+              colored: itemsValues.colored,
+            },
+            {
+              headers: headers,
+            }
+          );
+          break;
+        case "/personalSales":
+          await Api.post(
+            collReq,
+            {
+              date: itemsValues.date,
+              name: itemsValues.name.trim(),
+              strains: itemsValues.strains,
+              weightKind: itemsValues.weightKind,
+              number: itemsValues.number,
+              quantity: itemsValues.quantity,
+              totalAmount: itemsValues.totalAmount,
+              colored: itemsValues.colored,
+            },
+            {
+              headers: headers,
+            }
+          );
+          break;
+        case "/personalProductExpenses":
+          await Api.post(
+            collReq,
+            {
+              date: itemsValues.date,
+              name: itemsValues.name.trim(),
+              number: itemsValues.number,
+              quantity: itemsValues.quantity,
+              totalAmount: itemsValues.totalAmount,
+              colored: itemsValues.colored,
+            },
+            {
+              headers: headers,
+            }
+          );
+          break;
+        case "/personalWorkers":
+          await Api.post(
+            collReq,
+            {
+              date: itemsValues.date,
+              clientName: itemsValues.clientName.trim(),
+              name: itemsValues.name.trim(),
+              number: itemsValues.number,
+              totalAmount: itemsValues.totalAmount,
+              colored: itemsValues.colored,
+            },
+            {
+              headers: headers,
+            }
+          );
+          break;
+        case "/clients":
+          await Api.post(
+            collReq,
+            {
+              clientName: itemsValues.clientName.trim(),
+              name: itemsValues.name.trim(),
+              quantity: itemsValues.quantity,
+            },
+            {
+              headers: headers,
+            }
+          );
+          break;
+        case "/expenses":
+          await Api.post(
+            collReq,
+            {
+              date: itemsValues.date,
+              name: itemsValues.name,
+              number: itemsValues.number,
+              quantity: itemsValues.quantity,
+              totalAmount: itemsValues.totalAmount,
+              // tax: itemsValues.tax,
+              colored: itemsValues.colored,
+            },
+            {
+              headers: headers,
+            }
+          );
+          break;
+        case "/sales":
+          await Api.post(
+            collReq,
+            {
+              date: itemsValues.date,
+              clientName: itemsValues.clientName,
+              name: itemsValues.name,
+              number: itemsValues.number,
+              pricesOfProducts: itemsValues.pricesOfProducts,
+              purpose: itemsValues.purpose,
+              product: itemsValues.product,
+              water: itemsValues.water,
+              strains: itemsValues.strains,
+              colored: itemsValues.colored,
+              tax: itemsValues.tax,
+              quantity: itemsValues.quantity,
+              quantitiesOfProduct: itemsValues.quantitiesOfProduct,
+              totalAmount: itemsValues.totalAmount,
+            },
+            {
+              headers: headers,
+            }
+          );
+          break;
+        default:
+          await Api.post(
+            collReq,
+            { name: itemsValues.name, number: itemsValues.number },
+            {
+              headers: headers,
+            }
+          );
+      }
 
-    setFetchingStatus((prev) => {
-      return {
-        ...prev,
-        status: false,
-        loading: false,
-        error: false,
-        message: "המוצר נוסף בהצלחה",
-      };
-    });
-    setTimeout(() => {
+      setItemIsUpdated((prev) => !prev);
+
       setFetchingStatus((prev) => {
         return {
           ...prev,
           status: false,
           loading: false,
           error: false,
-          message: null,
+          message: "המוצר נוסף בהצלחה",
         };
       });
-    }, 1000);
+      setTimeout(() => {
+        setFetchingStatus((prev) => {
+          return {
+            ...prev,
+            status: false,
+            loading: false,
+            error: false,
+            message: null,
+          };
+        });
+      }, 1000);
+    } catch (e) {
+      setFetchingStatus((prev) => {
+        return {
+          ...prev,
+          status: false,
+          loading: false,
+          error: true,
+          message: "תקלה בביצוע ההוספה",
+        };
+      });
+      setTimeout(() => {
+        setFetchingStatus((prev) => {
+          return {
+            ...prev,
+            status: false,
+            loading: false,
+            error: false,
+            message: null,
+          };
+        });
+      }, 1000);
+    }
   };
 
   const addItem = async () => {
@@ -405,11 +429,15 @@ export default function AddItem({
                   ...prev,
                   workKind: e.label,
                   number: e.label === "ריסוס" ? prev.number : "",
-                  pricesOfProducts: e.label === "ריסוס" ? prev.pricesOfProducts : {},
-                  quantitiesOfProduct: e.label === "ריסוס" ? prev.quantitiesOfProduct : {},
+                  pricesOfProducts:
+                    e.label === "ריסוס" ? prev.pricesOfProducts : {},
+                  quantitiesOfProduct:
+                    e.label === "ריסוס" ? prev.quantitiesOfProduct : {},
                   product: e.label === "ריסוס" ? prev.product : [],
-                  totalAmount : e.label === "ריסוס" ? +prev.workPrice + +prev.number :+prev.workPrice
-
+                  totalAmount:
+                    e.label === "ריסוס"
+                      ? +prev.workPrice + +prev.number
+                      : +prev.workPrice,
                 };
               });
             }}

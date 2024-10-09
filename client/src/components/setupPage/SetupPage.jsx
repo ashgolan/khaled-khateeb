@@ -304,7 +304,7 @@ export default function SetupPage({
       }
     };
     fetchData();
-  }, [itemIsUpdated, updatedReport,setTaxValues]);
+  }, [itemIsUpdated, updatedReport]);
 
   const filterByReport = (sortedData) => {
     let monthNames = report?.month?.map((month) => month.value);
