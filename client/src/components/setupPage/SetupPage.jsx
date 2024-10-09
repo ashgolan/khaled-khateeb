@@ -58,118 +58,201 @@ export default function SetupPage({
     }
     return total;
   };
+  // const sendRequest = async (token) => {
+  //   const headers = { Authorization: token };
+  //   setFetchingStatus((prev) => {
+  //     return { ...prev, status: true, loading: true };
+  //   });
+
+  //   if (isFetching) {
+  //     if (collReq === "/sales") {
+  //       const { data: tractorPriceData } = await Api.get("/tractorPrice", {
+  //         headers,
+  //       });
+  //       setTractorPrice(tractorPriceData[0]?.price);
+
+  //       setDefaultTractorPrice(tractorPriceData);
+  //       setFetchingData(fetchingData.salesData);
+  //     } else if (collReq === "/personalSales") {
+  //       setFetchingData(fetchingData.personalSalesData);
+  //     } else if (collReq === "/personalRkrExpenses") {
+  //       setFetchingData(fetchingData.personalRkrExpensesData);
+  //     } else if (collReq === "/personalProductExpenses") {
+  //       setFetchingData(fetchingData.personalProductExpensesData);
+  //     } else if (collReq === "/expenses") {
+  //       setFetchingData(fetchingData.expensesData);
+  //     } else if (collReq === "/personalWorkers") {
+  //       setFetchingData(fetchingData.personalWorkersData);
+  //     } else {
+  //       setFetchingData(fetchingData.clientsData);
+  //     }
+  //   } else {
+  //     const { data } = await Api.get(collReq, { headers });
+
+  //     if (collReq === "/personalProductExpenses") {
+  //       const { data: personalProductsExpensesData } = await Api.get(
+  //         "/personalProductExpenses",
+  //         { headers }
+  //       );
+
+  //       setPersonalProductExpenses(personalProductsExpensesData);
+  //     }
+  //     if (collReq === "/personalWorkers") {
+  //       const { data: personalWorkersData } = await Api.get(
+  //         "/personalWorkers",
+  //         { headers }
+  //       );
+  //       setPersonalWorkers(personalWorkersData);
+  //     }
+  //     if (collReq === "/personalSales") {
+  //       const { data: personalSalesData } = await Api.get("/personalSales", {
+  //         headers,
+  //       });
+  //       setPersonalSales(personalSalesData);
+  //     }
+  //     if (collReq === "/personalRkrExpenses") {
+  //       const { data: personalRkrExpensesData } = await Api.get(
+  //         "/personalRkrExpenses",
+  //         {
+  //           headers,
+  //         }
+  //       );
+  //       setPersonalRkrExpenses(personalRkrExpensesData);
+  //       const { data: personalProductExpensesData } = await Api.get(
+  //         "/personalProductExpenses",
+  //         {
+  //           headers,
+  //         }
+  //       );
+  //       setPersonalProductExpenses(personalProductExpensesData);
+  //     }
+  //     if (collReq === "/sales") {
+  //       const { data: clientsData } = await Api.get("/clients", {
+  //         headers,
+  //       });
+  //       setClients(clientsData);
+  //       const { data: expensesData } = await Api.get("/expenses", {
+  //         headers,
+  //       });
+  //       setExpenses(expensesData);
+  //       const { data: tractorPriceData } = await Api.get("/tractorPrice", {
+  //         headers,
+  //       });
+  //       setTractorPrice(tractorPriceData[0]?.price);
+
+  //       setDefaultTractorPrice(tractorPriceData);
+  //     }
+
+  //     if (report === undefined) {
+  //       if (collReq === "/sales" || collReq === "/expenses") {
+  //         setFetchingData(
+  //           data.filter(
+  //             (item) =>
+  //               new Date(item.date).getFullYear() === year ||
+  //               item.colored === true
+  //           )
+  //         );
+  //       } else {
+  //         setFetchingData(data);
+  //       }
+  //     } else {
+  //       setFetchingData(data);
+  //     }
+  //   }
+  //   const { data: taxValuesData } = await Api.get("/taxValues", { headers });
+  // setTaxValues(taxValuesData[0]);
+  //   setFetchingStatus((prev) => {
+  //     return {
+  //       ...prev,
+  //       status: false,
+  //       loading: false,
+  //     };
+  //   });
+  // };
+  const fetchData = async (url, headers) => {
+    const { data } = await Api.get(url, { headers });
+    return data;
+  };
+  
+  const processSalesData = async (headers) => {
+    const [clientsData, expensesData, tractorPriceData] = await Promise.all([
+      fetchData("/clients", headers),
+      fetchData("/expenses", headers),
+      fetchData("/tractorPrice", headers)
+    ]);
+  
+    setClients(clientsData);
+    setExpenses(expensesData);
+    setTractorPrice(tractorPriceData[0]?.price);
+    setDefaultTractorPrice(tractorPriceData);
+  };
+  
+  const handlePersonalData = async (headers) => {
+    const [personalSalesData, personalWorkersData, personalRkrExpensesData, personalProductExpensesData] = await Promise.all([
+      fetchData("/personalSales", headers),
+      fetchData("/personalWorkers", headers),
+      fetchData("/personalRkrExpenses", headers),
+      fetchData("/personalProductExpenses", headers)
+    ]);
+  
+    setPersonalSales(personalSalesData);
+    setPersonalWorkers(personalWorkersData);
+    setPersonalRkrExpenses(personalRkrExpensesData);
+    setPersonalProductExpenses(personalProductExpensesData);
+  };
+  
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
-    setFetchingStatus((prev) => {
-      return { ...prev, status: true, loading: true };
-    });
-
+    setFetchingStatus({ status: true, loading: true });
+  
     if (isFetching) {
-      if (collReq === "/sales") {
-        const { data: tractorPriceData } = await Api.get("/tractorPrice", {
-          headers,
-        });
-        setTractorPrice(tractorPriceData[0]?.price);
-
-        setDefaultTractorPrice(tractorPriceData);
-        setFetchingData(fetchingData.salesData);
-      } else if (collReq === "/personalSales") {
-        setFetchingData(fetchingData.personalSalesData);
-      } else if (collReq === "/personalRkrExpenses") {
-        setFetchingData(fetchingData.personalRkrExpensesData);
-      } else if (collReq === "/personalProductExpenses") {
-        setFetchingData(fetchingData.personalProductExpensesData);
-      } else if (collReq === "/expenses") {
-        setFetchingData(fetchingData.expensesData);
-      } else if (collReq === "/personalWorkers") {
-        setFetchingData(fetchingData.personalWorkersData);
-      } else {
-        setFetchingData(fetchingData.clientsData);
+      switch (collReq) {
+        case "/sales":
+          const tractorPriceData = await fetchData("/tractorPrice", headers);
+          setTractorPrice(tractorPriceData[0]?.price);
+          setDefaultTractorPrice(tractorPriceData);
+          setFetchingData(fetchingData.salesData);
+          break;
+        case "/personalSales":
+          setFetchingData(fetchingData.personalSalesData);
+          break;
+        case "/personalRkrExpenses":
+          setFetchingData(fetchingData.personalRkrExpensesData);
+          break;
+        case "/personalProductExpenses":
+          setFetchingData(fetchingData.personalProductExpensesData);
+          break;
+        case "/expenses":
+          setFetchingData(fetchingData.expensesData);
+          break;
+        case "/personalWorkers":
+          setFetchingData(fetchingData.personalWorkersData);
+          break;
+        default:
+          setFetchingData(fetchingData.clientsData);
       }
     } else {
-      const { data } = await Api.get(collReq, { headers });
-
-      if (collReq === "/personalProductExpenses") {
-        const { data: personalProductsExpensesData } = await Api.get(
-          "/personalProductExpenses",
-          { headers }
-        );
-
-        setPersonalProductExpenses(personalProductsExpensesData);
-      }
-      if (collReq === "/personalWorkers") {
-        const { data: personalWorkersData } = await Api.get(
-          "/personalWorkers",
-          { headers }
-        );
-        setPersonalWorkers(personalWorkersData);
-      }
-      if (collReq === "/personalSales") {
-        const { data: personalSalesData } = await Api.get("/personalSales", {
-          headers,
-        });
-        setPersonalSales(personalSalesData);
-      }
-      if (collReq === "/personalRkrExpenses") {
-        const { data: personalRkrExpensesData } = await Api.get(
-          "/personalRkrExpenses",
-          {
-            headers,
-          }
-        );
-        setPersonalRkrExpenses(personalRkrExpensesData);
-        const { data: personalProductExpensesData } = await Api.get(
-          "/personalProductExpenses",
-          {
-            headers,
-          }
-        );
-        setPersonalProductExpenses(personalProductExpensesData);
-      }
+      const data = await fetchData(collReq, headers);
+  
       if (collReq === "/sales") {
-        const { data: clientsData } = await Api.get("/clients", {
-          headers,
-        });
-        setClients(clientsData);
-        const { data: expensesData } = await Api.get("/expenses", {
-          headers,
-        });
-        setExpenses(expensesData);
-        const { data: tractorPriceData } = await Api.get("/tractorPrice", {
-          headers,
-        });
-        setTractorPrice(tractorPriceData[0]?.price);
-
-        setDefaultTractorPrice(tractorPriceData);
+        await processSalesData(headers);
+      } else if (collReq === "/personalSales" || collReq === "/personalWorkers" || collReq === "/personalRkrExpenses") {
+        await handlePersonalData(headers);
       }
-
-      if (report === undefined) {
-        if (collReq === "/sales" || collReq === "/expenses") {
-          setFetchingData(
-            data.filter(
-              (item) =>
-                new Date(item.date).getFullYear() === year ||
-                item.colored === true
-            )
-          );
-        } else {
-          setFetchingData(data);
-        }
-      } else {
-        setFetchingData(data);
-      }
+  
+      setFetchingData(
+        report === undefined && (collReq === "/sales" || collReq === "/expenses")
+          ? data.filter((item) => new Date(item.date).getFullYear() === year || item.colored === true)
+          : data
+      );
     }
-    const { data: taxValuesData } = await Api.get("/taxValues", { headers });
-  setTaxValues(taxValuesData[0]);
-    setFetchingStatus((prev) => {
-      return {
-        ...prev,
-        status: false,
-        loading: false,
-      };
-    });
+  
+    const taxValuesData = await fetchData("/taxValues", headers);
+    setTaxValues(taxValuesData[0]);
+  
+    setFetchingStatus({ status: false, loading: false });
   };
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -221,7 +304,7 @@ export default function SetupPage({
       }
     };
     fetchData();
-  }, [itemIsUpdated, updatedReport]);
+  }, [itemIsUpdated, updatedReport,setTaxValues]);
 
   const filterByReport = (sortedData) => {
     let monthNames = report?.month?.map((month) => month.value);

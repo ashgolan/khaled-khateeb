@@ -14,6 +14,7 @@ export default function Navbar({ isPersonal, setIsPersonal }) {
   const [taxValues, setTaxValues] = useState({});
 
   const openModal = async () => {
+    navigate('/')
     setIsOpen(true);
     const headers = { Authorization: `Bearer ${getAccessToken()}` };
     try {

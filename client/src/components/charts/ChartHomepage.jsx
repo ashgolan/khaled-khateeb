@@ -205,42 +205,55 @@ function ChartHomepage() {
         {(fetchingData?.salesData?.length > 0 ||
           fetchingData?.expensesData?.length > 0) && (
           <div className="charts-title">
-            <Select
-              className="select-chart"
-              options={allTypes}
-              placeholder="בחר סוג דוח"
-              onChange={(e) => {
-                setUpdatedReport((prev) => !prev);
-                setReport((prev) => {
-                  return {
-                    ...prev,
-                    typeName: e.label,
-                    clientName: null,
-                    type: e.value,
-                    month: null,
-                    year: null,
-                  };
-                });
-                setUpdateChart((prev) => !prev);
-                setShowChart(false);
-              }}
-              styles={{
-                option: (provided, { data, isSelected }) => ({
-                  ...provided,
-                  backgroundColor: isSelected
-                    ? "lightgreen"
-                    : data.value.includes("Charts")
-                    ? "lightblue"
-                    : "white",
-                  color: isSelected
-                    ? "black"
-                    : data.value.includes("Charts")
-                    ? "blue"
-                    : "black",
-                    textAlign : "center"
-                }),
-              }}
-            ></Select>{" "}
+          <Select
+  className="select-chart"
+  options={allTypes}
+  placeholder="בחר סוג דוח"
+  onChange={(e) => {
+    setUpdatedReport((prev) => !prev);
+    setReport((prev) => {
+      return {
+        ...prev,
+        typeName: e.label,
+        clientName: null,
+        type: e.value,
+        month: null,
+        year: null,
+      };
+    });
+    setUpdateChart((prev) => !prev);
+    setShowChart(false);
+  }}
+  styles={{
+    control: (provided) => ({
+      ...provided,
+      textAlign: "center", // Centers the placeholder and value
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      textAlign: "center", // Centers the selected value
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      textAlign: "center", // Centers the placeholder
+    }),
+    option: (provided, { data, isSelected }) => ({
+      ...provided,
+      backgroundColor: isSelected
+        ? "lightgreen"
+        : data.value.includes("Charts")
+        ? "lightblue"
+        : "white",
+      color: isSelected
+        ? "black"
+        : data.value.includes("Charts")
+        ? "blue"
+        : "black",
+      textAlign: "center", // Centers the option text
+    }),
+  }}
+/>
+
             {report.type && (
               <Select
                 options={allYears.filter((option) => option.value !== null)}
