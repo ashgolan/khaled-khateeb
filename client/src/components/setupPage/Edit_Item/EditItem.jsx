@@ -407,20 +407,28 @@ export default function EditItem({
       ],
     }[collReq] || ["number", "name"]; // Fallback for unknown collection types
 
-    return relevantProps.some((key) => itemsValues[key] !== item[key]);
+    return relevantProps.some((key) => {
+      const inputValue = itemsValues[key];
+      const originalValue = item[key];
+
+      const inputValueTrimmed =
+        typeof inputValue === "string" ? inputValue.trim() : inputValue;
+      const originalValueTrimmed =
+        typeof originalValue === "string"
+          ? originalValue.trim()
+          : originalValue;
+
+      return inputValueTrimmed !== originalValueTrimmed;
+    });
   };
-
-  // Send API request
-
 
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
     try {
-      
       const payload = {
         clientName: itemsValues.clientName?.trim(),
         name: itemsValues.name?.trim(),
-        number: +itemsValues.number.trim(),
+        number: +itemsValues.number,
         quantity: +itemsValues.quantity,
         date: itemsValues.date,
         purpose: itemsValues.purpose,

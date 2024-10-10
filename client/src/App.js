@@ -34,6 +34,7 @@ function App() {
     if (!loggedIn) return;
     clearTokens();
     setLoggedIn(false);
+    localStorage.clear();
     navigate("/homepage");
   };
 
