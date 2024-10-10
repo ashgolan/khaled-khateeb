@@ -62,20 +62,18 @@ export default function AddItem({
             {
               date: itemsValues.date,
               name: itemsValues.name.trim(),
-              number: itemsValues.number,
-              quantity: itemsValues.quantity,
+              number: +(itemsValues.number.toString().trim()),
+              quantity: +(itemsValues.quantity.toString().trim()),
               other: itemsValues.other,
               product: itemsValues.product,
               workKind: itemsValues.workKind,
               pricesOfProducts: itemsValues.pricesOfProducts,
               quantitiesOfProduct: itemsValues.quantitiesOfProduct,
-              workPrice: itemsValues.workPrice,
+              workPrice: +(itemsValues.workPrice.toString().trim()),
               totalAmount: itemsValues.totalAmount,
               colored: itemsValues.colored,
             },
-            {
-              headers: headers,
-            }
+            { headers: headers }
           );
           break;
         case "/personalSales":
@@ -86,14 +84,12 @@ export default function AddItem({
               name: itemsValues.name.trim(),
               strains: itemsValues.strains,
               weightKind: itemsValues.weightKind,
-              number: itemsValues.number,
-              quantity: itemsValues.quantity,
+              number: +(itemsValues.number.toString().trim()),
+              quantity: +(itemsValues.quantity.toString().trim()),
               totalAmount: itemsValues.totalAmount,
               colored: itemsValues.colored,
             },
-            {
-              headers: headers,
-            }
+            { headers: headers }
           );
           break;
         case "/personalProductExpenses":
@@ -102,14 +98,12 @@ export default function AddItem({
             {
               date: itemsValues.date,
               name: itemsValues.name.trim(),
-              number: itemsValues.number,
-              quantity: itemsValues.quantity,
+              number: +(itemsValues.number.toString().trim()),
+              quantity: +(itemsValues.quantity.toString().trim()),
               totalAmount: itemsValues.totalAmount,
               colored: itemsValues.colored,
             },
-            {
-              headers: headers,
-            }
+            { headers: headers }
           );
           break;
         case "/personalWorkers":
@@ -119,13 +113,11 @@ export default function AddItem({
               date: itemsValues.date,
               clientName: itemsValues.clientName.trim(),
               name: itemsValues.name.trim(),
-              number: itemsValues.number,
+              number: +(itemsValues.number.toString().trim()),
               totalAmount: itemsValues.totalAmount,
               colored: itemsValues.colored,
             },
-            {
-              headers: headers,
-            }
+            { headers: headers }
           );
           break;
         case "/clients":
@@ -134,11 +126,9 @@ export default function AddItem({
             {
               clientName: itemsValues.clientName.trim(),
               name: itemsValues.name.trim(),
-              quantity: itemsValues.quantity,
+              quantity: +(itemsValues.quantity.toString().trim()),
             },
-            {
-              headers: headers,
-            }
+            { headers: headers }
           );
           break;
         case "/expenses":
@@ -146,16 +136,14 @@ export default function AddItem({
             collReq,
             {
               date: itemsValues.date,
-              name: itemsValues.name,
-              number: itemsValues.number,
-              quantity: itemsValues.quantity,
+              name: itemsValues.name.trim(),
+              number: +(itemsValues.number.toString().trim()),
+              quantity: +(itemsValues.quantity.toString().trim()),
               totalAmount: itemsValues.totalAmount,
               // tax: itemsValues.tax,
               colored: itemsValues.colored,
             },
-            {
-              headers: headers,
-            }
+            { headers: headers }
           );
           break;
         case "/sales":
@@ -163,34 +151,34 @@ export default function AddItem({
             collReq,
             {
               date: itemsValues.date,
-              clientName: itemsValues.clientName,
-              name: itemsValues.name,
-              number: itemsValues.number,
+              clientName: itemsValues.clientName.trim(),
+              name: itemsValues.name.trim(),
+              number: +(itemsValues.number.toString().trim()),
               pricesOfProducts: itemsValues.pricesOfProducts,
               purpose: itemsValues.purpose,
               product: itemsValues.product,
-              water: itemsValues.water,
+              water: +(itemsValues.water.toString().trim()),
               strains: itemsValues.strains,
               colored: itemsValues.colored,
               tax: itemsValues.tax,
-              quantity: itemsValues.quantity,
+              quantity: +(itemsValues.quantity.toString().trim()),
               quantitiesOfProduct: itemsValues.quantitiesOfProduct,
               totalAmount: itemsValues.totalAmount,
             },
-            {
-              headers: headers,
-            }
+            { headers: headers }
           );
           break;
         default:
           await Api.post(
             collReq,
-            { name: itemsValues.name, number: itemsValues.number },
             {
-              headers: headers,
-            }
+              name: itemsValues.name.trim(),
+              number: +(itemsValues.number.toString().trim()),
+            },
+            { headers: headers }
           );
       }
+      
 
       setItemIsUpdated((prev) => !prev);
 
