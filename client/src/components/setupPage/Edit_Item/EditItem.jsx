@@ -428,14 +428,14 @@ export default function EditItem({
       const payload = {
         clientName: itemsValues.clientName?.trim(),
         name: itemsValues.name?.trim(),
-        number: +itemsValues.number,
-        quantity: +itemsValues.quantity,
+        number: +(itemsValues.number?.toString().trim()),  // Trim number
+        quantity: +(itemsValues.quantity?.toString().trim()),  // Trim quantity
         date: itemsValues.date,
         purpose: itemsValues.purpose,
         weightKind: itemsValues.weightKind,
         workKind: itemsValues.workKind,
         strains: itemsValues.strains,
-        water: itemsValues.water,
+        water: +(itemsValues.water?.toString().trim()),  // Trim water
         other: itemsValues.other,
         colored: itemsValues.colored,
         totalAmount: itemsValues.totalAmount,
@@ -443,7 +443,7 @@ export default function EditItem({
         quantitiesOfProduct: itemsValues.quantitiesOfProduct,
         product: itemsValues.product,
       };
-
+  
       await Api.patch(`${collReq}/${item._id}`, payload, { headers });
       setFetchingStatus({
         status: false,
@@ -468,6 +468,7 @@ export default function EditItem({
       );
     }
   };
+  
 
   // Update the data with token refresh handling
   const updateData = async () => {
