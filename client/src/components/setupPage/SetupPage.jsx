@@ -173,38 +173,43 @@ export default function SetupPage({
     const { data } = await Api.get(url, { headers });
     return data;
   };
-  
+
   const processSalesData = async (headers) => {
     const [clientsData, expensesData, tractorPriceData] = await Promise.all([
       fetchData("/clients", headers),
       fetchData("/expenses", headers),
-      fetchData("/tractorPrice", headers)
+      fetchData("/tractorPrice", headers),
     ]);
-  
+
     setClients(clientsData);
     setExpenses(expensesData);
     setTractorPrice(tractorPriceData[0]?.price);
     setDefaultTractorPrice(tractorPriceData);
   };
-  
+
   const handlePersonalData = async (headers) => {
-    const [personalSalesData, personalWorkersData, personalRkrExpensesData, personalProductExpensesData] = await Promise.all([
+    const [
+      personalSalesData,
+      personalWorkersData,
+      personalRkrExpensesData,
+      personalProductExpensesData,
+    ] = await Promise.all([
       fetchData("/personalSales", headers),
       fetchData("/personalWorkers", headers),
       fetchData("/personalRkrExpenses", headers),
-      fetchData("/personalProductExpenses", headers)
+      fetchData("/personalProductExpenses", headers),
     ]);
-  
+
     setPersonalSales(personalSalesData);
     setPersonalWorkers(personalWorkersData);
     setPersonalRkrExpenses(personalRkrExpensesData);
     setPersonalProductExpenses(personalProductExpensesData);
   };
-  
+
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus({ status: true, loading: true });
-  
+
     if (isFetching) {
       switch (collReq) {
         case "/sales":
@@ -233,26 +238,35 @@ export default function SetupPage({
       }
     } else {
       const data = await fetchData(collReq, headers);
-  
+
       if (collReq === "/sales") {
         await processSalesData(headers);
-      } else if (collReq === "/personalSales" || collReq === "/personalWorkers" || collReq === "/personalRkrExpenses") {
+      } else if (
+        collReq === "/personalSales" ||
+        collReq === "/personalWorkers" ||
+        collReq === "/personalRkrExpenses"
+      ) {
         await handlePersonalData(headers);
       }
-  
+
       setFetchingData(
-        report === undefined && (collReq === "/sales" || collReq === "/expenses")
-          ? data.filter((item) => new Date(item.date).getFullYear() === year || item.colored === true)
+        report === undefined &&
+          (collReq === "/sales" || collReq === "/expenses")
+          ? data.filter(
+              (item) =>
+                new Date(item.date).getFullYear() === year ||
+                item.colored === true
+            )
           : data
       );
     }
-  
+
     const taxValuesData = await fetchData("/taxValues", headers);
     setTaxValues(taxValuesData[0]);
-  
+
     setFetchingStatus({ status: false, loading: false });
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -535,20 +549,22 @@ export default function SetupPage({
             {!report?.type && getTotals().toFixed(2)}
             {!report?.type && collReq !== "/clients" && `  ש"ח לפני מע"מ `}
             {!report?.type && collReq === "/clients" && `  דונם `}
-            {report?.type && (getTotals() + getTotals() * 0.17).toFixed(2)}{" "}
+            {report?.type &&
+              (
+                getTotals() 
+              ).toFixed(2)}{" "}
             {report?.type && `  ש"ח כולל מע"מ [ `}
             {report?.type && (
               <span style={{ fontSize: "0.8rem", color: "darkblue" }}>
-              {(getTotals() / (1 + taxValues?.maamValue / 100)).toFixed(2)}
-                  {`  ש"ח  `}
-                  {` + ${taxValues?.maamValue}% מע"מ  ( `}
-                  {(
-                    getTotals() -
-                    getTotals() / (1 + taxValues?.maamValue / 100)
-                  ).toFixed(2)}{" "}
-                  {`  ש"ח )  `}
+                {(getTotals() / (1 + taxValues?.maamValue / 100)).toFixed(2)}
+                {`  ש"ח  `}
+                {` + ${taxValues?.maamValue}% מע"מ  ( `}
+                {(
+                  getTotals() -
+                  getTotals() / (1 + taxValues?.maamValue / 100)
+                ).toFixed(2)}{" "}
+                {`  ש"ח )  `}
               </span>
-     
             )}
             {report?.type && `] `}
           </label>
@@ -639,7 +655,7 @@ export default function SetupPage({
             תאריך
           </button>
         )}
-        {(collReq ==='/personalRkrExpenses') && (
+        {collReq === "/personalRkrExpenses" && (
           <button
             id="workKind"
             className="input_show_item head"
@@ -794,7 +810,9 @@ export default function SetupPage({
               width:
                 collReq === "/sales"
                   ? "6%"
-                  : collReq === "/expenses" || collReq === "/personalSales"|| collReq === "/personalRkrExpenses"
+                  : collReq === "/expenses" ||
+                    collReq === "/personalSales" ||
+                    collReq === "/personalRkrExpenses"
                   ? "10%"
                   : "15%",
             }}
@@ -978,7 +996,7 @@ export default function SetupPage({
         )}
       {!addItemToggle.btnVisible && !report?.type && (
         <AddItem
-        personalProductExpenses={personalProductExpenses}
+          personalProductExpenses={personalProductExpenses}
           setaddItemToggle={setaddItemToggle}
           setInventoryData={setFetchingData}
           setItemIsUpdated={setItemIsUpdated}
