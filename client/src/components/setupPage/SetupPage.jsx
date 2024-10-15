@@ -684,7 +684,7 @@ export default function SetupPage({
               setKindOfSort(() => "clientName");
             }}
           >
-            {"קליינט"}
+            {collReq === '/personalWorkers' ? "עובד" : "קליינט"}
           </button>
         )}
 
