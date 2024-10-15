@@ -328,13 +328,14 @@ export default function SetupPage({
         const month =
           new Date(item.date).getMonth() + 1 < 10
             ? `0${new Date(item.date).getMonth() + 1}`
-            : new Date(item.date).getMonth() + 1;
+            : `${new Date(item.date).getMonth() + 1}`;
         if (report?.clientName)
           return (
             monthNames.includes(month) &&
             new Date(item.date).getFullYear() === report?.year &&
             item.clientName === report.clientName
           );
+          
         return (
           monthNames.includes(month) &&
           new Date(item.date).getFullYear() === report?.year
