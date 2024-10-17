@@ -4,6 +4,15 @@ export const getCollectionProps = (collReq) => {
       return ["clientName", "name", "quantity"];
     case "/expenses":
       return ["name", "number", "date", "quantity", "totalAmount"];
+    case "/personalInvestments":
+      return [
+        "date",
+        "name",
+        "number",
+        "other",
+        "totalAmount",
+        "colored",
+      ];
     case "/personalSales":
       return [
         "name",

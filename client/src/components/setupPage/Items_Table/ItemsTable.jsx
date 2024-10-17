@@ -26,7 +26,6 @@ export default function ItemsTable({
     disabled: true,
     itemId: null,
   });
-  const [totalsInMessages, setTotalsInMessages] = useState(0);
   const [itemsValues, setItemsValues] = useState({
     name: "",
     clientName: "",
@@ -189,6 +188,7 @@ export default function ItemsTable({
           {(collReq === "/expenses" ||
             collReq === "/personalProductExpenses" ||
             collReq === "/sales" ||
+            collReq === "/personalInvestments" ||
             collReq === "/personalRkrExpenses" ||
             collReq === "/personalSales" ||
             collReq === "/personalWorkers") && (
@@ -307,6 +307,8 @@ export default function ItemsTable({
           {(collReq === "/clients" ||
             collReq === "/expenses" ||
             collReq === "/personalSales" ||
+            collReq === "/personalInvestments" ||
+
             collReq === "/personalRkrExpenses" ||
             collReq === "/personalProductExpenses" ||
             collReq === "/personalWorkers") && (
@@ -314,8 +316,10 @@ export default function ItemsTable({
               id="name"
               className="input_show_item"
               style={{
+                color: itemsValues.colored && itemsValues.clientName === '' ? "rgb(255, 71, 46)" : "black",
+
                 maxWidth:
-                  collReq === "/clients" || collReq === "/expenses"
+                  collReq === "/clients" || collReq === "/expenses" ||      collReq === "/personalInvestments" 
                     ? "32%"
                     : collReq === "/sales" ||
                       collReq === "/expenses" ||
@@ -329,7 +333,8 @@ export default function ItemsTable({
                     : "15%",
 
                 minWidth:
-                  collReq === "/clients" || collReq === "/expenses"
+                  collReq === "/clients" || collReq === "/expenses"    ||      collReq === "/personalInvestments" 
+
                     ? "32%"
                     : collReq === "/sales" ||
                       collReq === "/expenses" ||
@@ -478,7 +483,6 @@ export default function ItemsTable({
                   }}
                   disabled
                   placeholder={"כ.חומר"}
-                  onDoubleClick={changeColorOfClientName}
                   value={getSumOfValues(itemsValues.quantitiesOfProduct)}
                 ></input>
                 <label>: כמות החומר</label>
@@ -491,7 +495,7 @@ export default function ItemsTable({
               className="input_show_item"
               style={{
                 width:
-                  collReq === "/sales"
+                  collReq === "/sales" ||      collReq === "/personalInvestments" 
                     ? "6%"
                     : collReq === "/expenses" ||
                       collReq === "/personalSales" ||
@@ -499,7 +503,6 @@ export default function ItemsTable({
                     ? "10%"
                     : "15%",
               }}
-              onDoubleClick={changeColorOfClientName}
               disabled={changeStatus.disabled}
               value={itemsValues.number}
               onChange={(e) => {
@@ -602,12 +605,13 @@ export default function ItemsTable({
               }}
             />
           )}
-          {collReq === "/personalRkrExpenses" && (
+          {(collReq === "/personalRkrExpenses" ||           collReq === "/personalInvestments" )
+ && (
             <input
               id="other"
               className="input_show_item"
               style={{
-                width: "7%",
+                width:     collReq === "/personalInvestments" ? "15%" : "7%",
               }}
               disabled={changeStatus.disabled}
               value={itemsValues.other}
@@ -622,6 +626,8 @@ export default function ItemsTable({
             collReq === "/sales" ||
             collReq === "/personalProductExpenses" ||
             collReq === "/personalRkrExpenses" ||
+            collReq === "/personalInvestments" ||
+
             collReq === "/personalSales" ||
             collReq === "/personalWorkers") && (
             <input

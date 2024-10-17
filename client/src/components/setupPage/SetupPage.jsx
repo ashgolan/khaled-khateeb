@@ -39,6 +39,7 @@ export default function SetupPage({
 
   const [personalProductExpenses, setPersonalProductExpenses] = useState([]);
   const [personalSales, setPersonalSales] = useState([]);
+  const [personalInvestments, setPersonalInvestments] = useState([]);
   const [personalRkrExpenses, setPersonalRkrExpenses] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [personalWorkers, setPersonalWorkers] = useState([]);
@@ -190,16 +191,19 @@ export default function SetupPage({
   const handlePersonalData = async (headers) => {
     const [
       personalSalesData,
+      personalInvestments,
       personalWorkersData,
       personalRkrExpensesData,
       personalProductExpensesData,
     ] = await Promise.all([
       fetchData("/personalSales", headers),
+      fetchData("/personalInvestments", headers),
       fetchData("/personalWorkers", headers),
       fetchData("/personalRkrExpenses", headers),
       fetchData("/personalProductExpenses", headers),
     ]);
 
+    setPersonalInvestments(personalInvestments);
     setPersonalSales(personalSalesData);
     setPersonalWorkers(personalWorkersData);
     setPersonalRkrExpenses(personalRkrExpensesData);
@@ -209,7 +213,8 @@ export default function SetupPage({
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus({ status: true, loading: true });
-
+    console.log('insend request');
+    
     if (isFetching) {
       switch (collReq) {
         case "/sales":
@@ -218,16 +223,19 @@ export default function SetupPage({
           setDefaultTractorPrice(tractorPriceData);
           setFetchingData(fetchingData.salesData);
           break;
-        case "/personalSales":
+          case "/personalSales":
           setFetchingData(fetchingData.personalSalesData);
           break;
-        case "/personalRkrExpenses":
-          setFetchingData(fetchingData.personalRkrExpensesData);
+        case "/personalInvestments":
+          setFetchingData(fetchingData.personalInvestmentsData);
           break;
+          case "/personalRkrExpenses":
+            setFetchingData(fetchingData.personalRkrExpensesData);
+            break;
         case "/personalProductExpenses":
           setFetchingData(fetchingData.personalProductExpensesData);
           break;
-        case "/expenses":
+          case "/expenses":
           setFetchingData(fetchingData.expensesData);
           break;
         case "/personalWorkers":
@@ -237,6 +245,7 @@ export default function SetupPage({
           setFetchingData(fetchingData.clientsData);
       }
     } else {
+      
       const data = await fetchData(collReq, headers);
 
       if (collReq === "/sales") {
@@ -270,6 +279,8 @@ export default function SetupPage({
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log('in useeffect');
+        
         await sendRequest(getAccessToken());
       } catch (error) {
         if (error.response && error.response.status === 401) {
@@ -335,7 +346,7 @@ export default function SetupPage({
             new Date(item.date).getFullYear() === report?.year &&
             item.clientName === report.clientName
           );
-          
+
         return (
           monthNames.includes(month) &&
           new Date(item.date).getFullYear() === report?.year
@@ -550,19 +561,15 @@ export default function SetupPage({
             {!report?.type && getTotals().toFixed(2)}
             {!report?.type && collReq !== "/clients" && `  ש"ח לפני מע"מ `}
             {!report?.type && collReq === "/clients" && `  דונם `}
-            {report?.type &&
-              (
-                getTotals() 
-              ).toFixed(2)}{" "}
+            {report?.type && (getTotals() + getTotals() * ( taxValues?.maamValue / 100)).toFixed(1)}{" "}
             {report?.type && `  ש"ח כולל מע"מ [ `}
             {report?.type && (
               <span style={{ fontSize: "0.8rem", color: "darkblue" }}>
-                {(getTotals() / (1 + taxValues?.maamValue / 100)).toFixed(2)}
+                {(getTotals()).toFixed(2)}
                 {`  ש"ח  `}
                 {` + ${taxValues?.maamValue}% מע"מ  ( `}
                 {(
-                  getTotals() -
-                  getTotals() / (1 + taxValues?.maamValue / 100)
+                  getTotals() * ( taxValues?.maamValue / 100)
                 ).toFixed(2)}{" "}
                 {`  ש"ח )  `}
               </span>
@@ -641,6 +648,7 @@ export default function SetupPage({
         {(collReq === "/expenses" ||
           collReq === "/sales" ||
           collReq === "/personalWorkers" ||
+          collReq === "/personalInvestments" ||
           collReq === "/personalRkrExpenses" ||
           collReq === "/personalSales" ||
           collReq === "/personalProductExpenses") && (
@@ -685,7 +693,7 @@ export default function SetupPage({
               setKindOfSort(() => "clientName");
             }}
           >
-            {collReq === '/personalWorkers' ? "עובד" : "קליינט"}
+            {collReq === "/personalWorkers" ? "עובד" : "קליינט"}
           </button>
         )}
 
@@ -693,6 +701,7 @@ export default function SetupPage({
           collReq === "/expenses" ||
           collReq === "/personalWorkers" ||
           collReq === "/personalSales" ||
+          collReq === "/personalInvestments" ||
           collReq === "/personalRkrExpenses" ||
           collReq === "/personalProductExpenses" ||
           collReq === "/sales") && (
@@ -701,7 +710,9 @@ export default function SetupPage({
             className="input_show_item head"
             style={{
               maxWidth:
-                collReq === "/clients" || collReq === "/expenses"
+                collReq === "/clients" ||
+                collReq === "/expenses" ||
+                collReq === "/personalInvestments"
                   ? "32%"
                   : collReq === "/sales" ||
                     collReq === "/personalWorkers" ||
@@ -713,7 +724,9 @@ export default function SetupPage({
                   ? "55%"
                   : "18%",
               minWidth:
-                collReq === "/clients" || collReq === "/expenses"
+                collReq === "/clients" ||
+                collReq === "/expenses" ||
+                collReq === "/personalInvestments"
                   ? "32%"
                   : collReq === "/sales" ||
                     collReq === "/expenses" ||
@@ -739,6 +752,8 @@ export default function SetupPage({
                 collReq === "/personalSales" ||
                 collReq === "/personalWorkers"
               ? "מטע"
+              : collReq === "/personalInvestments"
+              ? "השקעה"
               : "מוצר"}
           </button>
         )}
@@ -809,7 +824,7 @@ export default function SetupPage({
             className="input_show_item head"
             style={{
               width:
-                collReq === "/sales"
+                collReq === "/sales" || collReq === "/personalInvestments"
                   ? "6%"
                   : collReq === "/expenses" ||
                     collReq === "/personalSales" ||
@@ -826,6 +841,8 @@ export default function SetupPage({
               ? "יומית"
               : collReq === "/personalRkrExpenses"
               ? `סה"כ חומר`
+              : collReq === "/personalInvestments"
+              ? "סכום"
               : "מחיר"}
           </button>
         )}
@@ -893,24 +910,27 @@ export default function SetupPage({
             מים
           </button>
         )}
-        {collReq === "/personalRkrExpenses" && !report?.type && (
-          <button
-            id="other"
-            className="input_show_item head"
-            style={{
-              width: "7%",
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              setKindOfSort(() => "other");
-            }}
-          >
-            אחר{" "}
-          </button>
-        )}
+        {(collReq === "/personalRkrExpenses" ||
+          collReq === "/personalInvestments") &&
+          !report?.type && (
+            <button
+              id="other"
+              className="input_show_item head"
+              style={{
+                width: collReq === "/personalInvestments" ? "15%" : "7%",
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                setKindOfSort(() => "other");
+              }}
+            >
+              אחר{" "}
+            </button>
+          )}
         {(collReq === "/expenses" ||
           collReq === "/sales" ||
           collReq === "/personalSales" ||
+          collReq === "/personalInvestments" ||
           collReq === "/personalRkrExpenses" ||
           collReq === "/personalProductExpenses" ||
           collReq === "/personalWorkers") && (
@@ -979,6 +999,7 @@ export default function SetupPage({
               itemInChange={itemInChange}
               setItemInChange={setItemInChange}
               myData={fetchedData}
+              itemIsUpdated={itemIsUpdated}
               setItemIsUpdated={setItemIsUpdated}
               collReq={collReq}
               selectData={clients}

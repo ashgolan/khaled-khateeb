@@ -1,54 +1,54 @@
 import { PersonalProductExpenses } from "../../models/personal/personalProductsExpenses.model.js";
 
-export const productsExpenses = {
-  getAllProductsExpenses: async (req, res) => {
+export const personalProductsExpenses = {
+  getAllPersonalProductsExpenses: async (req, res) => {
     try {
-      const productsExpenses = await PersonalProductExpenses.find();
-      if (!productsExpenses) throw Error("productsExpenses not found");
-      res.send(productsExpenses);
+      const personalProductsExpenses = await PersonalProductExpenses.find();
+      if (!personalProductsExpenses) throw Error("personalProductsExpenses not found");
+      res.send(personalProductsExpenses);
     } catch (e) {
       res.send(e.message);
     }
   },
-  getProductsExpenses: async (req, res) => {
+  getPersonalProductsExpenses: async (req, res) => {
     const id = req.params.id;
     try {
-      const productsExpenses = await PersonalProductExpenses.findById({
+      const personalProductsExpenses = await PersonalProductExpenses.findById({
         _id: id,
       });
-      if (!productsExpenses) throw Error("sale not found");
-      res.send(productsExpenses);
+      if (!personalProductsExpenses) throw Error("sale not found");
+      res.send(personalProductsExpenses);
     } catch (e) {
       res.send(e.message);
     }
   },
 
-  createProductsExpenses: async (req, res) => {
+  createPersonalProductsExpenses: async (req, res) => {
     try {
-      const productsExpenses = await PersonalProductExpenses.create({
+      const personalProductsExpenses = await PersonalProductExpenses.create({
         ...req.body,
       });
-      if (!productsExpenses) throw Error("bad data was inserted!");
-      res.send(productsExpenses);
+      if (!personalProductsExpenses) throw Error("bad data was inserted!");
+      res.send(personalProductsExpenses);
     } catch (e) {
       res.send(e.message);
     }
   },
-  deleteProductsExpenses: async (req, res) => {
+  deletePersonalProductsExpenses: async (req, res) => {
     try {
-      const productsExpenses = await PersonalProductExpenses.findByIdAndDelete({
+      const personalProductsExpenses = await PersonalProductExpenses.findByIdAndDelete({
         _id: req.params.id,
       });
-      if (!productsExpenses) throw Error("bad data was inserted!");
-      res.send(productsExpenses);
+      if (!personalProductsExpenses) throw Error("bad data was inserted!");
+      res.send(personalProductsExpenses);
     } catch (e) {
       res.send(e.message);
     }
   },
 
-  updateProductsExpenses: async (req, res) => {
+  updatePersonalProductsExpenses: async (req, res) => {
     try {
-      const productsExpenses = await PersonalProductExpenses.findByIdAndUpdate(
+      const personalProductsExpenses = await PersonalProductExpenses.findByIdAndUpdate(
         { _id: req.params.id },
         {
           $set: {
@@ -56,8 +56,8 @@ export const productsExpenses = {
           },
         }
       );
-      if (!productsExpenses) throw Error("bad data was inserted!");
-      res.send(productsExpenses);
+      if (!personalProductsExpenses) throw Error("bad data was inserted!");
+      res.send(personalProductsExpenses);
     } catch (e) {
       res.send(e.message);
     }

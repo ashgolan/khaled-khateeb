@@ -315,7 +315,7 @@ export default function EditItem({
   // Check for empty values
   const checkInputsValues = () => {
     const thisProps = getCollectionProps(collReq);
-
+    
     return (
       Array.isArray(thisProps) &&
       thisProps.some((key) => !`${itemsValues[key]}`?.length)
@@ -342,6 +342,14 @@ export default function EditItem({
   const isInputsChanged = () => {
     const relevantProps = {
       "/clients": ["clientName", "name", "quantity"],
+      "/personalInvestments": [
+        "date",
+        "name",
+        "number",
+        "other",
+        "colored",
+        "totalAmount",
+      ],
       "/personalRkrExpenses": [
         "date",
         "name",
@@ -409,8 +417,7 @@ export default function EditItem({
 
     return relevantProps.some((key) => {
       const inputValue = itemsValues[key];
-      const originalValue = item[key];
-
+      const originalValue = item[key];      
       const inputValueTrimmed =
         typeof inputValue === "string" ? inputValue.trim() : inputValue;
       const originalValueTrimmed =
@@ -443,19 +450,17 @@ export default function EditItem({
         quantitiesOfProduct: itemsValues.quantitiesOfProduct,
         product: itemsValues.product,
       };
-  
+      
       await Api.patch(`${collReq}/${item._id}`, payload, { headers });
       setFetchingStatus({
         status: false,
         loading: false,
         message: "העדכון בוצע בהצלחה",
       });
-      setItemIsUpdated((prev) => !prev);
-      setTimeout(
-        () => setFetchingStatus((prev) => ({ ...prev, message: null })),
-        1000
-      );
-      setItemIsUpdated((prev) => !prev);
+      setTimeout(() => {
+        setFetchingStatus((prev) => ({ ...prev, message: null }))
+        setItemIsUpdated((prev) => !prev);
+      }, 1000);
     } catch (e) {
       setFetchingStatus({
         status: false,

@@ -1,31 +1,31 @@
 import { Router } from "express";
 
-import { productsExpenses } from "../../controllers/personal/personalProductsExpenses.controller.js";
 import { verifyAccessToken } from "../../middleware/verifyAccessToken.js";
+import { personalProductsExpenses } from "../../controllers/personal/personalProductsExpenses.controller.js";
 
 export const personalProductExpensesRouter = Router();
 personalProductExpensesRouter.get(
   "/",
   verifyAccessToken,
-  productsExpenses.getAllProductsExpenses
+  personalProductsExpenses.getAllPersonalProductsExpenses
 );
 personalProductExpensesRouter.get(
   "/:id",
   verifyAccessToken,
-  productsExpenses.getProductsExpenses
+  personalProductsExpenses.getPersonalProductsExpenses
 );
 personalProductExpensesRouter.post(
   "/",
   //   verifyAccessToken,
-  productsExpenses.createProductsExpenses
+  personalProductsExpenses.createPersonalProductsExpenses
 );
 personalProductExpensesRouter.patch(
   "/:id",
   verifyAccessToken,
-  productsExpenses.updateProductsExpenses
+  personalProductsExpenses.updatePersonalProductsExpenses
 );
 personalProductExpensesRouter.delete(
   "/:id",
   verifyAccessToken,
-  productsExpenses.deleteProductsExpenses
+  personalProductsExpenses.deletePersonalProductsExpenses
 );

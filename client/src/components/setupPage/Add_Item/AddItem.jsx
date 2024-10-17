@@ -56,20 +56,34 @@ export default function AddItem({
     try {
       setFetchingStatus({ loading: true, error: false });
       switch (collReq) {
+        case "/personalInvestments":
+          await Api.post(
+            collReq,
+            {
+              date: itemsValues.date,
+              name: itemsValues.name.trim(),
+              number: +itemsValues.number.toString().trim(),
+              other: itemsValues.other,
+              totalAmount: itemsValues.number,
+              colored: itemsValues.colored,
+            },
+            { headers: headers }
+          );
+          break;
         case "/personalRkrExpenses":
           await Api.post(
             collReq,
             {
               date: itemsValues.date,
               name: itemsValues.name.trim(),
-              number: +(itemsValues.number.toString().trim()),
-              quantity: +(itemsValues.quantity.toString().trim()),
+              number: +itemsValues.number.toString().trim(),
+              quantity: +itemsValues.quantity.toString().trim(),
               other: itemsValues.other,
               product: itemsValues.product,
               workKind: itemsValues.workKind,
               pricesOfProducts: itemsValues.pricesOfProducts,
               quantitiesOfProduct: itemsValues.quantitiesOfProduct,
-              workPrice: +(itemsValues.workPrice.toString().trim()),
+              workPrice: +itemsValues.workPrice.toString().trim(),
               totalAmount: itemsValues.totalAmount,
               colored: itemsValues.colored,
             },
@@ -84,8 +98,8 @@ export default function AddItem({
               name: itemsValues.name.trim(),
               strains: itemsValues.strains,
               weightKind: itemsValues.weightKind,
-              number: +(itemsValues.number.toString().trim()),
-              quantity: +(itemsValues.quantity.toString().trim()),
+              number: +itemsValues.number.toString().trim(),
+              quantity: +itemsValues.quantity.toString().trim(),
               totalAmount: itemsValues.totalAmount,
               colored: itemsValues.colored,
             },
@@ -98,8 +112,8 @@ export default function AddItem({
             {
               date: itemsValues.date,
               name: itemsValues.name.trim(),
-              number: +(itemsValues.number.toString().trim()),
-              quantity: +(itemsValues.quantity.toString().trim()),
+              number: +itemsValues.number.toString().trim(),
+              quantity: +itemsValues.quantity.toString().trim(),
               totalAmount: itemsValues.totalAmount,
               colored: itemsValues.colored,
             },
@@ -113,7 +127,7 @@ export default function AddItem({
               date: itemsValues.date,
               clientName: itemsValues.clientName.trim(),
               name: itemsValues.name.trim(),
-              number: +(itemsValues.number.toString().trim()),
+              number: +itemsValues.number.toString().trim(),
               totalAmount: itemsValues.totalAmount,
               colored: itemsValues.colored,
             },
@@ -126,7 +140,7 @@ export default function AddItem({
             {
               clientName: itemsValues.clientName.trim(),
               name: itemsValues.name.trim(),
-              quantity: +(itemsValues.quantity.toString().trim()),
+              quantity: +itemsValues.quantity.toString().trim(),
             },
             { headers: headers }
           );
@@ -137,8 +151,8 @@ export default function AddItem({
             {
               date: itemsValues.date,
               name: itemsValues.name.trim(),
-              number: +(itemsValues.number.toString().trim()),
-              quantity: +(itemsValues.quantity.toString().trim()),
+              number: +itemsValues.number.toString().trim(),
+              quantity: +itemsValues.quantity.toString().trim(),
               totalAmount: itemsValues.totalAmount,
               // tax: itemsValues.tax,
               colored: itemsValues.colored,
@@ -153,15 +167,15 @@ export default function AddItem({
               date: itemsValues.date,
               clientName: itemsValues.clientName.trim(),
               name: itemsValues.name.trim(),
-              number: +(itemsValues.number.toString().trim()),
+              number: +itemsValues.number.toString().trim(),
               pricesOfProducts: itemsValues.pricesOfProducts,
               purpose: itemsValues.purpose,
               product: itemsValues.product,
-              water: +(itemsValues.water.toString().trim()),
+              water: +itemsValues.water.toString().trim(),
               strains: itemsValues.strains,
               colored: itemsValues.colored,
               tax: itemsValues.tax,
-              quantity: +(itemsValues.quantity.toString().trim()),
+              quantity: +itemsValues.quantity.toString().trim(),
               quantitiesOfProduct: itemsValues.quantitiesOfProduct,
               totalAmount: itemsValues.totalAmount,
             },
@@ -173,12 +187,11 @@ export default function AddItem({
             collReq,
             {
               name: itemsValues.name.trim(),
-              number: +(itemsValues.number.toString().trim()),
+              number: +itemsValues.number.toString().trim(),
             },
             { headers: headers }
           );
       }
-      
 
       setItemIsUpdated((prev) => !prev);
 
@@ -341,6 +354,7 @@ export default function AddItem({
       <div className="add-row">
         {(collReq === "/expenses" ||
           collReq === "/sales" ||
+          collReq === "/personalInvestments" ||
           collReq === "/personalRkrExpenses" ||
           collReq === "/personalSales" ||
           collReq === "/personalProductExpenses" ||
@@ -503,6 +517,7 @@ export default function AddItem({
 
         {(collReq === "/clients" ||
           collReq === "/expenses" ||
+          collReq === "/personalInvestments" ||
           collReq === "/personalRkrExpenses" ||
           collReq === "/personalSales" ||
           collReq === "/personalProductExpenses" ||
@@ -513,7 +528,10 @@ export default function AddItem({
             required
             autoFocus={true}
             className="add_item"
-            style={{ width: "15%" }}
+            style={{
+              width: collReq === "/personalInvestments" ? "25%" : "15%",
+              color: itemsValues.colored && itemsValues.clientName === '' ? "rgb(255, 71, 46)" : "black",
+            }}
             placeholder={
               collReq === "/expenses" || collReq === "/personalProductExpenses"
                 ? "שם החומר"
@@ -522,6 +540,8 @@ export default function AddItem({
                   collReq === "/personalWorkers" ||
                   collReq === "/personalSales"
                 ? "מטע"
+                : collReq === "/personalInvestments"
+                ? "השקעה"
                 : "מוצר"
             }
             onChange={(e) =>
@@ -604,7 +624,6 @@ export default function AddItem({
                 }}
                 disabled
                 placeholder={"כ.חומר"}
-                onDoubleClick={changeColorOfClientName}
                 value={getSumOfValues(itemsValues.quantitiesOfProduct)}
               ></input>
               <label>: כמות החומר</label>
@@ -625,7 +644,8 @@ export default function AddItem({
                 ? "מספר"
                 : collReq === "/personalWorkers"
                 ? "יומית"
-                : collReq === "/personalSales"
+                : collReq === "/personalSales" ||
+                  collReq === "/personalInvestments"
                 ? "סכום"
                 : collReq === "/personalRkrExpenses"
                 ? "עלות חומר"
@@ -671,42 +691,43 @@ export default function AddItem({
             value={getSumOfValues(itemsValues.quantitiesOfProduct)}
           ></input>
         )} */}
-        {collReq !== "/personalWorkers" && (
-          <input
-            name="quantity"
-            id="quantity"
-            style={{ width: "10%" }}
-            required
-            className="add_item"
-            placeholder={
-              collReq === "/sales"
-                ? "שטח"
-                : collReq === "/personalRkrExpenses"
-                ? "דונומים"
-                : "כמות"
-            }
-            onChange={(e) => {
-              setItemsValues((prev) => {
-                const sum = Object.values(prev.pricesOfProducts).reduce(
-                  (acc, curr) => acc + curr,
-                  0
-                );
+        {collReq !== "/personalWorkers" &&
+          collReq !== "/personalInvestments" && (
+            <input
+              name="quantity"
+              id="quantity"
+              style={{ width: "10%" }}
+              required
+              className="add_item"
+              placeholder={
+                collReq === "/sales"
+                  ? "שטח"
+                  : collReq === "/personalRkrExpenses"
+                  ? "דונומים"
+                  : "כמות"
+              }
+              onChange={(e) => {
+                setItemsValues((prev) => {
+                  const sum = Object.values(prev.pricesOfProducts).reduce(
+                    (acc, curr) => acc + curr,
+                    0
+                  );
 
-                return {
-                  ...prev,
-                  quantity: e.target.value,
-                  totalAmount:
-                    collReq === "/expenses" ||
-                    collReq === "/personalProductExpenses" ||
-                    collReq === "/personalSales"
-                      ? +itemsValues.number * +e.target.value
-                      : +sum + +(tractorPrice * e.target.value),
-                };
-              });
-            }}
-            value={itemsValues.quantity}
-          ></input>
-        )}
+                  return {
+                    ...prev,
+                    quantity: e.target.value,
+                    totalAmount:
+                      collReq === "/expenses" ||
+                      collReq === "/personalProductExpenses" ||
+                      collReq === "/personalSales"
+                        ? +itemsValues.number * +e.target.value
+                        : +sum + +(tractorPrice * e.target.value),
+                  };
+                });
+              }}
+              value={itemsValues.quantity}
+            ></input>
+          )}
 
         {collReq === "/personalRkrExpenses" && (
           <input
@@ -727,13 +748,14 @@ export default function AddItem({
             required
           />
         )}
-        {collReq === "/personalRkrExpenses" && (
+        {(collReq === "/personalRkrExpenses" ||
+          collReq === "/personalInvestments") && (
           <input
             id="other"
             className="add_item select-product-in-add "
             placeholder="אחר"
             style={{
-              width: "7%",
+              width: collReq === "/personalInvestments" ? "15%" : "7%",
             }}
             value={itemsValues.other}
             onChange={(e) => {

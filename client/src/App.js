@@ -19,6 +19,7 @@ import OrderPage from "./components/Order_Components/OrderPage";
 import PersonalProductsExpenses from "./components/personal/PersonalProductsExpenses";
 import PersonalSales from "./components/personal/PersonalSales";
 import PersonalRkrExpenses from "./components/personal/PersonalRkrExpenses";
+import PersonalInvestments from "./components/personal/PersonalInvestments";
 function App() {
   const navigate = useNavigate();
   
@@ -75,6 +76,10 @@ function App() {
           <Route
             path="/personalWorkers"
             element={<PersonalWorkers></PersonalWorkers>}
+          ></Route>
+          <Route
+            path="/personalInvestments"
+            element={<PersonalInvestments></PersonalInvestments>}
           ></Route>
 
           <Route
