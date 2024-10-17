@@ -924,7 +924,7 @@ export default function SetupPage({
                 setKindOfSort(() => "other");
               }}
             >
-              אחר{" "}
+              { collReq === '/personalInvestments' ? "הערה" : "אחר"}
             </button>
           )}
         {(collReq === "/expenses" ||

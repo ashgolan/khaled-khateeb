@@ -627,7 +627,6 @@ export default function ItemsTable({
             collReq === "/personalProductExpenses" ||
             collReq === "/personalRkrExpenses" ||
             collReq === "/personalInvestments" ||
-
             collReq === "/personalSales" ||
             collReq === "/personalWorkers") && (
             <input
