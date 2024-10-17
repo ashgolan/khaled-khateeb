@@ -104,6 +104,8 @@ function ChartPage({ report, setShowChart, showChart, fetchingData }) {
     "personalSalesCharts": fetchingData?.personalSalesData,
     "/personalRkrExpenses": fetchingData?.personalRkrExpensesData,
     "personalRkrExpensesCharts": fetchingData?.personalRkrExpensesData,
+    "/personalInvestments": fetchingData?.personalInvestmentsData,
+    "personalInvestmentsCharts": fetchingData?.personalInvestmentsData,
     "sleevesBidsCharts": fetchingData?.sleevesBidsData,
     "/sleevesBids": fetchingData?.sleevesBidsData,
     "workersExpensesCharts": fetchingData?.workersExpensesData,

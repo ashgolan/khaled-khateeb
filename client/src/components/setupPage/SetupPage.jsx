@@ -561,7 +561,7 @@ export default function SetupPage({
             {!report?.type && getTotals().toFixed(2)}
             {!report?.type && collReq !== "/clients" && `  ש"ח לפני מע"מ `}
             {!report?.type && collReq === "/clients" && `  דונם `}
-            {report?.type && (getTotals() + getTotals() * ( taxValues?.maamValue / 100)).toFixed(1)}{" "}
+            {report?.type && (getTotals() *(1+ taxValues?.maamValue / 100)).toFixed(1)}{" "}
             {report?.type && `  ש"ח כולל מע"מ [ `}
             {report?.type && (
               <span style={{ fontSize: "0.8rem", color: "darkblue" }}>

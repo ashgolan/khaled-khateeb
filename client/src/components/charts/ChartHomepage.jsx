@@ -59,6 +59,7 @@ function ChartHomepage() {
     { type: "/personalSales", name: "דוח הכנסות פרטי" },
     { type: "/personalWorkers", name: "דוח עובדים פרטי" },
     { type: "/personalRkrExpenses", name: "דוח ריסוס קיסוח ריסוק פרטי" },
+    { type: "/personalInvestments", name: "דוח השקעות פרטי" },
     { type: "salesCharts", name: "תרשים הכנסות" },
     { type: "expensesCharts", name: "תרשים הוצאות" },
     {
@@ -68,6 +69,7 @@ function ChartHomepage() {
     { type: "personalSalesCharts", name: "תרשים הכנסות פרטי" },
     { type: "personalWorkersCharts", name: "תרשים עובדים פרטי" },
     { type: "personalRkrExpensesCharts", name: "תרשים ריסוס קיסוח ריסוק פרטי" },
+    { type: "personalInvestmentsCharts", name: "תרשים השקעות פרטי" },
   ].map((item) => {
     return { value: item.type, label: item.name };
   });
@@ -113,6 +115,7 @@ function ChartHomepage() {
       personalSalesData,
       personalWorkersData,
       personalRkrExpensesData,
+      personalInvestmentsData,
     ] = await Promise.all([
       Api.get("/sales", { headers }),
       Api.get("/expenses", { headers }),
@@ -120,6 +123,7 @@ function ChartHomepage() {
       Api.get("/personalSales", { headers }),
       Api.get("/personalWorkers", { headers }),
       Api.get("/personalRkrExpenses", { headers }),
+      Api.get("/personalInvestments", { headers }),
     ]).then((responses) => responses.map((res) => res.data));
     setFetchingStatus((prev) => {
       return {
@@ -135,6 +139,7 @@ function ChartHomepage() {
       personalSalesData: personalSalesData,
       personalWorkersData: personalWorkersData,
       personalRkrExpensesData: personalRkrExpensesData,
+      personalInvestmentsData: personalInvestmentsData,
     });
   };
 
@@ -352,6 +357,7 @@ function ChartHomepage() {
             report.type === "/personalProductExpenses" ||
             report.type === "/personalWorkers" ||
             report.type === "/personalRkrExpenses" ||
+            report.type === "/personalInvestments" ||
             report.type === "/salesByClient") && (
             <SetupPage
               updatedReport={updatedReport}
@@ -368,6 +374,7 @@ function ChartHomepage() {
             report.type === "personalProductExpensesCharts" ||
             report.type === "personalWorkersCharts" ||
             report.type === "personalRkrExpensesCharts" ||
+            report.type === "personalInvestmentsCharts" ||
             report.type === "salesCharts") && (
             <ChartPage
               fetchingData={fetchingData}
