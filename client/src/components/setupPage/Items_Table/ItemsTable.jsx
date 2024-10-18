@@ -172,7 +172,7 @@ export default function ItemsTable({
           key={`form${item.id}`}
           style={{
             width:
-              collReq === "/clients" ? "60%" : report?.type ? "100%" : "98%",
+              collReq === "/clients" ? "80%" : report?.type ? "100%" : "98%",
           }}
         >
           <label

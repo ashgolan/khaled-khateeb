@@ -637,7 +637,7 @@ export default function SetupPage({
       <form
         className="Item_form"
         style={{
-          width: collReq === "/clients" ? "60%" : report?.type ? "100%" : "98%",
+          width: collReq === "/clients" ? "80%" : report?.type ? "100%" : "98%",
         }}
       >
         <label
