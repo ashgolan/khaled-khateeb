@@ -126,7 +126,7 @@ export default function Navbar({ isPersonal, setIsPersonal }) {
             }}
             alt={""}
             onClick={() => openModal()}
-            src="/taxValues.png"
+            src="/tax2.png"
           />
         
           <img
