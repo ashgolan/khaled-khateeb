@@ -4,7 +4,6 @@ import { chart as ChartJS } from "chart.js/auto";
 import { getDataByTotals } from "../../utils/getDataByTotals";
 // import ChartDataLabels from "chartjs-plugin-datalabels";
 function ChartPage({ report, setShowChart, showChart, fetchingData }) {
-  console.log(report?.month);
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [

@@ -85,7 +85,6 @@ export default function SetupPage({
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus({ status: true, loading: true });
-    console.log("insend request");
 
     if (isFetching) {
       switch (collReq) {
