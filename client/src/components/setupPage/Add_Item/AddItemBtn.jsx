@@ -1,8 +1,8 @@
 import React from "react";
 import "./Add_Item_Btn.css";
-export default function AddItemBtn({ setaddItemToggle }) {
+export default function AddItemBtn({ setAddItemToggle }) {
   const showFormHandler = () => {
-    setaddItemToggle({ btn_Visible: false, formVisible: true });
+    setAddItemToggle({ btn_Visible: false, formVisible: true });
   };
   return (
     <div className="addItem_btn_btn_container">

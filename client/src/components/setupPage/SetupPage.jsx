@@ -29,20 +29,15 @@ export default function SetupPage({
   const [fetchingStatus, setFetchingStatus] = useContext(FetchingStatus);
   const [itemInChange, setItemInChange] = useState(false);
   const [itemIsUpdated, setItemIsUpdated] = useState(false);
-  const [addItemToggle, setaddItemToggle] = useState({
+  const [addItemToggle, setAddItemToggle] = useState({
     btnVisible: true,
     formVisible: false,
   });
   const [defaultTractorPrice, setDefaultTractorPrice] = useState([]);
   const [kindOfSort, setKindOfSort] = useState("date");
   const [clients, setClients] = useState([]);
-
   const [personalProductExpenses, setPersonalProductExpenses] = useState([]);
-  const [personalSales, setPersonalSales] = useState([]);
-  const [personalInvestments, setPersonalInvestments] = useState([]);
-  const [personalRkrExpenses, setPersonalRkrExpenses] = useState([]);
   const [expenses, setExpenses] = useState([]);
-  const [personalWorkers, setPersonalWorkers] = useState([]);
   const [tractorPriceChangeDisplay, settractorPriceChangeDisplay] =
     useState(false);
   const [tractorPrice, setTractorPrice] = useState(0);
@@ -59,117 +54,7 @@ export default function SetupPage({
     }
     return total;
   };
-  // const sendRequest = async (token) => {
-  //   const headers = { Authorization: token };
-  //   setFetchingStatus((prev) => {
-  //     return { ...prev, status: true, loading: true };
-  //   });
 
-  //   if (isFetching) {
-  //     if (collReq === "/sales") {
-  //       const { data: tractorPriceData } = await Api.get("/tractorPrice", {
-  //         headers,
-  //       });
-  //       setTractorPrice(tractorPriceData[0]?.price);
-
-  //       setDefaultTractorPrice(tractorPriceData);
-  //       setFetchingData(fetchingData.salesData);
-  //     } else if (collReq === "/personalSales") {
-  //       setFetchingData(fetchingData.personalSalesData);
-  //     } else if (collReq === "/personalRkrExpenses") {
-  //       setFetchingData(fetchingData.personalRkrExpensesData);
-  //     } else if (collReq === "/personalProductExpenses") {
-  //       setFetchingData(fetchingData.personalProductExpensesData);
-  //     } else if (collReq === "/expenses") {
-  //       setFetchingData(fetchingData.expensesData);
-  //     } else if (collReq === "/personalWorkers") {
-  //       setFetchingData(fetchingData.personalWorkersData);
-  //     } else {
-  //       setFetchingData(fetchingData.clientsData);
-  //     }
-  //   } else {
-  //     const { data } = await Api.get(collReq, { headers });
-
-  //     if (collReq === "/personalProductExpenses") {
-  //       const { data: personalProductsExpensesData } = await Api.get(
-  //         "/personalProductExpenses",
-  //         { headers }
-  //       );
-
-  //       setPersonalProductExpenses(personalProductsExpensesData);
-  //     }
-  //     if (collReq === "/personalWorkers") {
-  //       const { data: personalWorkersData } = await Api.get(
-  //         "/personalWorkers",
-  //         { headers }
-  //       );
-  //       setPersonalWorkers(personalWorkersData);
-  //     }
-  //     if (collReq === "/personalSales") {
-  //       const { data: personalSalesData } = await Api.get("/personalSales", {
-  //         headers,
-  //       });
-  //       setPersonalSales(personalSalesData);
-  //     }
-  //     if (collReq === "/personalRkrExpenses") {
-  //       const { data: personalRkrExpensesData } = await Api.get(
-  //         "/personalRkrExpenses",
-  //         {
-  //           headers,
-  //         }
-  //       );
-  //       setPersonalRkrExpenses(personalRkrExpensesData);
-  //       const { data: personalProductExpensesData } = await Api.get(
-  //         "/personalProductExpenses",
-  //         {
-  //           headers,
-  //         }
-  //       );
-  //       setPersonalProductExpenses(personalProductExpensesData);
-  //     }
-  //     if (collReq === "/sales") {
-  //       const { data: clientsData } = await Api.get("/clients", {
-  //         headers,
-  //       });
-  //       setClients(clientsData);
-  //       const { data: expensesData } = await Api.get("/expenses", {
-  //         headers,
-  //       });
-  //       setExpenses(expensesData);
-  //       const { data: tractorPriceData } = await Api.get("/tractorPrice", {
-  //         headers,
-  //       });
-  //       setTractorPrice(tractorPriceData[0]?.price);
-
-  //       setDefaultTractorPrice(tractorPriceData);
-  //     }
-
-  //     if (report === undefined) {
-  //       if (collReq === "/sales" || collReq === "/expenses") {
-  //         setFetchingData(
-  //           data.filter(
-  //             (item) =>
-  //               new Date(item.date).getFullYear() === year ||
-  //               item.colored === true
-  //           )
-  //         );
-  //       } else {
-  //         setFetchingData(data);
-  //       }
-  //     } else {
-  //       setFetchingData(data);
-  //     }
-  //   }
-  //   const { data: taxValuesData } = await Api.get("/taxValues", { headers });
-  // setTaxValues(taxValuesData[0]);
-  //   setFetchingStatus((prev) => {
-  //     return {
-  //       ...prev,
-  //       status: false,
-  //       loading: false,
-  //     };
-  //   });
-  // };
   const fetchData = async (url, headers) => {
     const { data } = await Api.get(url, { headers });
     return data;
@@ -189,32 +74,19 @@ export default function SetupPage({
   };
 
   const handlePersonalData = async (headers) => {
-    const [
-      personalSalesData,
-      personalInvestments,
-      personalWorkersData,
-      personalRkrExpensesData,
-      personalProductExpensesData,
-    ] = await Promise.all([
-      fetchData("/personalSales", headers),
-      fetchData("/personalInvestments", headers),
-      fetchData("/personalWorkers", headers),
-      fetchData("/personalRkrExpenses", headers),
-      fetchData("/personalProductExpenses", headers),
-    ]);
+    const personalProductExpensesData = await fetchData(
+      "/personalProductExpenses",
+      headers
+    );
 
-    setPersonalInvestments(personalInvestments);
-    setPersonalSales(personalSalesData);
-    setPersonalWorkers(personalWorkersData);
-    setPersonalRkrExpenses(personalRkrExpensesData);
     setPersonalProductExpenses(personalProductExpensesData);
   };
 
   const sendRequest = async (token) => {
     const headers = { Authorization: token };
     setFetchingStatus({ status: true, loading: true });
-    console.log('insend request');
-    
+    console.log("insend request");
+
     if (isFetching) {
       switch (collReq) {
         case "/sales":
@@ -223,19 +95,19 @@ export default function SetupPage({
           setDefaultTractorPrice(tractorPriceData);
           setFetchingData(fetchingData.salesData);
           break;
-          case "/personalSales":
+        case "/personalSales":
           setFetchingData(fetchingData.personalSalesData);
           break;
         case "/personalInvestments":
           setFetchingData(fetchingData.personalInvestmentsData);
           break;
-          case "/personalRkrExpenses":
-            setFetchingData(fetchingData.personalRkrExpensesData);
-            break;
+        case "/personalRkrExpenses":
+          setFetchingData(fetchingData.personalRkrExpensesData);
+          break;
         case "/personalProductExpenses":
           setFetchingData(fetchingData.personalProductExpensesData);
           break;
-          case "/expenses":
+        case "/expenses":
           setFetchingData(fetchingData.expensesData);
           break;
         case "/personalWorkers":
@@ -245,7 +117,6 @@ export default function SetupPage({
           setFetchingData(fetchingData.clientsData);
       }
     } else {
-      
       const data = await fetchData(collReq, headers);
 
       if (collReq === "/sales") {
@@ -279,8 +150,7 @@ export default function SetupPage({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('in useeffect');
-        
+
         await sendRequest(getAccessToken());
       } catch (error) {
         if (error.response && error.response.status === 401) {
@@ -561,16 +431,15 @@ export default function SetupPage({
             {!report?.type && getTotals().toFixed(2)}
             {!report?.type && collReq !== "/clients" && `  ש"ח לפני מע"מ `}
             {!report?.type && collReq === "/clients" && `  דונם `}
-            {report?.type && (getTotals() *(1+ taxValues?.maamValue / 100)).toFixed(1)}{" "}
+            {report?.type &&
+              (getTotals() * (1 + taxValues?.maamValue / 100)).toFixed(1)}{" "}
             {report?.type && `  ש"ח כולל מע"מ [ `}
             {report?.type && (
               <span style={{ fontSize: "0.8rem", color: "darkblue" }}>
-                {(getTotals()).toFixed(2)}
+                {getTotals().toFixed(2)}
                 {`  ש"ח  `}
                 {` + ${taxValues?.maamValue}% מע"מ  ( `}
-                {(
-                  getTotals() * ( taxValues?.maamValue / 100)
-                ).toFixed(2)}{" "}
+                {(getTotals() * (taxValues?.maamValue / 100)).toFixed(2)}{" "}
                 {`  ש"ח )  `}
               </span>
             )}
@@ -924,7 +793,7 @@ export default function SetupPage({
                 setKindOfSort(() => "other");
               }}
             >
-              { collReq === '/personalInvestments' ? "הערה" : "אחר"}
+              {collReq === "/personalInvestments" ? "הערה" : "אחר"}
             </button>
           )}
         {(collReq === "/expenses" ||
@@ -1006,7 +875,6 @@ export default function SetupPage({
               report={report}
               expenses={expenses}
               personalProductExpenses={personalProductExpenses}
-              personalWorkers={personalWorkers}
               tractorPrice={+tractorPrice}
             />
           );
@@ -1014,12 +882,12 @@ export default function SetupPage({
       {!addItemToggle.formVisible &&
         !report?.type &&
         !fetchingStatus.loading && (
-          <AddItemBtn setaddItemToggle={setaddItemToggle}></AddItemBtn>
+          <AddItemBtn setAddItemToggle={setAddItemToggle}></AddItemBtn>
         )}
       {!addItemToggle.btnVisible && !report?.type && (
         <AddItem
           personalProductExpenses={personalProductExpenses}
-          setaddItemToggle={setaddItemToggle}
+          setAddItemToggle={setAddItemToggle}
           setInventoryData={setFetchingData}
           setItemIsUpdated={setItemIsUpdated}
           collReq={collReq}

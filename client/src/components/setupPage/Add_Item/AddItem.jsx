@@ -12,7 +12,7 @@ import { getProductKeys } from "../../../utils/getProductKeys";
 import { getSumOfValues } from "../../../utils/getValuesSum";
 export default function AddItem({
   collReq,
-  setaddItemToggle,
+  setAddItemToggle,
   setItemIsUpdated,
   selectData,
   expenses,
@@ -292,12 +292,12 @@ export default function AddItem({
   const confirmAddingItem = (e) => {
     e.preventDefault();
 
-    setaddItemToggle({ btnVisible: true, formVisible: false });
+    setAddItemToggle({ btnVisible: true, formVisible: false });
     addItem();
   };
   const cancelAddingItem = (e) => {
     e.preventDefault();
-    setaddItemToggle({ btnVisible: true, formVisible: false });
+    setAddItemToggle({ btnVisible: true, formVisible: false });
   };
 
   const customStyles = {
