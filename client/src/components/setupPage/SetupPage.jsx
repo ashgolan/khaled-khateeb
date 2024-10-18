@@ -970,7 +970,7 @@ export default function SetupPage({
           <button
             style={{
               visibility: "hidden",
-              width: collReq === "/sales" ? "7%" : "11%",
+              width: "6%",
             }}
             className="edit_btn"
           >
@@ -981,7 +981,7 @@ export default function SetupPage({
           <button
             style={{
               visibility: "hidden",
-              width: collReq === "/sales" ? "7%" : "11%",
+              width: "6%",
             }}
             className="delete_btn"
           >

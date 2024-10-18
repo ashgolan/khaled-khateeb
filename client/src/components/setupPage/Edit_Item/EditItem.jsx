@@ -529,7 +529,7 @@ export default function EditItem({
   return (
     <button
       style={{
-        width: collReq === "/sales" ? "7%" : "11%",
+        width: "6%",
         visibility:
           !itemInChange || changeStatus.itemId === item._id
             ? "visible"

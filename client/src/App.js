@@ -35,6 +35,7 @@ function App() {
     if (!loggedIn) return;
     clearTokens();
     setLoggedIn(false);
+    setIsPersonal(0)
     localStorage.clear();
     navigate("/homepage");
   };
