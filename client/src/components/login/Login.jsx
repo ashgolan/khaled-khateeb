@@ -21,26 +21,16 @@ export default function Login({ setLoggedIn }) {
     password: "",
   });
 
-  const [validEmail, setValidEmail] = useState(null);
   const checklogin = async (e) => {
     e.preventDefault();
-    if (!validator.isEmail(login.email)) {
-      setFetchingStatus({
-        status: true,
-        loading: false,
-        error: true,
-        message: "כתובת המייל או הסיסמא שהזנת אינן חוקיות",
-      });
-      return;
-    }
+
 
     setFetchingStatus({ status: true, loading: true });
     try {
-      const { data } = await Api.post("/users/login", login);
-
-      if (data === "user not found!!") {
-        throw new Error("שם המשתמש או הסיסמא לא נכונים");
-      }
+      const { data } = await Api.post("/users/login", login)
+      // if (data === "user not found!!") {
+      //   throw new Error("שם המשתמש או הסיסמא לא נכונים");
+      // }
       if (data?.adminUser?.isBlocked) {
         throw new Error("תקופת הניסיון החינמית עבור משתמש זה הסתיימה");
       }
@@ -60,7 +50,7 @@ export default function Login({ setLoggedIn }) {
         status: true,
         loading: false,
         error: true,
-        message: e.message,
+        message: "תקלה בביצוע כניסה לחשבון",
       });
       setTimeout(() => {
         setFetchingStatus({
@@ -70,8 +60,7 @@ export default function Login({ setLoggedIn }) {
           message: null,
         });
       }, 1000);
-      setValidEmail(e.message);
-    }
+   }
   };
 
   return (
@@ -92,8 +81,8 @@ export default function Login({ setLoggedIn }) {
                       type="email"
                       value={login.email}
                       id="typeEmailX-2"
+                      required
                       onChange={(e) => {
-                        setValidEmail("");
                         setLogin((prev) => {
                           return { ...prev, email: e.target.value };
                         });
@@ -108,6 +97,7 @@ export default function Login({ setLoggedIn }) {
                   <div className="form-outline mb-1">
                     <input
                       type="password"
+                      required
                       value={login.password}
                       onChange={(e) =>
                         setLogin((prev) => {
@@ -134,8 +124,7 @@ export default function Login({ setLoggedIn }) {
                       כניסה
                     </button>
                   </div>
-                  <label style={{ color: "brown" }}>{validEmail}</label>
-                </div>
+      </div>
               </div>
             </div>
           </div>
