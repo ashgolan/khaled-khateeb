@@ -193,8 +193,7 @@ export default function AddItem({
           );
       }
 
-      setItemIsUpdated((prev) => !prev);
-
+      
       setFetchingStatus((prev) => {
         return {
           ...prev,
@@ -214,6 +213,7 @@ export default function AddItem({
             message: null,
           };
         });
+        setItemIsUpdated((prev) => !prev);
       }, 1000);
     } catch (e) {
       setFetchingStatus((prev) => {
