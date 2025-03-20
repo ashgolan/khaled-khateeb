@@ -129,14 +129,15 @@ export default function SetupPage({
       }
 
       setFetchingData(
-        report === undefined &&
-          (collReq === "/sales" || collReq === "/expenses")
-          ? data.filter(
-              (item) =>
-                new Date(item.date).getFullYear() === year ||
-                item.colored === true
-            )
-          : data
+        // report === undefined &&
+        //   (collReq === "/sales" || collReq === "/expenses")
+        //   ? data.filter(
+        //       (item) =>
+        //         new Date(item.date).getFullYear() === year ||
+        //         item.colored === true
+        //     )
+        //   :
+           data
       );
     }
 
