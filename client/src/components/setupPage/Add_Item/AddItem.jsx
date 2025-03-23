@@ -10,6 +10,8 @@ import Select from "react-select";
 import InputForQuantity from "./InputForQuantity";
 import { getProductKeys } from "../../../utils/getProductKeys";
 import { getSumOfValues } from "../../../utils/getValuesSum";
+import { Tooltip } from "react-tooltip";
+
 export default function AddItem({
   collReq,
   setAddItemToggle,
@@ -48,6 +50,7 @@ export default function AddItem({
     totalAmount: 0,
     quantitiesOfProduct: {},
   });
+  
   const sendPostRequest = async (token) => {
     const headers = {
       Authorization: token,
@@ -327,9 +330,17 @@ export default function AddItem({
   const filteredProducts = productsData?.filter(
     ({ product }) => !idsOfProduct.includes(product)
   );
-  const allSelectProducts = filteredProducts?.map((item, index) => {
-    return { value: `${index}-` + item.number, label: item.name };
-  });
+  const allSelectProducts = filteredProducts
+  ?.sort((a, b) => a.name.localeCompare(b.name))
+  .map((item, index) => ({
+    value: `${index}-` + item.number,
+    label: (
+      <span data-tooltip-id={`tooltip-${index}`} data-tooltip-content={`תאריך: ${item.date}`}>
+        {item.name} - <span style={{ fontSize: "0.8em" }}>{item.number} ש"ח</span>
+        <Tooltip id={`tooltip-${index}`} place="top" effect="solid" />
+      </span>
+    )
+  }));
   const filteredOptions = allSelectProducts.filter(
     (option) => !itemsValues?.product.includes(option)
   );

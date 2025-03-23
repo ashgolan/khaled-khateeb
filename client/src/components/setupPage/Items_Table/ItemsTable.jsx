@@ -7,6 +7,8 @@ import Select from "react-select";
 import InputForQuantity from "../Add_Item/InputForQuantity";
 import { getSumOfValues } from "../../../utils/getValuesSum";
 import { getProductKeys } from "../../../utils/getProductKeys";
+import { Tooltip } from "react-tooltip";
+
 export default function ItemsTable({
   item,
   itemInChange,
@@ -138,9 +140,17 @@ export default function ItemsTable({
     ({ product }) => !idsOfProduct.includes(product)
   );
 
-  const allSelectProducts = filteredProducts?.map((item, index) => {
-    return { value: `${index}-` + item.number, label: item.name };
-  });
+  const allSelectProducts = filteredProducts
+  ?.sort((a, b) => a.name.localeCompare(b.name))
+  .map((item, index) => ({
+    value: `${index}-` + item.number,
+    label: (
+      <span data-tooltip-id={`tooltip-${index}`} data-tooltip-content={`תאריך: ${item.date}`}>
+        {item.name} - <span style={{ fontSize: "0.8em" }}>{item.number} ש"ח</span>
+        <Tooltip id={`tooltip-${index}`} place="top" effect="solid" />
+      </span>
+    )
+  }));
   const filteredOptions = allSelectProducts.filter(
     (option) => !itemsValues?.product.includes(option)
   );
@@ -478,7 +488,7 @@ export default function ItemsTable({
                   name="quantitiesOfProducts"
                   id="quantitiesOfProducts"
                   style={{
-                    width: collReq === "/sales" ? "6%" : "15%",
+                    width:  "15%",
                     border: "none",
                   }}
                   disabled
