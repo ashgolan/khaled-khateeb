@@ -8,6 +8,7 @@ import InputForQuantity from "../Add_Item/InputForQuantity";
 import { getSumOfValues } from "../../../utils/getValuesSum";
 import { getProductKeys } from "../../../utils/getProductKeys";
 import { Tooltip } from "react-tooltip";
+import TooltipSidebar from "./TooltipSidebar";
 
 export default function ItemsTable({
   item,
@@ -463,7 +464,14 @@ export default function ItemsTable({
                 }}
               ></Select>
             )}
-          {itemsValues?.product?.length > 0 && !changeStatus.disabled && (
+            <TooltipSidebar
+  itemsValues={itemsValues}
+  changeStatus={changeStatus}
+  collReq={collReq}
+  tractorPrice={tractorPrice}
+  setItemsValues={setItemsValues}
+/>
+          {/* {itemsValues?.product?.length > 0 && !changeStatus.disabled && (
             <div className="Productquantities">
               {itemsValues?.product.map((option, index) => (
                 <InputForQuantity
@@ -498,7 +506,7 @@ export default function ItemsTable({
                 <label>: כמות החומר</label>
               </div>
             </div>
-          )}
+          )} */}
           {collReq !== "/clients" && (
             <input
               id="number"

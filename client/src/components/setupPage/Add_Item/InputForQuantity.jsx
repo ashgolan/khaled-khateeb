@@ -55,8 +55,9 @@ function InputForQuantity({
     <div
       key={option.value}
       style={{
-        margin: "1%",
-        borderBottom: "1px solid gray"
+        margin: "2% auto",
+        borderBottom: "1px solid gray",
+        padding : "2%"
       }}
     >
       <input
