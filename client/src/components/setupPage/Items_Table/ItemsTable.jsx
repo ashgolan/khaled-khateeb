@@ -152,14 +152,31 @@ export default function ItemsTable({
     </div>
   );
   
-  const customOption = ({ data, innerRef, innerProps }) => (
-    <div ref={innerRef} {...innerProps} style={{ padding: '5px', cursor: 'pointer' }}>
-      <span data-tooltip-id={`tooltip-${data.value}`} data-tooltip-content={data.date}>
-        {data.label}
-      </span>
-      <Tooltip id={`tooltip-${data.value}`} place="top" effect="solid" />
-    </div>
-  );
+  const customOption = ({ data, innerRef, innerProps, isFocused }) => {
+    // Set styles based on whether the option is focused
+    const optionStyles = {
+      padding: "5px",
+      cursor: "pointer",
+      backgroundColor: isFocused ? "gold" : "transparent", // Change background color when focused
+      color: isFocused ? "black" : "initial", // Change text color when focused
+    };
+  
+    return (
+      <div
+        ref={innerRef}
+        {...innerProps}
+        style={optionStyles} // Apply the styles here
+      >
+        <span
+          data-tooltip-id={`tooltip-${data.value}`}
+          data-tooltip-content={data.date}
+        >
+          {data.label}
+        </span>
+        <Tooltip id={`tooltip-${data.value}`} place="top" effect="solid" />
+      </div>
+    );
+  };
   
   const allSelectProducts = filteredProducts
   ?.sort((a, b) => a.name.localeCompare(b.name))

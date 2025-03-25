@@ -313,14 +313,8 @@ export default function AddItem({
       ...base,
       textAlign: "center",
     }),
-    option: (base, state) => ({
-      ...base,
-      textAlign: "center",
-      backgroundColor: state.isFocused ? "gold" : base.backgroundColor, // خلفية ذهبية عند التفاعل
-      color: state.isFocused ? "black" : base.color, // تغيير اللون عند التفاعل
-      cursor: "pointer", // تغيير مؤشر الفأرة ليكون يد
-    }),
   };
+  
   const ids = selectData.map(({ clientName }) => clientName);
   const filtered = selectData.filter(
     ({ clientName }, index) => !ids.includes(clientName, index + 1)
@@ -347,22 +341,33 @@ export default function AddItem({
       <Tooltip id={`tooltip-${data.value}`} place="top" effect="solid" />
     </div>
   );
-
-  const customOption = ({ data, innerRef, innerProps }) => (
-    <div
-      ref={innerRef}
-      {...innerProps}
-      style={{ padding: "5px", cursor: "pointer" }}
-    >
-      <span
-        data-tooltip-id={`tooltip-${data.value}`}
-        data-tooltip-content={data.date}
+  const customOption = ({ data, innerRef, innerProps, isFocused }) => {
+    // Set styles based on whether the option is focused
+    const optionStyles = {
+      padding: "5px",
+      cursor: "pointer",
+      backgroundColor: isFocused ? "gold" : "transparent", // Change background color when focused
+      color: isFocused ? "black" : "initial", // Change text color when focused
+    };
+  
+    return (
+      <div
+        ref={innerRef}
+        {...innerProps}
+        style={optionStyles} // Apply the styles here
       >
-        {data.label}
-      </span>
-      <Tooltip id={`tooltip-${data.value}`} place="top" effect="solid" />
-    </div>
-  );
+        <span
+          data-tooltip-id={`tooltip-${data.value}`}
+          data-tooltip-content={data.date}
+        >
+          {data.label}
+        </span>
+        <Tooltip id={`tooltip-${data.value}`} place="top" effect="solid" />
+      </div>
+    );
+  };
+  
+  
 
   const allSelectProducts = filteredProducts
     ?.sort((a, b) => a.name.localeCompare(b.name))
