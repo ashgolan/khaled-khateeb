@@ -141,20 +141,36 @@ export default function ItemsTable({
     ({ product }) => !idsOfProduct.includes(product)
   );
 
+  const customSingleValue = ({ data }) => (
+    <div
+      data-tooltip-id={`tooltip-${data.value}`}
+      data-tooltip-content={data.date} // إضافة التاريخ داخل التولتيب
+      style={{ cursor: 'pointer' }} // إضافة مؤشر الفأرة لجعلها تفاعلية
+    >
+      {data.label}
+      <Tooltip id={`tooltip-${data.value}`} place="top" effect="solid" />
+    </div>
+  );
+  
+  const customOption = ({ data, innerRef, innerProps }) => (
+    <div ref={innerRef} {...innerProps} style={{ padding: '5px', cursor: 'pointer' }}>
+      <span data-tooltip-id={`tooltip-${data.value}`} data-tooltip-content={data.date}>
+        {data.label}
+      </span>
+      <Tooltip id={`tooltip-${data.value}`} place="top" effect="solid" />
+    </div>
+  );
+  
   const allSelectProducts = filteredProducts
   ?.sort((a, b) => a.name.localeCompare(b.name))
   .map((item, index) => ({
-    value: `${index}-` + item.number,
-    label: (
-      <span data-tooltip-id={`tooltip-${index}`} data-tooltip-content={`תאריך: ${item.date}`}>
-        {item.name} - <span style={{ fontSize: "0.8em" }}>{item.number} ש"ח</span>
-        <Tooltip id={`tooltip-${index}`} place="top" effect="solid" />
-      </span>
-    )
+    value: `${index}-${item.number}`,
+    label: `${item.name} - ${item.number} ש"ח`,
+    date: item.date, // يجب أن يكون تاريخاً صحيحاً
   }));
-  const filteredOptions = allSelectProducts.filter(
-    (option) => !itemsValues?.product.includes(option)
-  );
+  // const filteredOptions = allSelectProducts.filter(
+  //   (option) => !itemsValues?.product.includes(option)
+  // );
 
   const allSelectLandData = selectData?.filter((item) => {
     return itemsValues.clientName === item.clientName;
@@ -424,7 +440,10 @@ export default function ItemsTable({
           {(collReq === "/sales" || collReq === "/personalRkrExpenses") &&
             !report?.type && (
               <Select
-                options={filteredOptions}
+              options={allSelectProducts}
+                components={{ SingleValue: customSingleValue, Option: customOption }}
+
+                // options={filteredOptions}
                 className="input_show_item select-product-head Select-multi-value-wrapper "
                 placeholder={
                   itemsValues?.product ? itemsValues.product : "בחר חומר"

@@ -7,10 +7,11 @@ import { refreshMyToken } from "../../../utils/setNewAccessToken";
 import "./Add_item.css";
 import { clearTokens, getAccessToken } from "../../../utils/tokensStorage";
 import Select from "react-select";
-import InputForQuantity from "./InputForQuantity";
 import { getProductKeys } from "../../../utils/getProductKeys";
 import { getSumOfValues } from "../../../utils/getValuesSum";
 import { Tooltip } from "react-tooltip";
+import TooltipSidebar from "../Items_Table/TooltipSidebar";
+import InputForQuantity from "./InputForQuantity";
 
 export default function AddItem({
   collReq,
@@ -50,7 +51,7 @@ export default function AddItem({
     totalAmount: 0,
     quantitiesOfProduct: {},
   });
-  
+
   const sendPostRequest = async (token) => {
     const headers = {
       Authorization: token,
@@ -196,7 +197,6 @@ export default function AddItem({
           );
       }
 
-      
       setFetchingStatus((prev) => {
         return {
           ...prev,
@@ -313,6 +313,13 @@ export default function AddItem({
       ...base,
       textAlign: "center",
     }),
+    option: (base, state) => ({
+      ...base,
+      textAlign: "center",
+      backgroundColor: state.isFocused ? "gold" : base.backgroundColor, // خلفية ذهبية عند التفاعل
+      color: state.isFocused ? "black" : base.color, // تغيير اللون عند التفاعل
+      cursor: "pointer", // تغيير مؤشر الفأرة ليكون يد
+    }),
   };
   const ids = selectData.map(({ clientName }) => clientName);
   const filtered = selectData.filter(
@@ -330,20 +337,56 @@ export default function AddItem({
   const filteredProducts = productsData?.filter(
     ({ product }) => !idsOfProduct.includes(product)
   );
-  const allSelectProducts = filteredProducts
-  ?.sort((a, b) => a.name.localeCompare(b.name))
-  .map((item, index) => ({
-    value: `${index}-` + item.number,
-    label: (
-      <span data-tooltip-id={`tooltip-${index}`} data-tooltip-content={`תאריך: ${item.date}`}>
-        {item.name} - <span style={{ fontSize: "0.8em" }}>{item.number} ש"ח</span>
-        <Tooltip id={`tooltip-${index}`} place="top" effect="solid" />
-      </span>
-    )
-  }));
-  const filteredOptions = allSelectProducts.filter(
-    (option) => !itemsValues?.product.includes(option)
+  const customSingleValue = ({ data }) => (
+    <div
+      data-tooltip-id={`tooltip-${data.value}`}
+      data-tooltip-content={data.date} // إضافة التاريخ داخل التولتيب
+      style={{ cursor: "pointer" }} // إضافة مؤشر الفأرة لجعلها تفاعلية
+    >
+      {data.label}
+      <Tooltip id={`tooltip-${data.value}`} place="top" effect="solid" />
+    </div>
   );
+
+  const customOption = ({ data, innerRef, innerProps }) => (
+    <div
+      ref={innerRef}
+      {...innerProps}
+      style={{ padding: "5px", cursor: "pointer" }}
+    >
+      <span
+        data-tooltip-id={`tooltip-${data.value}`}
+        data-tooltip-content={data.date}
+      >
+        {data.label}
+      </span>
+      <Tooltip id={`tooltip-${data.value}`} place="top" effect="solid" />
+    </div>
+  );
+
+  const allSelectProducts = filteredProducts
+    ?.sort((a, b) => a.name.localeCompare(b.name))
+    .map((item, index) => ({
+      value: `${index}-${item.number}`,
+      label: `${item.name} - ${item.number} ש"ח`,
+      date: item.date, // يجب أن يكون تاريخاً صحيحاً
+    }));
+  // const allSelectProducts = filteredProducts
+  // ?.sort((a, b) => a.name.localeCompare(b.name))
+  // .map((item, index) => ({
+  //   value: `${index}-` + item.number,
+  //   label:
+
+  //     <span data-tooltip-id={`tooltip-${index}`} data-tooltip-content={`תאריך: ${item.date}`}>
+  //       {item.name} - <span style={{ fontSize: "0.8em" }}>{item.number} ש"ח</span>
+  //       <Tooltip id={`tooltip-${index}`} place="top" effect="solid" />
+  //     </span>
+
+  // }));
+
+  // const filteredOptions = allSelectProducts.filter(
+  //   (option) => !itemsValues?.product.includes(option)
+  // );
   const allSelectLandData = selectData?.filter((item) => {
     return itemsValues.clientName === item.clientName;
   });
@@ -541,7 +584,10 @@ export default function AddItem({
             className="add_item"
             style={{
               width: collReq === "/personalInvestments" ? "25%" : "15%",
-              color: itemsValues.colored && itemsValues.clientName === '' ? "rgb(255, 71, 46)" : "black",
+              color:
+                itemsValues.colored && itemsValues.clientName === ""
+                  ? "rgb(255, 71, 46)"
+                  : "black",
             }}
             placeholder={
               collReq === "/expenses" || collReq === "/personalProductExpenses"
@@ -567,7 +613,11 @@ export default function AddItem({
           (collReq === "/personalRkrExpenses" &&
             itemsValues.workKind === "ריסוס")) && (
           <Select
-            options={filteredOptions}
+            options={allSelectProducts}
+            components={{
+              SingleValue: customSingleValue,
+              Option: customOption,
+            }}
             className="add_item select-product-in-add "
             placeholder={
               itemsValues?.product.length > 0 ? itemsValues.product : "בחר חומר"
@@ -605,7 +655,13 @@ export default function AddItem({
             }}
           ></Select>
         )}
-        {itemsValues?.product?.length > 0 && (
+        <TooltipSidebar
+          itemsValues={itemsValues}
+          collReq={collReq}
+          tractorPrice={tractorPrice}
+          setItemsValues={setItemsValues}
+        />
+        {/* {itemsValues?.product?.length > 0 && (
           <div className="Productquantities">
             {itemsValues?.product.map((option, index) => (
               <InputForQuantity
@@ -640,7 +696,7 @@ export default function AddItem({
               <label>: כמות החומר</label>
             </div>
           </div>
-        )}
+        )} */}
         {collReq !== "/clients" && (
           <input
             name="number"

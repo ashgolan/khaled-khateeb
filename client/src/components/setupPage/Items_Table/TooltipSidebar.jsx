@@ -2,7 +2,7 @@ import React from "react";
 import InputForQuantity from "../Add_Item/InputForQuantity";
 import { getSumOfValues } from "../../../utils/getValuesSum";
 
-const TooltipSidebar = ({ itemsValues, changeStatus, collReq, tractorPrice, setItemsValues }) => {
+const TooltipSidebar = ({ itemsValues, changeStatus = { disabled: false }, collReq, tractorPrice, setItemsValues }) => {
   return (
     itemsValues?.product?.length > 0 && !changeStatus.disabled && (
       <div style={styles.tooltipContainer}>
@@ -41,14 +41,14 @@ const TooltipSidebar = ({ itemsValues, changeStatus, collReq, tractorPrice, setI
 const styles = {
   tooltipContainer: {
     position: "fixed",
-    top: "80%",
+    top: "50%",
     right: "10px", 
     transform: "translateY(-50%)",
     backgroundColor: "gold",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
     borderRadius: "10px",
     padding: "10px",
-    width: "250px",
+    width: "350px",
     zIndex: 1000,
   },
   tooltipContent: {
