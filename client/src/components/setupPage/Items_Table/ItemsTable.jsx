@@ -49,6 +49,7 @@ export default function ItemsTable({
     quantitiesOfProduct: {},
     totalAmount: 0,
   });
+  
   useEffect(() => {
     const getData = async () => {
       const thisItem = myData?.find((t) => t._id === item._id);
@@ -188,6 +189,7 @@ export default function ItemsTable({
   // const filteredOptions = allSelectProducts.filter(
   //   (option) => !itemsValues?.product.includes(option)
   // );
+console.log(itemsValues);
 
   const allSelectLandData = selectData?.filter((item) => {
     return itemsValues.clientName === item.clientName;
@@ -204,6 +206,7 @@ export default function ItemsTable({
   const getTotalsOfProducts = () => {
     let sum = 0;
     quantitiesInArray?.map((product, index) => {
+      
       sum += +PricesInArray[index][1];
     });
     return sum;
@@ -767,7 +770,7 @@ export default function ItemsTable({
                 <label
                   style={{ color: "green", direction: "rtl", margin: "0 10px" }}
                 >
-                  {key} {value} {"ל. ("} {PricesInArray[index][1]} {`ש"ח`}
+                  {key.split("-")[0]} {value} {"ל. ("} {+PricesInArray[index][1]} {`ש"ח`}
                   {") "}
                 </label>
               </div>
