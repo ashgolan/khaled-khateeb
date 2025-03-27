@@ -80,3 +80,19 @@
 .remove_addItem {
   background-color: brown;
 }
+.delete-button {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #333; /* اللون الرئيسي للأيقونة */
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-button:hover {
+  color: #ca1d0a; /* اللون عند المرور فوق الزر */
+}
+
+.delete-button i {
+  font-size: 20px; /* حجم الأيقونة */
+}

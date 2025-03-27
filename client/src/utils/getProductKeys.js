@@ -1,8 +1,5 @@
 export const getProductKeys = (obj, keysToApply) => {
-  Object.keys(obj).forEach((key) => {
-    if (!keysToApply.includes(key)) {
-      delete obj[key];
-    }
-  });
-  return obj;
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key]) => keysToApply.includes(key))
+  );
 };

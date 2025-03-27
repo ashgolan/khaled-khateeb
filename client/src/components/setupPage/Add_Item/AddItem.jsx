@@ -11,7 +11,6 @@ import { getProductKeys } from "../../../utils/getProductKeys";
 import { getSumOfValues } from "../../../utils/getValuesSum";
 import { Tooltip } from "react-tooltip";
 import TooltipSidebar from "../Items_Table/TooltipSidebar";
-import InputForQuantity from "./InputForQuantity";
 
 export default function AddItem({
   collReq,
@@ -51,6 +50,7 @@ export default function AddItem({
     totalAmount: 0,
     quantitiesOfProduct: {},
   });
+
 
   const sendPostRequest = async (token) => {
     const headers = {
@@ -314,7 +314,7 @@ export default function AddItem({
       textAlign: "center",
     }),
   };
-  
+
   const ids = selectData.map(({ clientName }) => clientName);
   const filtered = selectData.filter(
     ({ clientName }, index) => !ids.includes(clientName, index + 1)
@@ -349,7 +349,7 @@ export default function AddItem({
       backgroundColor: isFocused ? "gold" : "transparent", // Change background color when focused
       color: isFocused ? "black" : "initial", // Change text color when focused
     };
-  
+
     return (
       <div
         ref={innerRef}
@@ -366,8 +366,6 @@ export default function AddItem({
       </div>
     );
   };
-  
-  
 
   const allSelectProducts = filteredProducts
     ?.sort((a, b) => a.name.localeCompare(b.name))
@@ -403,7 +401,6 @@ export default function AddItem({
       return { ...prev, colored: !prev.colored };
     });
   };
-
   return (
     <form
       onSubmit={confirmAddingItem}
@@ -635,8 +632,9 @@ export default function AddItem({
               const keysOfProductNames = selectedOptions.map(
                 (obj) => obj["label"]
               );
+              
               setItemsValues((prev) => {
-                const myNewQuantitis = getProductKeys(
+                const myNewQuantities = getProductKeys(
                   prev.quantitiesOfProduct,
                   keysOfProductNames
                 );
@@ -647,7 +645,7 @@ export default function AddItem({
                 const sumOfPrices = getSumOfValues(myNewPrices);
                 return {
                   ...prev,
-                  quantitiesOfProduct: myNewQuantitis,
+                  quantitiesOfProduct: myNewQuantities,
                   pricesOfProducts: myNewPrices,
                   number: sumOfPrices,
                   product: selectedOptions,
@@ -658,6 +656,7 @@ export default function AddItem({
                 };
               });
             }}
+            value={itemsValues.product}
           ></Select>
         )}
         <TooltipSidebar

@@ -49,6 +49,7 @@ export default function ItemsTable({
     quantitiesOfProduct: {},
     totalAmount: 0,
   });
+  console.log(itemsValues);
   
   useEffect(() => {
     const getData = async () => {
@@ -211,6 +212,8 @@ console.log(itemsValues);
     });
     return sum;
   };
+ 
+  
   return (
     <>
       <form className="form-container-in-table">
@@ -487,6 +490,7 @@ console.log(itemsValues);
                       prev.pricesOfProducts,
                       keysOfProductNames
                     );
+                    
                     const sumOfPrices = getSumOfValues(myNewPrices);
                     return {
                       ...prev,
