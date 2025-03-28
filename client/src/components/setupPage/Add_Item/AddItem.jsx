@@ -429,6 +429,8 @@ export default function AddItem({
                 return { ...prev, date: e.target.value };
               })
             }
+            onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
           ></input>
         )}
         {collReq === "/sales" && (
@@ -531,6 +533,8 @@ export default function AddItem({
                 return { ...prev, purpose: e.target.value };
               })
             }
+            onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
             value={itemsValues.purpose}
             required
           />
@@ -546,6 +550,8 @@ export default function AddItem({
                 return { ...prev, strains: e.target.value };
               })
             }
+            onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
             value={itemsValues.strains}
           />
         )}
@@ -745,6 +751,8 @@ export default function AddItem({
                 };
               })
             }
+            onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
             value={itemsValues.number}
           ></input>
         )}
@@ -797,6 +805,8 @@ export default function AddItem({
                 });
               }}
               value={itemsValues.quantity}
+              onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
             ></input>
           )}
 
@@ -834,6 +844,8 @@ export default function AddItem({
                 return { ...prev, other: e.target.value };
               });
             }}
+            onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
           />
         )}
         {collReq === "/sales" && (
@@ -846,6 +858,8 @@ export default function AddItem({
                 return { ...prev, water: e.target.value };
               })
             }
+            onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
             value={itemsValues.water}
             required
           />

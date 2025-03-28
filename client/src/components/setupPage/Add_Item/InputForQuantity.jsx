@@ -7,33 +7,41 @@ function InputForQuantity({
   option,
   tractorPrice,
   setItemsValues,
+  itemsValues, // تمرير الحالة الأصلية هنا لضمان دقة القيم
 }) {
   const label = option.label;
-  const [letersOfProduct, setLetersOfProduct] = useState(quantityValue || "");
+  
+  // الاحتفاظ بالقيمة محليًا ولكن يجب تحديثها عند تغيّر `itemsValues`
+  const [localQuantity, setLocalQuantity] = useState(quantityValue || "");
+
+  // تحديث القيمة المحلية عند تغير `itemsValues`
   useEffect(() => {
-    setLetersOfProduct(quantityValue || "");
-  }, [quantityValue]);
+    setLocalQuantity(itemsValues.quantitiesOfProduct[label] || "");
+  }, [itemsValues, label]);
 
   const handleQuantityChange = (e) => {
     const newQuantity = +e.target.value || "";
+    setLocalQuantity(newQuantity); // تحديث القيمة محليًا فقط
 
     setItemsValues((prev) => {
+      // تحديث القيم المستهدفة فقط دون التأثير على بقية المنتجات
       const updatedQuantities = {
         ...prev.quantitiesOfProduct,
-        [label]: +newQuantity,
+        [label]: newQuantity,
       };
-      let pricePerUnit = option.value;
 
+      let pricePerUnit = option.value;
       if (typeof option?.value === "string" && option.value.includes("-")) {
         pricePerUnit = +option.value.split("-").pop();
       } else {
         pricePerUnit = +option.value;
       }
+
       const updatedProductsPrice = {
         ...prev.pricesOfProducts,
-        [label]: +newQuantity * +pricePerUnit,
+        [label]: newQuantity * pricePerUnit,
       };
-      
+
       const sumOfPrices = getSumOfValues(updatedProductsPrice);
 
       return {
@@ -43,12 +51,10 @@ function InputForQuantity({
         number: sumOfPrices,
         totalAmount:
           collReq === "/sales"
-            ? +sumOfPrices + +(tractorPrice * prev.quantity)
-            : +sumOfPrices + +prev.workPrice,
+            ? sumOfPrices + tractorPrice * (prev.quantity || 0)
+            : sumOfPrices + (prev.workPrice || 0),
       };
     });
-
-    setLetersOfProduct(newQuantity);
   };
 
   return (
@@ -57,14 +63,14 @@ function InputForQuantity({
       style={{
         margin: "2% auto",
         borderBottom: "1px solid gray",
-        padding : "2%"
+        padding: "2%",
       }}
     >
       <input
         type="number"
         placeholder="כמות"
         className="quantityBoxOfProduct"
-        value={letersOfProduct}
+        value={localQuantity} // استخدام القيمة المحلية
         onChange={handleQuantityChange}
       />
       <span style={{ width: "20%" }} htmlFor="">

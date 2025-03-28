@@ -257,6 +257,8 @@ console.log(itemsValues);
                   return { ...prev, date: e.target.value };
                 });
               }}
+              onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
             ></input>
           )}
 
@@ -420,6 +422,8 @@ console.log(itemsValues);
                   return { ...prev, purpose: e.target.value };
                 });
               }}
+              onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
             />
           )}
           {(collReq === "/personalSales" || collReq === "/sales") && (
@@ -436,6 +440,8 @@ console.log(itemsValues);
                   return { ...prev, strains: e.target.value };
                 });
               }}
+              onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
             />
           )}
           {collReq === "/personalSales" && (
@@ -583,6 +589,8 @@ console.log(itemsValues);
                   };
                 });
               }}
+              onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
             ></input>
           )}
           {collReq === "/personalRkrExpenses" && (
@@ -636,6 +644,8 @@ console.log(itemsValues);
                   };
                 });
               }}
+              onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
             ></input>
           )}
           {collReq === "/sales" && (
@@ -649,6 +659,8 @@ console.log(itemsValues);
               value={Object.values(
                 itemsValues?.quantitiesOfProduct ?? {}
               )?.reduce((acc, curr) => acc + curr, 0)}
+              onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
             ></input>
           )}
 
@@ -664,6 +676,8 @@ console.log(itemsValues);
                   return { ...prev, water: e.target.value };
                 });
               }}
+              onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+
             />
           )}
           {(collReq === "/personalRkrExpenses" ||           collReq === "/personalInvestments" )
