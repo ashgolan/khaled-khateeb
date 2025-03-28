@@ -448,6 +448,7 @@ export default function EditItem({
         totalAmount: itemsValues.totalAmount,
         tax: itemsValues.tax,
         quantitiesOfProduct: itemsValues.quantitiesOfProduct,
+        pricesOfProducts: itemsValues.pricesOfProducts,
         product: itemsValues.product,
       };
       
