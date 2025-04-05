@@ -1,6 +1,6 @@
-import React from "react";
-import InputForQuantity from "../Add_Item/InputForQuantity"; // تأكد من أن هذا المكون موجود في المسار الصحيح
-import { getSumOfValues } from "../../../utils/getValuesSum"; // تأكد من وجود هذه الدالة أيضًا
+import React, { useRef, useState, useEffect } from "react";
+import InputForQuantity from "../Add_Item/InputForQuantity";
+import { getSumOfValues } from "../../../utils/getValuesSum";
 
 const TooltipSidebar = ({
   itemsValues,
@@ -9,27 +9,55 @@ const TooltipSidebar = ({
   tractorPrice,
   setItemsValues,
 }) => {
-  // دالة لحذف المنتج
-  const handleDeleteProduct = (productLabel) => {
+  const sidebarRef = useRef(null);
+  const [position, setPosition] = useState({ x: 10, y: window.innerHeight / 2 });
 
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!isDragging.current) return;
+      setPosition({
+        x: e.clientX - offset.current.x,
+        y: e.clientY - offset.current.y,
+      });
+    };
+
+    const handleMouseUp = () => {
+      isDragging.current = false;
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
+  const isDragging = useRef(false);
+  const offset = useRef({ x: 0, y: 0 });
+
+  const handleMouseDown = (e) => {
+    const rect = sidebarRef.current.getBoundingClientRect();
+    offset.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    };
+    isDragging.current = true;
+  };
+
+  const handleDeleteProduct = (productLabel) => {
     setItemsValues((prev) => {
-      // إزالة المنتج من itemsValues.product
       const updatedProducts = prev.product.filter((option) => option.label !== productLabel);
-      
-      // إزالة الكميات والأسعار المرتبطة بالمنتج المحذوف بناءً على `productLabel`
       const updatedQuantities = Object.fromEntries(
         Object.entries(prev.quantitiesOfProduct).filter(
           ([key]) => key !== productLabel
         )
       );
-
       const updatedPrices = Object.fromEntries(
         Object.entries(prev.pricesOfProducts).filter(
           ([key]) => key !== productLabel
         )
       );
-
-      // حساب المجموع الجديد
       const sumOfPrices = getSumOfValues(updatedPrices);
 
       return {
@@ -49,7 +77,22 @@ const TooltipSidebar = ({
   return (
     itemsValues?.product?.length > 0 &&
     !changeStatus.disabled && (
-      <div style={styles.tooltipContainer}>
+      <div
+        ref={sidebarRef}
+        style={{
+          ...styles.tooltipContainer,
+          left: `${position.x}px`,
+          top: `${position.y}px`,
+          transform: "translate(0, 0)", // لا حاجة لـ translateY مع السحب
+        }}
+      >
+        <div
+          style={styles.dragHandle}
+          onMouseDown={handleMouseDown}
+        >
+          תפוס לגרירה 🖐
+        </div>
+
         <div style={styles.tooltipContent}>
           {itemsValues?.product.map((option, index) => (
             <div key={index} style={styles.productContainer}>
@@ -64,9 +107,10 @@ const TooltipSidebar = ({
                 }
               />
               <button
-                onClick={(e) =>{
-                  e.preventDefault(); // يمنع إرسال النموذج
-                  handleDeleteProduct(option.label)}}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleDeleteProduct(option.label);
+                }}
                 className="delete-button"
               >
                 <i className="fas fa-trash"></i>
@@ -94,15 +138,24 @@ const TooltipSidebar = ({
 const styles = {
   tooltipContainer: {
     position: "fixed",
-    top: "50%",
-    right: "10px",
-    transform: "translateY(-50%)",
     backgroundColor: "gold",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
     borderRadius: "10px",
     padding: "10px",
     width: "350px",
     zIndex: 1000,
+    cursor: "move", // إشارة السحب
+  },
+  dragHandle: {
+    backgroundColor: "white",
+    padding: "5px 10px",
+    textAlign : "center" ,
+    borderRadius: "5px",
+    color: "brown",
+    marginBottom: "10px",
+    cursor: "grab",
+    userSelect: "none",
+    fontWeight: "bold",
   },
   tooltipContent: {
     display: "flex",
@@ -128,14 +181,6 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: "10px",
-  },
-  deleteButton: {
-    backgroundColor: "red",
-    color: "white",
-    border: "none",
-    padding: "5px 10px",
-    borderRadius: "5px",
-    cursor: "pointer",
   },
 };
 
