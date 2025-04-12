@@ -767,7 +767,7 @@ console.log(itemsValues);
               </label>
               {`  ( ש"ח `}
               <label htmlFor="">
-                {+itemsValues.totalAmount - +getTotalsOfProducts() + " )"}
+                {(+itemsValues.totalAmount - +getTotalsOfProducts()).toFixed(2) + " )"}
                 {/* {+tractorPrice * +itemsValues?.quantity + " )"} */}
               </label>
               <label htmlFor="" style={{ color: "darkblue" }}>
@@ -788,7 +788,7 @@ console.log(itemsValues);
                 <label
                   style={{ color: "green", direction: "rtl", margin: "0 10px" }}
                 >
-                  {key.split("-")[0]} {value} {"ל. ("} {+PricesInArray[index][1]} {`ש"ח`}
+                  {key.split("-")[0]} {value} {"ל. ("} {+PricesInArray[index][1].toFixed(2)} {`ש"ח`}
                   {") "}
                 </label>
               </div>
