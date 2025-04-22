@@ -1,8 +1,94 @@
-@media screen and (max-width: 1000px) {
-  .form-outline mb-1 {
-    height: 20%;
-  }
-}
+/* ارتفاع مخصص للنموذج */
 .vh-50 {
   height: 85vh;
+}
+
+/* تنسيق عام */
+.container {
+  padding: 2rem;
+}
+
+.card {
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+h3 {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+.form-outline {
+  margin-bottom: 1.5rem;
+}
+
+.form-control {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+}
+
+.form-label {
+  margin-top: 0.5rem;
+  display: block;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 1rem;
+  background-color: gold;
+  color: #000;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-login:hover {
+  background-color: #e6c200;
+}
+
+/* ✅ Responsive Design */
+@media screen and (max-width: 768px) {
+  .vh-50 {
+    height: auto;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.6rem;
+  }
+
+  .form-control {
+    font-size: 0.95rem;
+    padding: 0.6rem 0.8rem;
+  }
+
+  .btn-login {
+    font-size: 1rem;
+    padding: 0.7rem;
+  }
+
+  .form-label {
+    font-size: 0.9rem;
+  }
 }

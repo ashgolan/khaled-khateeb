@@ -114,12 +114,7 @@ export default function Login({ setLoggedIn }) {
                   <div>
                     <button
                       type="submit"
-                      style={{
-                        padding: "1.5% 40%",
-                        border: "none",
-                        borderRadius: "1rem",
-                        backgroundColor: "gold",
-                      }}
+                 className="btn-login"
                     >
                       כניסה
                     </button>
