@@ -49,6 +49,9 @@ function ChartPage({ report, setShowChart, showChart, fetchingData }) {
     if (report?.clientName) {
       data = data.filter((item) => item.clientName === report?.clientName);
     }
+    if (report?.strains) {
+      data = data.filter((item) => item.strains === report?.strains);
+    }
     if (report?.month?.value && report?.year) {
       setChartData({
         labels: Object?.keys(

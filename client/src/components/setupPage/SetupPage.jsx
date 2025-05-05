@@ -216,6 +216,12 @@ export default function SetupPage({
             new Date(item.date).getFullYear() === report?.year &&
             item.clientName === report.clientName
           );
+        if (report?.strains)
+          return (
+            monthNames.includes(month) &&
+            new Date(item.date).getFullYear() === report?.year &&
+            item.strains === report.strains
+          );
 
         return (
           monthNames.includes(month) &&
@@ -232,6 +238,10 @@ export default function SetupPage({
           return (
             monthNames.includes(month) && item.clientName === report.clientName
           );
+        if (report?.strains)
+          return (
+            monthNames.includes(month) && item.strains === report.strains
+          );
         return monthNames.includes(month);
       });
     } else {
@@ -240,6 +250,12 @@ export default function SetupPage({
           (item) =>
             new Date(item.date).getFullYear() === report?.year &&
             report?.clientName === item.clientName
+        );
+      if (report?.strains)
+        return sortedData.filter(
+          (item) =>
+            new Date(item.date).getFullYear() === report?.year &&
+            report?.strains === item.strains
         );
       else
         return sortedData.filter(
@@ -641,6 +657,21 @@ export default function SetupPage({
             מטרה
           </button>
         )}
+        {(collReq === "/sales" || collReq === "/personalSales") && (
+          <button
+            id="strains"
+            className="input_show_item head"
+            style={{
+              width:report?.type ?"10%" : "7%",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              setKindOfSort(() => "strains");
+            }}
+          >
+            זנים
+          </button>
+        )}
         {collReq === "/personalSales" && (
           <button
             id="weightKind"
@@ -654,21 +685,6 @@ export default function SetupPage({
             }}
           >
             משקל
-          </button>
-        )}
-        {(collReq === "/sales" || collReq === "/personalSales") && (
-          <button
-            id="strains"
-            className="input_show_item head"
-            style={{
-              width: "7%",
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              setKindOfSort(() => "strains");
-            }}
-          >
-            זנים
           </button>
         )}
         {(collReq === "/sales" || collReq === "/personalRkrExpenses") &&

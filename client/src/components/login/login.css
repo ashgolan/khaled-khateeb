@@ -1,9 +1,7 @@
-/* ارتفاع مخصص للنموذج */
 .vh-50 {
   height: 85vh;
 }
 
-/* تنسيق عام */
 .container {
   padding: 2rem;
 }
@@ -60,7 +58,6 @@ h3 {
   background-color: #e6c200;
 }
 
-/* ✅ Responsive Design */
 @media screen and (max-width: 768px) {
   .vh-50 {
     height: auto;

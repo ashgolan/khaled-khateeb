@@ -431,7 +431,7 @@ console.log(itemsValues);
               id="strains"
               className="input_show_item"
               style={{
-                width: "7%",
+                width:report?.type ?"10%" : "7%",
               }}
               disabled={changeStatus.disabled}
               value={itemsValues.strains}

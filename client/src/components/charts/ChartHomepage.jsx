@@ -14,6 +14,7 @@ function ChartHomepage() {
     typeName: "",
     type: "",
     clientName: "",
+    strains: "",
     month: [],
     year: "",
   });
@@ -199,7 +200,14 @@ function ChartHomepage() {
   const filtered = fetchingData?.salesData?.filter(
     ({ clientName }, index) => !ids.includes(clientName, index + 1)
   );
+  const personalIds = fetchingData?.personalSalesData?.map(({ strains }) => strains);
+  const personalFiltered = fetchingData?.personalSalesData?.filter(
+    ({ strains }, index) => !personalIds.includes(strains, index + 1)
+  );
 
+  const allSelectStrains = personalFiltered?.map((item) => {
+    return { value: item._id, label: item.strains };
+  });
   const allSelectData = filtered?.map((item) => {
     return { value: item._id, label: item.clientName };
   });
@@ -308,6 +316,34 @@ function ChartHomepage() {
                 }
                 value={report?.month || []}
                 isClearable={true}
+              ></Select>
+            )}
+            {(report?.type === "/personalSales" || report?.type === "personalSalesCharts") && (
+              <Select
+                options={allSelectStrains?.filter(
+                  (option) => option.value !== null
+                )}
+                placeholder="בחר זן"
+                onChange={(selectedOption) => {
+                  setReport((prev) => {
+                    setUpdatedReport((prev) => !prev);
+                    return {
+                      ...prev,
+                      strains: selectedOption ? selectedOption.label : null,
+                    };
+                  });
+                  setUpdateChart((prev) => !prev);
+                  setShowChart(false);
+                }}
+                value={
+                  report.strains !== null
+                    ? allSelectStrains?.find(
+                        (option) => option.value === report.strains
+                      )
+                    : null
+                }
+                isClearable={true}
+                styles={customStyles}
               ></Select>
             )}
             {(report?.type === "/sales" || report?.type === "salesCharts") && (
