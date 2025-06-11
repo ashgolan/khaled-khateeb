@@ -22,8 +22,10 @@ import PersonalRkrExpenses from "./components/personal/PersonalRkrExpenses";
 import PersonalInvestments from "./components/personal/PersonalInvestments";
 function App() {
   const navigate = useNavigate();
-  
-  const [isPersonal, setIsPersonal] = useState((JSON.parse(localStorage.getItem("isPersonalNavBar")))||0);
+
+  const [isPersonal, setIsPersonal] = useState(
+    JSON.parse(localStorage.getItem("isPersonalNavBar")) || 0
+  );
   const [loggedIn, setLoggedIn] = useState(false);
   const [fetchingStatus, setFetchingStatus] = useState({
     loading: false,
@@ -35,14 +37,14 @@ function App() {
     if (!loggedIn) return;
     clearTokens();
     setLoggedIn(false);
-    setIsPersonal(0)
+    setIsPersonal(0);
     localStorage.clear();
     navigate("/homepage");
   };
 
   return (
     <div>
-      <IdleTimer timeout={20 * 60 * 1000} onIdle={handleIdle} />
+      <IdleTimer timeout={1000 * 60 * 5} onIdle={handleIdle} /> 
       {<Navbar isPersonal={isPersonal} setIsPersonal={setIsPersonal}></Navbar>}
       {fetchingStatus.message && (
         <h5 className="message">{fetchingStatus.message}</h5>
@@ -97,7 +99,12 @@ function App() {
           ></Route>
           <Route
             path="/homePage"
-            element={<HomePage isPersonal={isPersonal} setIsPersonal={setIsPersonal}></HomePage>}
+            element={
+              <HomePage
+                isPersonal={isPersonal}
+                setIsPersonal={setIsPersonal}
+              ></HomePage>
+            }
           ></Route>
           <Route path="/calender" element={<Calender></Calender>}></Route>
         </Routes>
