@@ -251,7 +251,7 @@ const TooltipSidebar = ({
           ([key]) => key !== productLabel
         )
       );
-      const sumOfPrices = getSumOfValues(updatedPrices);
+      const sumOfPrices = getSumOfValues(updatedPrices ?? {});
 
       const totalAmount =
         collReq === "/personalRkrExpenses"
@@ -315,17 +315,18 @@ const TooltipSidebar = ({
             </div>
           ))}
 
-          <div style={styles.totalContainer}>
+                   <div style={styles.totalContainer}>
             <input
               name="quantitiesOfProducts"
               id="quantitiesOfProducts"
               style={styles.inputStyle}
               disabled
               placeholder={"כ.חומר"}
-              value={getSumOfValues(itemsValues.quantitiesOfProduct)}
+              value={getSumOfValues(itemsValues?.quantitiesOfProduct ?? {})}
             />
             <label>: כמות החומר</label>
           </div>
+
         </div>
       </div>
     )

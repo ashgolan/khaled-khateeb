@@ -234,7 +234,7 @@ function InputForQuantity({
       [label]: quantityNum * pricePerUnit,
     };
 
-    const sumOfPrices = getSumOfValues(updatedProductsPrice);
+    const sumOfPrices = getSumOfValues(updatedProductsPrice ?? {});
 
     let total = 0;
     if (collReq === "/sales") {
