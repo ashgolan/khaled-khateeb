@@ -49,8 +49,7 @@ export default function ItemsTable({
     quantitiesOfProduct: {},
     totalAmount: 0,
   });
-  console.log(itemsValues);
-  
+
   useEffect(() => {
     const getData = async () => {
       const thisItem = myData?.find((t) => t._id === item._id);
@@ -83,6 +82,32 @@ export default function ItemsTable({
     };
     getData();
   }, [item._id, myData]);
+
+  const toNum = (v) => Number(v) || 0;
+const computeTotal = (s) => {
+  let total;
+
+  if (collReq === "/personalRkrExpenses") {
+    total =
+      s.workKind === "ריסוס"
+        ? toNum(s.workPrice) * toNum(s.quantity) + toNum(s.number)
+        : toNum(s.workPrice) + toNum(s.number);
+  } else if (
+    collReq === "/expenses" ||
+    collReq === "/personalProductExpenses" ||
+    collReq === "/personalSales"
+  ) {
+    total = toNum(s.number) * toNum(s.quantity);
+  } else if (collReq === "/sales") {
+    total = toNum(s.number) + toNum(tractorPrice) * toNum(s.quantity);
+  } else {
+    total = toNum(s.totalAmount);
+  }
+
+  // Always return with 1 decimal
+  return Number(total.toFixed(1));
+};
+
 
   const customStyles = {
     control: (base, state) => ({
@@ -147,13 +172,13 @@ export default function ItemsTable({
     <div
       data-tooltip-id={`tooltip-${data.value}`}
       data-tooltip-content={data.date} // إضافة التاريخ داخل التولتيب
-      style={{ cursor: 'pointer' }} // إضافة مؤشر الفأرة لجعلها تفاعلية
+      style={{ cursor: "pointer" }} // إضافة مؤشر الفأرة لجعلها تفاعلية
     >
       {data.label}
       <Tooltip id={`tooltip-${data.value}`} place="top" effect="solid" />
     </div>
   );
-  
+
   const customOption = ({ data, innerRef, innerProps, isFocused }) => {
     // Set styles based on whether the option is focused
     const optionStyles = {
@@ -162,7 +187,7 @@ export default function ItemsTable({
       backgroundColor: isFocused ? "gold" : "transparent", // Change background color when focused
       color: isFocused ? "black" : "initial", // Change text color when focused
     };
-  
+
     return (
       <div
         ref={innerRef}
@@ -179,18 +204,21 @@ export default function ItemsTable({
       </div>
     );
   };
-  
+  console.log(itemsValues.number);
+  console.log(itemsValues.quantity);
+  console.log(itemsValues.workKind);
+  console.log(itemsValues.workPrice);
+
   const allSelectProducts = filteredProducts
-  ?.sort((a, b) => a.name.localeCompare(b.name))
-  .map((item, index) => ({
-    value: `${index}-${item.number}`,
-    label: `${item.name} - ${item.number} ש"ח`,
-    date: item.date, // يجب أن يكون تاريخاً صحيحاً
-  }));
+    ?.sort((a, b) => a.name.localeCompare(b.name))
+    .map((item, index) => ({
+      value: `${index}-${item.number}`,
+      label: `${item.name} - ${item.number} ש"ח`,
+      date: item.date, // يجب أن يكون تاريخاً صحيحاً
+    }));
   // const filteredOptions = allSelectProducts.filter(
   //   (option) => !itemsValues?.product.includes(option)
   // );
-console.log(itemsValues);
 
   const allSelectLandData = selectData?.filter((item) => {
     return itemsValues.clientName === item.clientName;
@@ -207,13 +235,11 @@ console.log(itemsValues);
   const getTotalsOfProducts = () => {
     let sum = 0;
     quantitiesInArray?.map((product, index) => {
-      
       sum += +PricesInArray[index][1];
     });
     return sum;
   };
- 
-  
+
   return (
     <>
       <form className="form-container-in-table">
@@ -258,7 +284,6 @@ console.log(itemsValues);
                 });
               }}
               onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
-
             ></input>
           )}
 
@@ -288,7 +313,10 @@ console.log(itemsValues);
                     quantitiesOfProduct:
                       e.label === "ריסוס" ? prev.quantitiesOfProduct : {},
                     product: e.label === "ריסוס" ? prev.product : [],
-                    totalAmount : e.label === "ריסוס" ? +prev.workPrice + +prev.number :+prev.workPrice
+                    totalAmount:
+                      e.label === "ריסוס"
+                        ? +prev.workPrice + +prev.number
+                        : +prev.workPrice,
                   };
                 });
               }}
@@ -360,7 +388,6 @@ console.log(itemsValues);
             collReq === "/expenses" ||
             collReq === "/personalSales" ||
             collReq === "/personalInvestments" ||
-
             collReq === "/personalRkrExpenses" ||
             collReq === "/personalProductExpenses" ||
             collReq === "/personalWorkers") && (
@@ -368,10 +395,15 @@ console.log(itemsValues);
               id="name"
               className="input_show_item"
               style={{
-                color: itemsValues.colored && itemsValues.clientName === '' ? "rgb(255, 71, 46)" : "black",
+                color:
+                  itemsValues.colored && itemsValues.clientName === ""
+                    ? "rgb(255, 71, 46)"
+                    : "black",
 
                 maxWidth:
-                  collReq === "/clients" || collReq === "/expenses" ||      collReq === "/personalInvestments" 
+                  collReq === "/clients" ||
+                  collReq === "/expenses" ||
+                  collReq === "/personalInvestments"
                     ? "32%"
                     : collReq === "/sales" ||
                       collReq === "/expenses" ||
@@ -385,8 +417,9 @@ console.log(itemsValues);
                     : "15%",
 
                 minWidth:
-                  collReq === "/clients" || collReq === "/expenses"    ||      collReq === "/personalInvestments" 
-
+                  collReq === "/clients" ||
+                  collReq === "/expenses" ||
+                  collReq === "/personalInvestments"
                     ? "32%"
                     : collReq === "/sales" ||
                       collReq === "/expenses" ||
@@ -423,7 +456,6 @@ console.log(itemsValues);
                 });
               }}
               onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
-
             />
           )}
           {(collReq === "/personalSales" || collReq === "/sales") && (
@@ -431,7 +463,7 @@ console.log(itemsValues);
               id="strains"
               className="input_show_item"
               style={{
-                width:report?.type ?"10%" : "7%",
+                width: report?.type ? "10%" : "7%",
               }}
               disabled={changeStatus.disabled}
               value={itemsValues.strains}
@@ -441,7 +473,6 @@ console.log(itemsValues);
                 });
               }}
               onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
-
             />
           )}
           {collReq === "/personalSales" && (
@@ -469,9 +500,11 @@ console.log(itemsValues);
           {(collReq === "/sales" || collReq === "/personalRkrExpenses") &&
             !report?.type && (
               <Select
-              options={allSelectProducts}
-                components={{ SingleValue: customSingleValue, Option: customOption }}
-
+                options={allSelectProducts}
+                components={{
+                  SingleValue: customSingleValue,
+                  Option: customOption,
+                }}
                 // options={filteredOptions}
                 className="input_show_item select-product-head Select-multi-value-wrapper "
                 placeholder={
@@ -487,6 +520,7 @@ console.log(itemsValues);
                   const keysOfProductNames = selectedOptions.map(
                     (obj) => obj["label"]
                   );
+
                   setItemsValues((prev) => {
                     const myNewQuantitis = getProductKeys(
                       prev.quantitiesOfProduct,
@@ -496,73 +530,51 @@ console.log(itemsValues);
                       prev.pricesOfProducts,
                       keysOfProductNames
                     );
-                    
                     const sumOfPrices = getSumOfValues(myNewPrices);
+
+                    const q = Number(prev.quantity) || 0;
+                    const wp = Number(prev.workPrice) || 0;
+                    const tp = Number(tractorPrice) || 0;
+
+                    let total;
+                    if (collReq === "/personalRkrExpenses") {
+                      total =
+                        prev.workKind === "ריסוס"
+                          ? wp * q + sumOfPrices
+                          : wp + sumOfPrices;
+                    } else if (collReq === "/sales") {
+                      total = sumOfPrices + tp * q;
+                    } else {
+                      total = sumOfPrices + wp;
+                    }
+
                     return {
                       ...prev,
                       quantitiesOfProduct: myNewQuantitis,
                       pricesOfProducts: myNewPrices,
                       number: sumOfPrices,
                       product: selectedOptions,
-                      totalAmount:
-                        collReq === "/sales"
-                          ? +sumOfPrices + +(+tractorPrice * prev.quantity)
-                          : +sumOfPrices + +prev.workPrice,
+                      totalAmount: total,
                     };
                   });
                 }}
               ></Select>
             )}
-            <TooltipSidebar
-  itemsValues={itemsValues}
-  changeStatus={changeStatus}
-  collReq={collReq}
-  tractorPrice={tractorPrice}
-  setItemsValues={setItemsValues}
-/>
-          {/* {itemsValues?.product?.length > 0 && !changeStatus.disabled && (
-            <div className="Productquantities">
-              {itemsValues?.product.map((option, index) => (
-                <InputForQuantity
-                  collReq={collReq}
-                  tractorPrice={+tractorPrice}
-                  itemsValues={itemsValues}
-                  setItemsValues={setItemsValues}
-                  option={option}
-                  quantityValue={
-                    Object.values(itemsValues?.quantitiesOfProduct ?? {})[index]
-                  }
-                ></InputForQuantity>
-              ))}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  color: "brown",
-                }}
-              >
-                <input
-                  name="quantitiesOfProducts"
-                  id="quantitiesOfProducts"
-                  style={{
-                    width:  "15%",
-                    border: "none",
-                  }}
-                  disabled
-                  placeholder={"כ.חומר"}
-                  value={getSumOfValues(itemsValues.quantitiesOfProduct)}
-                ></input>
-                <label>: כמות החומר</label>
-              </div>
-            </div>
-          )} */}
+          <TooltipSidebar
+            itemsValues={itemsValues}
+            changeStatus={changeStatus}
+            collReq={collReq}
+            tractorPrice={tractorPrice}
+            setItemsValues={setItemsValues}
+          />
+
           {collReq !== "/clients" && (
             <input
               id="number"
               className="input_show_item"
               style={{
                 width:
-                  collReq === "/sales" ||      collReq === "/personalInvestments" 
+                  collReq === "/sales" || collReq === "/personalInvestments"
                     ? "6%"
                     : collReq === "/expenses" ||
                       collReq === "/personalSales" ||
@@ -573,24 +585,13 @@ console.log(itemsValues);
               disabled={changeStatus.disabled}
               value={itemsValues.number}
               onChange={(e) => {
+                const newNumber = e.target.value;
                 setItemsValues((prev) => {
-                  return {
-                    ...prev,
-                    number: e.target.value,
-                    totalAmount:
-                      collReq === "/personalRkrExpenses"
-                        ? +e.target.value + +prev.pricesOfProducts
-                        : collReq === "/expenses" ||
-                          collReq === "/personalProductExpenses" ||
-                          collReq === "/personalSales"
-                        ? +e.target.value * +itemsValues.quantity
-                        : +e.target.value +
-                          +tractorPrice * +itemsValues.quantity,
-                  };
+                  const updated = { ...prev, number: newNumber };
+                  return { ...updated, totalAmount: computeTotal(updated) };
                 });
               }}
               onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
-
             ></input>
           )}
           {collReq === "/personalRkrExpenses" && (
@@ -603,12 +604,10 @@ console.log(itemsValues);
               disabled={changeStatus.disabled}
               value={itemsValues.workPrice}
               onChange={(e) => {
+                const newNumber = e.target.value;
                 setItemsValues((prev) => {
-                  return {
-                    ...prev,
-                    workPrice: +e.target.value,
-                    totalAmount: +prev.number + +e.target.value,
-                  };
+                  const updated = { ...prev, workPrice: newNumber };
+                  return { ...updated, totalAmount: computeTotal(updated) };
                 });
               }}
             ></input>
@@ -631,21 +630,13 @@ console.log(itemsValues);
               disabled={changeStatus.disabled}
               value={itemsValues.quantity}
               onChange={(e) => {
+                const newNumber = e.target.value;
                 setItemsValues((prev) => {
-                  return {
-                    ...prev,
-                    quantity: e.target.value,
-                    totalAmount:
-                      collReq === "/expenses" ||
-                      collReq === "/personalProductExpenses" ||
-                      collReq === "/personalSales"
-                        ? +e.target.value * +itemsValues.number
-                        : +prev.number + +(tractorPrice * +e.target.value),
-                  };
+                  const updated = { ...prev, quantity: newNumber };
+                  return { ...updated, totalAmount: computeTotal(updated) };
                 });
               }}
               onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
-
             ></input>
           )}
           {collReq === "/sales" && (
@@ -660,7 +651,6 @@ console.log(itemsValues);
                 itemsValues?.quantitiesOfProduct ?? {}
               )?.reduce((acc, curr) => acc + curr, 0)}
               onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
-
             ></input>
           )}
 
@@ -677,16 +667,15 @@ console.log(itemsValues);
                 });
               }}
               onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
-
             />
           )}
-          {(collReq === "/personalRkrExpenses" ||           collReq === "/personalInvestments" )
- && (
+          {(collReq === "/personalRkrExpenses" ||
+            collReq === "/personalInvestments") && (
             <input
               id="other"
               className="input_show_item"
               style={{
-                width:     collReq === "/personalInvestments" ? "15%" : "7%",
+                width: collReq === "/personalInvestments" ? "15%" : "7%",
               }}
               disabled={changeStatus.disabled}
               value={itemsValues.other}
@@ -767,7 +756,9 @@ console.log(itemsValues);
               </label>
               {`  ( ש"ח `}
               <label htmlFor="">
-                {(+itemsValues.totalAmount - +getTotalsOfProducts()).toFixed(2) + " )"}
+                {(+itemsValues.totalAmount - +getTotalsOfProducts()).toFixed(
+                  2
+                ) + " )"}
                 {/* {+tractorPrice * +itemsValues?.quantity + " )"} */}
               </label>
               <label htmlFor="" style={{ color: "darkblue" }}>
@@ -788,7 +779,8 @@ console.log(itemsValues);
                 <label
                   style={{ color: "green", direction: "rtl", margin: "0 10px" }}
                 >
-                  {key.split("-")[0]} {value} {"ל. ("} {+PricesInArray[index][1].toFixed(2)} {`ש"ח`}
+                  {key.split("-")[0]} {value} {"ל. ("}{" "}
+                  {+PricesInArray[index][1].toFixed(2)} {`ש"ח`}
                   {") "}
                 </label>
               </div>
