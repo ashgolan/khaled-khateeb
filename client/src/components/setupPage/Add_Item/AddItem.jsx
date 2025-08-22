@@ -52,6 +52,31 @@ export default function AddItem({
   });
 
 
+  const toNum = (v) => Number(v) || 0;
+const computeTotal = (s) => {
+  let total;
+
+  if (collReq === "/personalRkrExpenses") {
+    total =
+      s.workKind === "ריסוס"
+        ? toNum(s.workPrice) * toNum(s.quantity) + toNum(s.number)
+        : toNum(s.workPrice) + toNum(s.number);
+  } else if (
+    collReq === "/expenses" ||
+    collReq === "/personalProductExpenses" ||
+    collReq === "/personalSales"
+  ) {
+    total = toNum(s.number) * toNum(s.quantity);
+  } else if (collReq === "/sales") {
+    total = toNum(s.number) + toNum(tractorPrice) * toNum(s.quantity);
+  } else {
+    total = toNum(s.totalAmount);
+  }
+
+  // Always return with 1 decimal
+  return Number(total.toFixed(1));
+};
+
   const sendPostRequest = async (token) => {
     const headers = {
       Authorization: token,
@@ -671,42 +696,7 @@ export default function AddItem({
           tractorPrice={tractorPrice}
           setItemsValues={setItemsValues}
         />
-        {/* {itemsValues?.product?.length > 0 && (
-          <div className="Productquantities">
-            {itemsValues?.product.map((option, index) => (
-              <InputForQuantity
-                collReq={collReq}
-                tractorPrice={+tractorPrice}
-                itemsValues={itemsValues}
-                setItemsValues={setItemsValues}
-                option={option}
-                quantityValue={
-                  Object.values(itemsValues?.quantitiesOfProduct ?? {})[index]
-                }
-              ></InputForQuantity>
-            ))}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                color: "brown",
-              }}
-            >
-              <input
-                name="quantitiesOfProducts"
-                id="quantitiesOfProducts"
-                style={{
-                  width: collReq === "/sales" ? "6%" : "15%",
-                  border: "none",
-                }}
-                disabled
-                placeholder={"כ.חומר"}
-                value={getSumOfValues(itemsValues.quantitiesOfProduct)}
-              ></input>
-              <label>: כמות החומר</label>
-            </div>
-          </div>
-        )} */}
+       
         {collReq !== "/clients" && (
           <input
             name="number"
@@ -729,47 +719,19 @@ export default function AddItem({
                 : "מחיר"
             }
             onDoubleClick={changeColorOfClientName}
-            onChange={(e) =>
-              setItemsValues((prev) => {
-                let sumOfPrices = 0;
-                const product = itemsValues.pricesOfProducts;
-                for (const key in product) {
-                  sumOfPrices += product[key];
-                }
-                return {
-                  ...prev,
-                  number: e.target.value,
-                  totalAmount:
-                    collReq === "/personalRkrExpenses"
-                      ? +e.target.value + prev.pricesOfProducts
-                      : collReq === "/expenses" ||
-                        collReq === "/personalProductExpenses" ||
-                        collReq === "/personalSales"
-                      ? +e.target.value * +itemsValues.quantity
-                      : +e.target.value * +sumOfPrices +
-                        +tractorPrice * +itemsValues.quantity,
-                };
-              })
-            }
+            onChange={(e) => {
+                const newNumber = e.target.value;
+                setItemsValues((prev) => {
+                  const updated = { ...prev, number: newNumber };
+                  return { ...updated, totalAmount: computeTotal(updated) };
+                });
+              }}
             onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
 
             value={itemsValues.number}
           ></input>
         )}
-        {/* {(collReq === "/sales" || collReq === '/personalRkrExpenses')          && (
-          <input
-            name="quantitiesOfProducts"
-            id="quantitiesOfProducts"
-            style={{
-              width: collReq === "/sales" ? "6%" : "15%",
-            }}
-            disabled
-            className="add_item"
-            placeholder={"כ.חומר"}
-            onDoubleClick={changeColorOfClientName}
-            value={getSumOfValues(itemsValues.quantitiesOfProduct)}
-          ></input>
-        )} */}
+
         {collReq !== "/personalWorkers" &&
           collReq !== "/personalInvestments" && (
             <input
@@ -786,22 +748,10 @@ export default function AddItem({
                   : "כמות"
               }
               onChange={(e) => {
+                const newNumber = e.target.value;
                 setItemsValues((prev) => {
-                  const sum = Object.values(prev.pricesOfProducts).reduce(
-                    (acc, curr) => acc + curr,
-                    0
-                  );
-
-                  return {
-                    ...prev,
-                    quantity: e.target.value,
-                    totalAmount:
-                      collReq === "/expenses" ||
-                      collReq === "/personalProductExpenses" ||
-                      collReq === "/personalSales"
-                        ? +itemsValues.number * +e.target.value
-                        : +sum + +(tractorPrice * e.target.value),
-                  };
+                  const updated = { ...prev, quantity: newNumber };
+                  return { ...updated, totalAmount: computeTotal(updated) };
                 });
               }}
               value={itemsValues.quantity}
@@ -816,15 +766,13 @@ export default function AddItem({
             className="add_item select-product-in-add "
             style={{ width: "10%" }}
             placeholder="מחיר עבודה"
-            onChange={(e) =>
-              setItemsValues((prev) => {
-                return {
-                  ...prev,
-                  workPrice: +e.target.value,
-                  totalAmount: +e.target.value + +prev.number,
-                };
-              })
-            }
+            onChange={(e) => {
+                const newNumber = e.target.value;
+                setItemsValues((prev) => {
+                  const updated = { ...prev, workPrice: newNumber };
+                  return { ...updated, totalAmount: computeTotal(updated) };
+                });
+              }}
             value={itemsValues.workPrice}
             required
           />
