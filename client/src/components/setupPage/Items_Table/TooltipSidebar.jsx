@@ -59,7 +59,7 @@
 //         )
 //       );
 //       const sumOfPrices = getSumOfValues(updatedPrices);
-      
+
 //       return {
 //         ...prev,
 //         quantitiesOfProduct: updatedQuantities,
@@ -201,7 +201,10 @@ const TooltipSidebar = ({
   setItemsValues,
 }) => {
   const sidebarRef = useRef(null);
-  const [position, setPosition] = useState({ x: 10, y: window.innerHeight / 2 });
+  const [position, setPosition] = useState({
+    x: 10,
+    y: window.innerHeight / 2,
+  });
 
   const isDragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
@@ -251,7 +254,7 @@ const TooltipSidebar = ({
           ([key]) => key !== productLabel
         )
       );
-      const sumOfPrices = getSumOfValues(updatedPrices ?? {});
+      const sumOfPrices = +getSumOfValues(updatedPrices ?? {}).toFixed(2);
 
       const totalAmount =
         collReq === "/personalRkrExpenses"
@@ -298,7 +301,11 @@ const TooltipSidebar = ({
                   handleDeleteProduct(option.label);
                 }}
                 className="delete-button"
-                style={{ marginLeft: "10px", cursor: "pointer", color: "brown" }}
+                style={{
+                  marginLeft: "10px",
+                  cursor: "pointer",
+                  color: "brown",
+                }}
               >
                 <i className="fas fa-trash"></i>
               </button>
@@ -315,7 +322,7 @@ const TooltipSidebar = ({
             </div>
           ))}
 
-                   <div style={styles.totalContainer}>
+          <div style={styles.totalContainer}>
             <input
               name="quantitiesOfProducts"
               id="quantitiesOfProducts"
@@ -326,7 +333,6 @@ const TooltipSidebar = ({
             />
             <label>: כמות החומר</label>
           </div>
-
         </div>
       </div>
     )
