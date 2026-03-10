@@ -797,7 +797,7 @@ export default function SetupPage({
         )}
         {(collReq === "/personalRkrExpenses" ||
           collReq === "/personalInvestments") &&
-          !report?.type && (
+           (
             <button
               id="other"
               className="input_show_item head"

@@ -83,30 +83,36 @@ export default function ItemsTable({
     getData();
   }, [item._id, myData]);
 
+
+
   const toNum = (v) => Number(v) || 0;
-const computeTotal = (s) => {
-  let total;
 
-  if (collReq === "/personalRkrExpenses") {
-    total =
-      s.workKind === "ריסוס"
-        ? toNum(s.workPrice) * toNum(s.quantity) + toNum(s.number)
-        : toNum(s.workPrice) + toNum(s.number);
-  } else if (
-    collReq === "/expenses" ||
-    collReq === "/personalProductExpenses" ||
-    collReq === "/personalSales"
-  ) {
-    total = toNum(s.number) * toNum(s.quantity);
-  } else if (collReq === "/sales") {
-    total = toNum(s.number) + toNum(tractorPrice) * toNum(s.quantity);
-  } else {
-    total = toNum(s.totalAmount);
-  }
+  const roundTo = (num, digits = 2) => {
+    const factor = 10 ** digits;
+    return Math.round((Number(num) + Number.EPSILON) * factor) / factor;
+  };
+  const computeTotal = (s) => {
+    let total;
 
-  // Always return with 1 decimal
-  return Number(total.toFixed(1));
-};
+    if (collReq === "/personalRkrExpenses") {
+      total =
+        s.workKind === "ריסוס"
+          ? toNum(s.workPrice) * toNum(s.quantity) + toNum(s.number)
+          : toNum(s.workPrice) + toNum(s.number);
+    } else if (
+      collReq === "/expenses" ||
+      collReq === "/personalProductExpenses" ||
+      collReq === "/personalSales"
+    ) {
+      total = toNum(s.number) * toNum(s.quantity);
+    } else if (collReq === "/sales") {
+      total = toNum(s.number) + toNum(tractorPrice) * toNum(s.quantity);
+    } else {
+      total = toNum(s.totalAmount);
+    }
+
+    return roundTo(total, 2);
+  };
 
 
   const customStyles = {
@@ -233,13 +239,18 @@ const computeTotal = (s) => {
   const PricesInArray = Object.entries(itemsValues?.pricesOfProducts || {});
 
   const getTotalsOfProducts = () => {
-    let sum = 0;
-    quantitiesInArray?.map((product, index) => {
-      sum += +PricesInArray[index][1];
-    });
-    return sum;
-  };
+    const sum = PricesInArray.reduce((acc, [, price]) => {
+      return acc + toNum(price);
+    }, 0);
 
+    return roundTo(sum, 2);
+  };
+  const workLabel =
+    collReq === "/sales"
+      ? "עבודת טרקטור"
+      : collReq === "/personalRkrExpenses"
+        ? "עלות עבודה"
+        : "עבודה";
   return (
     <>
       <form className="form-container-in-table">
@@ -268,24 +279,24 @@ const computeTotal = (s) => {
             collReq === "/personalRkrExpenses" ||
             collReq === "/personalSales" ||
             collReq === "/personalWorkers") && (
-            <input
-              id="date"
-              type="date"
-              className="input_show_item date-input"
-              style={{
-                width: report?.type ? "15%" : "11%",
-                textAlign: "center",
-              }}
-              disabled={changeStatus.disabled}
-              value={itemsValues.date}
-              onChange={(e) => {
-                setItemsValues((prev) => {
-                  return { ...prev, date: e.target.value };
-                });
-              }}
-              onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
-            ></input>
-          )}
+              <input
+                id="date"
+                type="date"
+                className="input_show_item date-input"
+                style={{
+                  width: report?.type ? "15%" : "11%",
+                  textAlign: "center",
+                }}
+                disabled={changeStatus.disabled}
+                value={itemsValues.date}
+                onChange={(e) => {
+                  setItemsValues((prev) => {
+                    return { ...prev, date: e.target.value };
+                  });
+                }}
+                onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+              ></input>
+            )}
 
           {collReq === "/personalRkrExpenses" && (
             <Select
@@ -391,56 +402,56 @@ const computeTotal = (s) => {
             collReq === "/personalRkrExpenses" ||
             collReq === "/personalProductExpenses" ||
             collReq === "/personalWorkers") && (
-            <input
-              id="name"
-              className="input_show_item"
-              style={{
-                color:
-                  itemsValues.colored && itemsValues.clientName === ""
-                    ? "rgb(255, 71, 46)"
-                    : "black",
+              <input
+                id="name"
+                className="input_show_item"
+                style={{
+                  color:
+                    itemsValues.colored && itemsValues.clientName === ""
+                      ? "rgb(255, 71, 46)"
+                      : "black",
 
-                maxWidth:
-                  collReq === "/clients" ||
-                  collReq === "/expenses" ||
-                  collReq === "/personalInvestments"
-                    ? "32%"
-                    : collReq === "/sales" ||
+                  maxWidth:
+                    collReq === "/clients" ||
                       collReq === "/expenses" ||
-                      collReq === "/personalWorkers" ||
-                      collReq === "/personalSales" ||
-                      collReq === "/personalRkrExpenses" ||
-                      collReq === "/personalProductExpenses"
-                    ? "10%"
-                    : report?.type
-                    ? "55%"
-                    : "15%",
+                      collReq === "/personalInvestments"
+                      ? "32%"
+                      : collReq === "/sales" ||
+                        collReq === "/expenses" ||
+                        collReq === "/personalWorkers" ||
+                        collReq === "/personalSales" ||
+                        collReq === "/personalRkrExpenses" ||
+                        collReq === "/personalProductExpenses"
+                        ? "10%"
+                        : report?.type
+                          ? "55%"
+                          : "15%",
 
-                minWidth:
-                  collReq === "/clients" ||
-                  collReq === "/expenses" ||
-                  collReq === "/personalInvestments"
-                    ? "32%"
-                    : collReq === "/sales" ||
+                  minWidth:
+                    collReq === "/clients" ||
                       collReq === "/expenses" ||
-                      collReq === "/personalSales" ||
-                      collReq === "/personalRkrExpenses" ||
-                      collReq === "/personalWorkers" ||
-                      collReq === "/personalProductExpenses"
-                    ? "10%"
-                    : report?.type
-                    ? "55%"
-                    : "15%",
-              }}
-              disabled={changeStatus.disabled}
-              value={itemsValues.name}
-              onChange={(e) => {
-                setItemsValues((prev) => {
-                  return { ...prev, name: e.target.value };
-                });
-              }}
-            ></input>
-          )}
+                      collReq === "/personalInvestments"
+                      ? "32%"
+                      : collReq === "/sales" ||
+                        collReq === "/expenses" ||
+                        collReq === "/personalSales" ||
+                        collReq === "/personalRkrExpenses" ||
+                        collReq === "/personalWorkers" ||
+                        collReq === "/personalProductExpenses"
+                        ? "10%"
+                        : report?.type
+                          ? "55%"
+                          : "15%",
+                }}
+                disabled={changeStatus.disabled}
+                value={itemsValues.name}
+                onChange={(e) => {
+                  setItemsValues((prev) => {
+                    return { ...prev, name: e.target.value };
+                  });
+                }}
+              ></input>
+            )}
           {collReq === "/sales" && (
             <input
               id="purpose"
@@ -530,8 +541,7 @@ const computeTotal = (s) => {
                       prev.pricesOfProducts,
                       keysOfProductNames
                     );
-                    const sumOfPrices = getSumOfValues(myNewPrices);
-
+                    const sumOfPrices = roundTo(getSumOfValues(myNewPrices), 2);
                     const q = Number(prev.quantity) || 0;
                     const wp = Number(prev.workPrice) || 0;
                     const tp = Number(tractorPrice) || 0;
@@ -552,9 +562,9 @@ const computeTotal = (s) => {
                       ...prev,
                       quantitiesOfProduct: myNewQuantitis,
                       pricesOfProducts: myNewPrices,
-                      number: sumOfPrices,
+                      number: roundTo(sumOfPrices, 2),
                       product: selectedOptions,
-                      totalAmount: total,
+                      totalAmount: roundTo(total, 2),
                     };
                   });
                 }}
@@ -579,8 +589,8 @@ const computeTotal = (s) => {
                     : collReq === "/expenses" ||
                       collReq === "/personalSales" ||
                       collReq === "/personalRkrExpenses"
-                    ? "10%"
-                    : "15%",
+                      ? "10%"
+                      : "15%",
               }}
               disabled={changeStatus.disabled}
               value={itemsValues.number}
@@ -619,26 +629,26 @@ const computeTotal = (s) => {
             collReq === "/personalRkrExpenses" ||
             collReq === "/personalProductExpenses" ||
             collReq === "/expenses") && (
-            <input
-              id="quantity"
-              className="input_show_item"
-              style={{
-                width: collReq === "/clients" ? "15%" : "5%",
-                color: collReq === "/clients" ? "rgb(184, 89, 0)" : "black",
-                fontWeight: collReq === "/clients" ? "bold" : "normal",
-              }}
-              disabled={changeStatus.disabled}
-              value={itemsValues.quantity}
-              onChange={(e) => {
-                const newNumber = e.target.value;
-                setItemsValues((prev) => {
-                  const updated = { ...prev, quantity: newNumber };
-                  return { ...updated, totalAmount: computeTotal(updated) };
-                });
-              }}
-              onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
-            ></input>
-          )}
+              <input
+                id="quantity"
+                className="input_show_item"
+                style={{
+                  width: collReq === "/clients" ? "15%" : "5%",
+                  color: collReq === "/clients" ? "rgb(184, 89, 0)" : "black",
+                  fontWeight: collReq === "/clients" ? "bold" : "normal",
+                }}
+                disabled={changeStatus.disabled}
+                value={itemsValues.quantity}
+                onChange={(e) => {
+                  const newNumber = e.target.value;
+                  setItemsValues((prev) => {
+                    const updated = { ...prev, quantity: newNumber };
+                    return { ...updated, totalAmount: computeTotal(updated) };
+                  });
+                }}
+                onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} // منع Enter
+              ></input>
+            )}
           {collReq === "/sales" && (
             <input
               id="letersOfProduct"
@@ -671,21 +681,21 @@ const computeTotal = (s) => {
           )}
           {(collReq === "/personalRkrExpenses" ||
             collReq === "/personalInvestments") && (
-            <input
-              id="other"
-              className="input_show_item"
-              style={{
-                width: collReq === "/personalInvestments" ? "15%" : "7%",
-              }}
-              disabled={changeStatus.disabled}
-              value={itemsValues.other}
-              onChange={(e) => {
-                setItemsValues((prev) => {
-                  return { ...prev, other: e.target.value };
-                });
-              }}
-            />
-          )}
+              <input
+                id="other"
+                className="input_show_item"
+                style={{
+                  width: collReq === "/personalInvestments" ? "15%" : "7%",
+                }}
+                disabled={changeStatus.disabled}
+                value={itemsValues.other}
+                onChange={(e) => {
+                  setItemsValues((prev) => {
+                    return { ...prev, other: e.target.value };
+                  });
+                }}
+              />
+            )}
           {(collReq === "/expenses" ||
             collReq === "/sales" ||
             collReq === "/personalProductExpenses" ||
@@ -693,22 +703,19 @@ const computeTotal = (s) => {
             collReq === "/personalInvestments" ||
             collReq === "/personalSales" ||
             collReq === "/personalWorkers") && (
-            <input
-              id="totalAmount"
-              className="input_show_item"
-              style={{
-                width:
-                  collReq === "/expenses" ? "8%" : report?.type ? "10%" : "7%",
-                color: "rgb(184, 89, 0)",
-                fontWeight: "bold",
-              }}
-              disabled
-              value={(itemsValues?.totalAmount
-                ? +itemsValues.totalAmount
-                : 0
-              ).toFixed(1)}
-            ></input>
-          )}
+              <input
+                id="totalAmount"
+                className="input_show_item"
+                style={{
+                  width:
+                    collReq === "/expenses" ? "8%" : report?.type ? "10%" : "7%",
+                  color: "rgb(184, 89, 0)",
+                  fontWeight: "bold",
+                }}
+                disabled
+                value={roundTo(toNum(itemsValues?.totalAmount), 2).toFixed(2)}
+              ></input>
+            )}
 
           {!report?.type && (
             <EditItem
@@ -735,69 +742,83 @@ const computeTotal = (s) => {
             ></DeleteItem>
           )}
         </div>
-        {collReq === "/sales" && report?.type && (
+        {(collReq === "/sales" || collReq === "/personalRkrExpenses") && report?.type && (
           <div
             style={{
-              display: "flex",
               width: "80%",
-              justifyContent: "flex-end",
               paddingRight: "1%",
-              marginBottom: "1px",
+              marginBottom: "4px",
+              direction: "rtl",
+              textAlign: "right",
             }}
           >
             <div
               style={{
-                padding: "0 1%",
-                color: "green",
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "8px 14px",
+                alignItems: "center",
+                direction: "rtl",
+                width: "fit-content",
+                maxWidth: "100%",
+                marginLeft: "auto",
               }}
             >
-              <label htmlFor="" style={{ color: "brown" }}>
-                [
-              </label>
-              {`  ( ש"ח `}
-              <label htmlFor="">
-                {(+itemsValues.totalAmount - +getTotalsOfProducts()).toFixed(
-                  2
-                ) + " )"}
-                {/* {+tractorPrice * +itemsValues?.quantity + " )"} */}
-              </label>
-              <label htmlFor="" style={{ color: "darkblue" }}>
-                {" "}
-                : עבודת טרקטור
-              </label>
-            </div>
-            {quantitiesInArray?.map(([key, value], index) => (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row-reverse",
-                  justifyContent: "space-between",
-                  padding: "0 1%",
-                  color: "darkblue",
-                }}
-              >
-                <label
-                  style={{ color: "green", direction: "rtl", margin: "0 10px" }}
+              <span style={{ color: "brown", unicodeBidi: "isolate" }}>[</span>
+
+              <span style={{ color: "brown", unicodeBidi: "isolate" }}>
+                חישוב מפורט
+              </span>
+
+              <span style={{ color: "darkblue", unicodeBidi: "isolate" }}>
+                : חומרים
+              </span>
+
+              {quantitiesInArray?.map(([key, value], index) => (
+                <span
+                  key={`${key}-${index}`}
+                  style={{
+                    color: "green",
+                    whiteSpace: "nowrap",
+                    unicodeBidi: "isolate",
+                  }}
                 >
-                  {key.split("-")[0]} {value} {"ל. ("}{" "}
-                  {+PricesInArray[index][1].toFixed(2)} {`ש"ח`}
-                  {") "}
-                </label>
-              </div>
-            ))}
-            <label htmlFor="" style={{ color: "darkblue" }}>
-              {" "}
-              : חומרים
-            </label>
-            <label style={{ color: "brown" }}> ] חישוב מפורט</label>
+                  {key.split("-")[0]} {value} ל. ({+PricesInArray[index][1].toFixed(2)} ש"ח)
+                </span>
+              ))}
+
+              <span style={{ color: "brown", unicodeBidi: "isolate" }}>]</span>
+            </div>
+
+            <div
+              style={{
+                marginTop: "4px",
+                direction: "rtl",
+                textAlign: "right",
+                unicodeBidi: "embed",
+                width: "fit-content",
+                maxWidth: "100%",
+                marginLeft: "auto",
+              }}
+            >
+              <span style={{ color: "brown" }}>[ {workLabel} : </span>
+
+              <span style={{ color: "green" }}>
+                ({roundTo(toNum(itemsValues.totalAmount) - getTotalsOfProducts(), 2).toFixed(2)} ש"ח)
+              </span>
+
+              <span style={{ color: "brown" }}> ]</span>
+            </div>
           </div>
         )}
+
         <div
           style={{
             width: "84.7%",
-            borderBottom: report?.type && "1px black dotted",
+            borderBottom: report?.type ? "1px black dotted" : "none",
           }}
         ></div>
+
       </form>
     </>
   );
